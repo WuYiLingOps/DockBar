@@ -78,6 +78,9 @@ jobs:
       # Keyless build: no update server, no signing keys. Integrity is
       # checksum-based (no minisign signature). tauri-action builds, bundles
       # and (on tag pushes) creates the release with the notes above.
+      # 每个架构产出两个安装包：轻量版（默认 embedBootstrapper）+ 离线版
+      # （tauri.offline.conf.json 覆盖为 offlineInstaller，内嵌离线运行时），
+      # 两者共存于同一 bundle 目录，由 tauri-action 一并上传 Release。
       - name: Build and release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: tauri-apps/tauri-action@v0
@@ -91,10 +94,33 @@ jobs:
           prerelease: false
           args: --target ${{ matrix.target }}
 
+      # 离线版复用已编译产物（源码未变，cargo 增量为空转），只重新执行
+      # NSIS 打包；产物为 *offline*-setup.exe，随后上传到同一 Release
+      - name: Bundle offline installer (tag build)
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: npx tauri build --ci --target ${{ matrix.target }} --config src/tauri.offline.conf.json --bundles nsis
+
+      - name: Upload offline bundle to release (tag build)
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          $exe = Get-ChildItem "target/${{ matrix.target }}/release/bundle/nsis/*offline*-setup.exe" -ErrorAction SilentlyContinue
+          if (-not $exe) {
+            Write-Error "offline installer not found in bundle directory"
+          }
+          gh release upload "$tag" $exe.FullName --clobber
+
       # 手动触发走完整构建（含打包）做验证，不发版；产物可在本次运行页面的 Artifacts 下载
       - name: Build only (manual run)
         if: github.event_name == 'workflow_dispatch'
         run: npx tauri build --ci --target ${{ matrix.target }}
+
+      - name: Bundle offline installer (manual run)
+        if: github.event_name == 'workflow_dispatch'
+        run: npx tauri build --ci --target ${{ matrix.target }} --config src/tauri.offline.conf.json --bundles nsis
 
       - name: Upload bundles to artifacts (manual run)
         if: github.event_name == 'workflow_dispatch'
