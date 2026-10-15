@@ -81,6 +81,10 @@ impl DockItemsManager {
                 }
             };
             items.sanitize();
+            // the manager lazily initializes on first command access, which can
+            // happen before main's create_main_folders has run, so make sure the
+            // widget data dir exists before writing the initial state file
+            std::fs::create_dir_all(DOCKBAR_COMMON.widget_data_dir(&WidgetId::known_dock()))?;
             atomic_write_file(&path, serde_yaml::to_string(&items)?.as_bytes())?;
             items
         };

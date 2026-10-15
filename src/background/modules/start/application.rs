@@ -95,6 +95,16 @@ impl StartMenuManager {
     pub fn initialize() -> Result<()> {
         let manager = Self::instance();
         crate::measure!("StartMenu Shortcuts", manager.load_shortcuts());
+        let shortcut_count = manager.user_menu.len() + manager.system_menu.len();
+        if shortcut_count == 0 {
+            log::warn!(
+                "No start-menu shortcuts were found; installed (win32) apps will be \
+                 missing from app pickers. Check that the Start Menu known folders \
+                 resolve on this machine."
+            );
+        } else {
+            log::debug!("Start menu shortcuts loaded: {shortcut_count}");
+        }
         manager.packaged.replace(crate::measure!(
             "StartMenu Packaged",
             Self::load_packaged_items()?
@@ -235,11 +245,15 @@ impl StartMenuManager {
     }
 
     fn load_shortcut_items(folder: &Path) -> Vec<ShortcutEntry> {
-        crate::utils::collect_files(folder)
-            .unwrap_or_default()
-            .into_par_iter()
-            .map(Self::_process_file)
-            .collect()
+        match crate::utils::collect_files(folder) {
+            Ok(files) => files.into_par_iter().map(Self::_process_file).collect(),
+            Err(err) => {
+                // an unreadable start-menu folder silently empties the dock's
+                // app picker, so the failure must be visible in the logs
+                log::warn!("Failed to scan start-menu folder {folder:?}: {err:?}");
+                Vec::new()
+            }
+        }
     }
 
     /// Each package needs several WinRT calls, so they are resolved in parallel. Rayon balances

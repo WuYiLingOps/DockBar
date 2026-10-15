@@ -21,6 +21,7 @@ use string_utils::WindowsString;
 use widestring::U16CStr;
 use windows_core::{Interface, Owned, RuntimeType};
 use windows_future::{AsyncStatus, IAsyncOperation};
+use winreg::{RegKey, enums::HKEY_CURRENT_USER};
 
 use std::{
     collections::{HashMap, HashSet},
@@ -154,6 +155,31 @@ macro_rules! hstring {
 }
 
 pub struct WindowsApi {}
+
+/// Registry value names under `Explorer\Shell Folders` for the known folders
+/// this app resolves, kept in sync with the call sites of
+/// `WindowsApi::known_folder`. The API fails on machines whose
+/// `FolderDescriptions` keys were emptied, so the expanded values are the
+/// only remaining source of truth.
+const KNOWN_FOLDER_REGISTRY_NAMES: &[(windows::core::GUID, &str)] = &[
+    (windows::Win32::UI::Shell::FOLDERID_StartMenu, "Start Menu"),
+    (
+        windows::Win32::UI::Shell::FOLDERID_CommonStartMenu,
+        "Common Start Menu",
+    ),
+    (
+        windows::Win32::UI::Shell::FOLDERID_LocalAppData,
+        "Local AppData",
+    ),
+    (windows::Win32::UI::Shell::FOLDERID_System, "System"),
+    (windows::Win32::UI::Shell::FOLDERID_Windows, "Windows"),
+];
+
+const SHELL_FOLDERS_USER_KEY: &str =
+    r"Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders";
+const SHELL_FOLDERS_USER_SHELL_KEY: &str =
+    r"Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders";
+
 impl WindowsApi {
     /// Blocks the calling thread until `op` completes, like `.join()`, but pumps
     /// the thread's window message queue while waiting instead of doing a plain
@@ -1165,11 +1191,58 @@ impl WindowsApi {
     }
 
     /// https://learn.microsoft.com/en-us/windows/win32/shell/knownfolderid
+    ///
+    /// Falls back to the expanded `Shell Folders` registry value when the
+    /// Known Folders API fails (some machines ship with an emptied
+    /// `FolderDescriptions` key, which makes `SHGetKnownFolderPath` return
+    /// 0x80070002 even though the folder itself is fine).
     pub fn known_folder(folder_id: windows::core::GUID) -> Result<PathBuf> {
-        let path = unsafe { SHGetKnownFolderPath(&folder_id, KF_FLAG_DEFAULT, None)? };
-        Ok(PathBuf::from(OsString::from_wide(unsafe {
-            path.as_wide()
-        })))
+        match unsafe { SHGetKnownFolderPath(&folder_id, KF_FLAG_DEFAULT, None) } {
+            Ok(path) => Ok(PathBuf::from(OsString::from_wide(unsafe {
+                path.as_wide()
+            }))),
+            Err(api_error) => Self::known_folder_from_registry(folder_id).map_err(|reg_error| {
+                format!(
+                    "SHGetKnownFolderPath failed ({api_error:?}) and the Shell Folders \
+                     registry fallback failed too ({reg_error:?})"
+                )
+                .into()
+            }),
+        }
+    }
+
+    /// Reads the expanded `Shell Folders` value for `folder_id`; the
+    /// `User Shell Folders` variant (env-var strings) is expanded as a
+    /// second chance because the mirror key is not guaranteed to exist.
+    fn known_folder_from_registry(folder_id: windows::core::GUID) -> Result<PathBuf> {
+        let Some((_, value_name)) = KNOWN_FOLDER_REGISTRY_NAMES
+            .iter()
+            .find(|(guid, _)| *guid == folder_id)
+        else {
+            return Err(format!("no registry fallback for known folder {folder_id:?}").into());
+        };
+
+        let hkcu = RegKey::predef(HKEY_CURRENT_USER);
+        let user_key = hkcu.open_subkey(SHELL_FOLDERS_USER_KEY)?;
+        if let Ok(expanded) = user_key.get_value::<String, _>(value_name)
+            && !expanded.is_empty()
+        {
+            log::warn!(
+                "Known folder {value_name:?} resolved via Shell Folders registry fallback: {expanded:?}"
+            );
+            return Ok(PathBuf::from(expanded));
+        }
+
+        // `User Shell Folders` holds REG_EXPAND_SZ env-var strings (%USERPROFILE%\...),
+        // expand them by hand as the mirror key may be missing or empty.
+        let user_shell_key = hkcu.open_subkey(SHELL_FOLDERS_USER_SHELL_KEY)?;
+        let raw: String = user_shell_key.get_value(value_name)?;
+        let expanded = Self::resolve_environment_variables(&WindowsString::from_str(&raw))?;
+        let expanded = expanded.to_string();
+        log::warn!(
+            "Known folder {value_name:?} resolved via User Shell Folders registry fallback: {expanded:?}"
+        );
+        Ok(PathBuf::from(expanded))
     }
 
     #[allow(dead_code)]
