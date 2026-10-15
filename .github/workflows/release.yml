@@ -47,14 +47,9 @@ jobs:
       - name: Install frontend dependencies & Gen Core Lib
         run: npm install
 
-      # Ship with a pinned WebView2 Fixed Version Runtime instead of the
-      # evergreen installer; the script rewrites webviewInstallMode in
-      # tauri.conf.json and leaves the runtime under src/runtime/<version>.
-      - name: Set Fixed Runtime
-        shell: pwsh
-        run: |
-          $arch = "${{ matrix.target }}".Contains("aarch64") ? "arm64" : "x64"
-          ./scripts/SetFixedRuntime.ps1 -Architecture $arch
+      # WebView2 走 Evergreen 引导安装（tauri.conf.json webviewInstallMode
+      # embedBootstrapper）：安装包不打包固定版运行时，安装时检测系统
+      # WebView2，缺失时由内嵌引导器联网安装（Win10/11 绝大多数已自带）。
 
       # 从 changelog.md 提取 `## [version]` 段作为发布说明（多行内容经
       # 定界符写入 $GITHUB_OUTPUT，供 tauri-action 的 releaseBody 引用）

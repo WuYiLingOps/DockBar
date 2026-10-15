@@ -51,6 +51,9 @@
     "windows": {
       "certificateThumbprint": null,
       "digestAlgorithm": "sha256",
+      "webviewInstallMode": {
+        "type": "embedBootstrapper"
+      },
       "nsis": {
         "installerIcon": "static/icons/installer.ico",
         "uninstallerIcon": "static/icons/uninstaller.ico",
