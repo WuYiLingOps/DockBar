@@ -1301,7 +1301,7 @@ dependencies = [
 
 [[package]]
 name = "dockbar"
-version = "1.0.2"
+version = "1.0.0"
 dependencies = [
  "arc-swap",
  "backtrace",
@@ -1363,7 +1363,7 @@ dependencies = [
 
 [[package]]
 name = "dockbar-core"
-version = "1.0.2"
+version = "1.0.0"
 dependencies = [
  "base64 0.23.1",
  "chrono",
@@ -1388,7 +1388,7 @@ dependencies = [
 
 [[package]]
 name = "dockbar-ipc"
-version = "1.0.2"
+version = "1.0.0"
 dependencies = [
  "clap",
  "dockbar-core",
@@ -1405,7 +1405,7 @@ dependencies = [
 
 [[package]]
 name = "dockbar-macros"
-version = "1.0.2"
+version = "1.0.0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1414,7 +1414,7 @@ dependencies = [
 
 [[package]]
 name = "dockbar-utils"
-version = "1.0.2"
+version = "1.0.0"
 dependencies = [
  "base64 0.23.1",
  "sha2",
