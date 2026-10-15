@@ -1,0 +1,130 @@
+import { DockBarCommand, invoke, Widget } from "@dockbar/lib";
+import { Icon } from "libs/ui/react/components/Icon/index.tsx";
+import { Button, Input, Switch, Tooltip } from "antd";
+import { useTranslation } from "react-i18next";
+
+import {
+  getShortcutsConfig,
+  resetShortcuts,
+  setShortcutsEnabled,
+  type ShortcutEntry,
+  shortcutGroups,
+  shortcutsError,
+  updateShortcut,
+} from "./application.ts";
+import { settings } from "../../state/mod";
+
+import { SettingsGroup, SettingsOption, SettingsSubGroup } from "../../components/SettingsBox/index.tsx";
+import { Note } from "../../components/Note/index.tsx";
+import { ResourceText } from "libs/ui/react/components/ResourceText/index.tsx";
+import { isWidgetEnabled } from "../resources/Widget/application.ts";
+import Compact from "antd/es/space/Compact";
+
+export function Shortcuts() {
+  const { enabled } = getShortcutsConfig();
+  const groups = shortcutGroups.value;
+
+  const { t } = useTranslation();
+
+  function mapEntry(entry: ShortcutEntry) {
+    return <Shortcut key={entry.id} entry={entry} onChanged={(keys) => updateShortcut(entry, keys)} />;
+  }
+
+  return (
+    <>
+      {shortcutsError.value.size > 0 && (
+        <Note type="error">
+          <b>{t("shortcuts.duplicate_error")}:</b>
+          {t("shortcuts.duplicate_error_hint")}
+        </Note>
+      )}
+
+      <SettingsGroup>
+        <SettingsOption
+          label={t("shortcuts.enable")}
+          tip={t("shortcuts.enable_tooltip")}
+          action={<Switch value={enabled} onChange={setShortcutsEnabled} />}
+        />
+        <SettingsOption
+          label={t("shortcuts.reset")}
+          action={
+            <Button onClick={resetShortcuts}>
+              <Icon iconName="RiResetLeftLine" />
+            </Button>
+          }
+        />
+      </SettingsGroup>
+
+      {/* Widget groups */}
+      {Array.from(groups.byWidget.values()).map(({ widget, entries }) => (
+        <SettingsGroup key={widget.id}>
+          <SettingsSubGroup label={<ResourceText text={widget.metadata.displayName} />}>
+            {entries.map(mapEntry)}
+          </SettingsSubGroup>
+        </SettingsGroup>
+      ))}
+
+      {/* Misc */}
+      <SettingsGroup>{groups.system.misc.map(mapEntry)}</SettingsGroup>
+    </>
+  );
+}
+
+interface ShortcutProps {
+  entry: ShortcutEntry;
+  onChanged: (keys: string[]) => void;
+}
+
+function Shortcut({ entry, onChanged }: ShortcutProps) {
+  const { id, label, keys, readonly: sugestedReadonly } = entry;
+
+  const { devTools, unlockShortcuts } = settings.value;
+  const readonly = sugestedReadonly && !(devTools && unlockShortcuts);
+
+  const isAttachedWidgetEnabled = entry.widgetId ? isWidgetEnabled(entry.widgetId) : true;
+
+  const { t } = useTranslation();
+  const hasError = shortcutsError.value.has(id);
+
+  function onEdit() {
+    if (readonly) return;
+
+    invoke(DockBarCommand.RequestToUserInputShortcut, { callbackEvent: "finished" });
+    Widget.getCurrent().webview.once<null | string[]>("finished", (e) => {
+      if (e.payload && e.payload.length >= 2) {
+        onChanged(e.payload);
+      }
+    });
+  }
+
+  let inputTooltip: string | undefined = undefined;
+  if (hasError) {
+    inputTooltip = t("shortcuts.duplicate_error");
+  } else if (!isAttachedWidgetEnabled) {
+    inputTooltip = t("shortcuts.disabled_tooltip");
+  }
+
+  return (
+    <SettingsOption
+      label={<ResourceText text={label} />}
+      action={
+        <Compact>
+          <Tooltip title={inputTooltip} placement="left">
+            <Input
+              value={keys.join(" + ")}
+              status={hasError ? "error" : undefined}
+              readOnly
+              disabled={!isAttachedWidgetEnabled}
+            />
+          </Tooltip>
+
+          <Tooltip title={readonly ? t("shortcuts.readonly_tooltip") : undefined}>
+            <Button type="primary" disabled={readonly} onClick={onEdit}>
+              <Icon iconName="IoPencilOutline" />
+            </Button>
+          </Tooltip>
+        </Compact>
+      }
+    />
+  );
+}

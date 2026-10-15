@@ -1,0 +1,42 @@
+pub mod constants;
+pub mod error;
+pub mod handlers;
+pub mod rect;
+pub mod resource;
+pub mod state;
+pub mod system_state;
+pub mod utils;
+
+pub use chrono;
+pub use error::DockBarLibError;
+pub use rect::*;
+
+#[macro_use(Serialize, Deserialize)]
+extern crate serde;
+
+#[macro_use(JsonSchema)]
+extern crate schemars;
+
+#[cfg(feature = "gen-binds")]
+#[test]
+fn generate_schemas() {
+    use state::{AppConfig, IconPack, Settings, Widget};
+
+    fn write_schema<T>(path: &str)
+    where
+        T: schemars::JsonSchema,
+    {
+        let schema = schemars::schema_for!(T);
+        std::fs::write(path, serde_json::to_string_pretty(&schema).unwrap()).unwrap();
+    }
+
+    std::fs::create_dir_all("./gen/schemas").unwrap();
+    write_schema::<Settings>("./gen/schemas/settings.schema.json");
+    write_schema::<Vec<AppConfig>>("./gen/schemas/settings_by_app.schema.json");
+
+    write_schema::<Widget>("./gen/schemas/widget.schema.json");
+    write_schema::<IconPack>("./gen/schemas/icon_pack.schema.json");
+
+    handlers::events::DockBarEvent::generate_ts_file("./src/handlers/events.ts");
+    handlers::commands::DockBarCommand::generate_ts_file("./src/handlers/commands.ts");
+}

@@ -1,0 +1,27 @@
+app_menu:
+  close: Sluiten
+  close_multiple: Sluit alles
+  copy_handles: Kopieer handgrepen
+  edit_app_icon: App-pictogram bewerken
+  kill: Dood proces
+  kill_multiple: Dood alle processen
+  open_file_location: Open de bestandslocatie
+  pin: Pin
+  pin_to_center: Pin in het midden
+  pin_to_left: Pin naar links
+  pin_to_right: Pin naar rechts
+  run_as: Als administrator uitvoeren
+  unpin: Losmaken
+context_menu:
+  edit_icon: Pictogram bewerken
+  remove_separator: Scheidingsteken verwijderen
+  reorder_disable: Taakbalk vergrendelen
+  reorder_enable: Taakbalk ontgrendelen
+taskbar_menu:
+  add_apps: Apps toevoegen
+  add_file: Pin aangepaste bestand
+  add_separator: Scheidingsteken toevoegen
+  settings: Instellingen
+  task_manager: Taakbeheer
+weg:
+  empty: Er zijn geen items om te tonen

@@ -1,0 +1,109 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "DockBar",
+  "identifier": "com.dockbar.app",
+  "version": "../package.json",
+  "app": {
+    "security": {
+      "assetProtocol": {
+        "enable": true,
+        "scope": [
+          "$RESOURCE/**/*",
+          "$TEMP/**/*",
+          "$APPDATA/**/*",
+          "$LOCALDATA/**/*",
+          "**/*.jpg",
+          "**/*.jpeg",
+          "**/*.png",
+          "**/*.webp",
+          "**/*.gif",
+          "**/*.svg"
+        ]
+      }
+    },
+    "withGlobalTauri": false
+  },
+  "build": {
+    "beforeDevCommand": "npm run build:ui -- --serve",
+    "beforeBuildCommand": "npm run build:ui -- --production",
+    "devUrl": "http://localhost:3579",
+    "frontendDist": "../dist",
+    "features": []
+  },
+  "bundle": {
+    "active": true,
+    "publisher": "DockBar",
+    "category": "Utility",
+    "copyright": "Copyright © 2024",
+    "shortDescription": "DockBar",
+    "longDescription": "DockBar Fully Customizable Desktop Environment for Windows",
+    "licenseFile": "../LICENSE",
+    "homepage": "https://github.com/dockbar-app/dockbar",
+    "resources": {
+      "static": "static"
+    },
+    "targets": [
+      "nsis"
+    ],
+    "icon": [
+      "static/icons/icon.ico"
+    ],
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "nsis": {
+        "installerIcon": "static/icons/installer.ico",
+        "uninstallerIcon": "static/icons/uninstaller.ico",
+        "sidebarImage": "static/icons/banner.bmp",
+        "template": "templates/installer.nsi",
+        "installerHooks": "templates/installer-hooks.nsh",
+        "installMode": "perMachine",
+        "startMenuFolder": "DockBar",
+        "displayLanguageSelector": true,
+        "languages": [
+          "arabic",
+          "bulgarian",
+          "dutch",
+          "english",
+          "french",
+          "german",
+          "italian",
+          "japanese",
+          "korean",
+          "norwegian",
+          "portuguese",
+          "portuguesebr",
+          "russian",
+          "simpchinese",
+          "spanish",
+          "swedish",
+          "tradchinese",
+          "turkish",
+          "ukrainian",
+          "vietnamese"
+        ]
+      }
+    },
+    "fileAssociations": [
+      {
+        "ext": [
+          ".dockbar"
+        ],
+        "name": "dockbar.file",
+        "description": "DockBar File",
+        "mimeType": "text/plain",
+        "role": "Viewer"
+      }
+    ]
+  },
+  "plugins": {
+    "deep-link": {
+      "mobile": [],
+      "desktop": {
+        "schemes": [
+          "dockbar.uri"
+        ]
+      }
+    }
+  }
+}

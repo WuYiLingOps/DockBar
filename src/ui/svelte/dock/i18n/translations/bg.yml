@@ -1,0 +1,28 @@
+app_menu:
+  close: Близо
+  close_multiple: Затвори всички
+  copy_handles: Копиращи дръжки
+  edit_app_icon: Редактиране на иконата на приложението
+  kill: Процес на унищожаване
+  kill_multiple: Убийте всички процеси
+  open_file_location: Отворете местоположението на файла
+  pin: Щифт
+  pin_to_center: Щифт към центъра
+  pin_to_left: Пин вляво
+  pin_to_right: Пин вдясно
+  run_as: Изпълни като администратор
+  unpin: Unpin
+context_menu:
+  edit_icon: Икона за редактиране
+  remove_separator: Премахване на разделителя
+  reorder_disable: Заключване на лентата на задачите
+  reorder_enable: Отключване на лентата на задачите
+taskbar_menu:
+  add_apps: Добавяне на приложения
+  add_file: ПИН Персонализиран файл
+  add_separator: Добавяне на разделител
+  media: Медиен плейър
+  settings: Настройки
+  task_manager: Диспечер на задачите
+weg:
+  empty: Няма елементи за показване

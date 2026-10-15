@@ -1,0 +1,27 @@
+app_menu:
+  close: Tutup
+  close_multiple: Tutup semua
+  copy_handles: Salin pemegang
+  edit_app_icon: Edit Ikon Apl
+  kill: Proses Bunuh
+  kill_multiple: Bunuh Semua Proses
+  open_file_location: Buka lokasi fail
+  pin: Pin
+  pin_to_center: Pin ke pusat
+  pin_to_left: Pin ke kiri
+  pin_to_right: Pin ke kanan
+  run_as: Jalankan sebagai pentadbir
+  unpin: Unpin
+context_menu:
+  edit_icon: Edit Ikon
+  remove_separator: Keluarkan Pemisah
+  reorder_disable: Kunci bar tugas
+  reorder_enable: Buka kunci bar tugas
+taskbar_menu:
+  add_apps: Tambah apl
+  add_file: Fail tersuai pin
+  add_separator: Tambah Pemisah
+  settings: tetapan
+  task_manager: Pengurus Tugas
+weg:
+  empty: Tiada item untuk ditunjukkan

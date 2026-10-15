@@ -1,0 +1,28 @@
+app_menu:
+  close: Ngokuminyanisa
+  close_multiple: Vala konke
+  copy_handles: Kopisha izibambo
+  edit_app_icon: Hlela Isithonjana Sohlelo Lokusebenza
+  kill: Kill Process
+  kill_multiple: Bulala Zonke Izinqubo
+  open_file_location: Vula Indawo yefayela
+  pin: Isipeletu
+  pin_to_center: Pin esikhungweni
+  pin_to_left: Pin kwesokunxele
+  pin_to_right: Pin kwesokudla
+  run_as: Gijima njengomlawuli
+  unpin: Unpin
+context_menu:
+  edit_icon: Hlela Isithonjana
+  remove_separator: Susa Isihlukanisi
+  reorder_disable: Khiya i-taskbar
+  reorder_enable: Vula i-Taskbar
+taskbar_menu:
+  add_apps: Engeza izinhlelo
+  add_file: I-PIN ifayela ngokwezifiso
+  add_separator: Engeza isihlukanisi
+  media: Isidlali Semidiya
+  settings: Izilungiselelo
+  task_manager: Umphathi Womsebenzi
+weg:
+  empty: Azikho izinto ezizoboniswa

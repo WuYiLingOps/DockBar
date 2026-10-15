@@ -1,0 +1,25 @@
+<svg width="100%" height="100%" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- 方案 B：字母 D 缺口内藏三色 Dock 条，D = DockBar。整体左移 8px 达到光学居中 -->
+  <rect width="100%" height="100%" rx="20%" ry="20%" fill="#0f0f0f" />
+
+  <!-- D 的竖笔 -->
+  <path d="M 54 44 H 88 V 212 H 54 Z" fill="#e8e8ec" />
+
+  <!-- D 的弓背：右下开缺口让 Dock 条穿过 -->
+  <path
+    d="M 88 44
+       H 118
+       A 78 78 0 0 1 118 212
+       H 88
+       V 174
+       H 110
+       A 40 40 0 0 0 110 82
+       H 88
+       Z"
+    fill="#e8e8ec"
+  />
+
+  <!-- 从缺口伸出的 Dock 条：品牌红 + 品牌蓝，扁平胶囊 -->
+  <rect x="110" y="174" width="72" height="38" rx="19" fill="#f75c46" />
+  <rect x="160" y="174" width="41" height="38" rx="19" fill="#0054b6" />
+</svg>

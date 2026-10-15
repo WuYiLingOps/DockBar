@@ -1,0 +1,28 @@
+app_menu:
+  close: Cerrar
+  close_multiple: Cerrar todo
+  copy_handles: Copiar identificadores
+  edit_app_icon: Editar icono de aplicación
+  kill: Finalizar proceso
+  kill_multiple: Finalizar todos los procesos
+  open_file_location: Abrir ubicación del archivo
+  pin: Anclar
+  pin_to_center: Anclar al centro
+  pin_to_left: Anclar a la izquierda
+  pin_to_right: Anclar a la derecha
+  run_as: Ejecutar como administrador
+  unpin: Desanclar
+context_menu:
+  edit_icon: Editar icono
+  remove_separator: Quitar separador
+  reorder_disable: Bloquear la barra de tareas
+  reorder_enable: Desbloquear la barra de tareas
+taskbar_menu:
+  add_apps: Añadir aplicaciones
+  add_file: Anclar archivo personalizado
+  add_separator: Agregar separador
+  media: Reproductor multimedia
+  settings: Ajustes
+  task_manager: Administrador de tareas
+weg:
+  empty: No hay elementos para mostrar

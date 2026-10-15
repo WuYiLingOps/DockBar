@@ -1,0 +1,303 @@
+action:
+  confirm: 确定？
+  confirm_body: 此操作无法撤销。
+cancel: 取消
+close: 关闭
+delete: 删除
+devtools:
+  app_folders: 应用文件夹
+  color_palette: 调色板
+  color_palette_note: 这些颜色会自动适应浅色/深色模式——每种色阶都是相对当前背景的对比度，而非固定值。用它们代替硬编码颜色，即可自动适配主题。
+  custom_config_file: 加载自定义配置文件
+  data_folder: 数据文件夹
+  enable: 启用开发者工具
+  enable_description: 解锁用于检查和调试 DockBar 内部的高级工具。不适合日常使用。
+  icons: 缓存图标
+  install_folder: 安装文件夹
+  load: 加载
+  settings_file: 设置文件
+  shared_components: SLU 标准组件
+  simulate_dialog:
+    label: 模拟对话框
+    trigger: 触发
+  simulate_perm:
+    label: 模拟部件权限请求
+    result_allowed: ✓ 已授予权限
+    result_denied: ✗ 已拒绝权限
+    trigger: 模拟
+    widget_id_placeholder: '@作者/部件名称'
+  tools: 工具
+  unlock_shortcuts: 解锁只读快捷键
+  unlock_shortcuts_description: 允许编辑通常只读的快捷键（例如系统覆盖项）。
+  unstable_optimizations: 不稳定优化
+  unstable_optimizations_description: '启用可减少 RAM 使用的实验性 Chromium 标志。
+
+    警告：如果某个部件崩溃，共享同一加载器的所有部件都会一起崩溃。'
+  widgets_debug:
+    actions: 操作
+    empty: 未加载任何部件。点击刷新。
+    instance_id: 实例 ID
+    monitor_id: 显示器 ID
+    open_devtools: 开发者工具
+    refresh: 刷新
+    status: 状态
+    tab: 部件
+    widget_id: 部件 ID
+discord_banner:
+  message: 与其他 DockBar 用户联系、获取帮助、分享主题并了解最新消息。
+  title: 加入我们的社区
+dock:
+  auto_hide: 自动隐藏
+  auto_hide_touch_disabled: 触摸屏设备不支持自动隐藏
+  delay_to_hide: 隐藏延迟
+  delay_to_show: 显示延迟
+  dock_side: 位置
+  filtering: 项目过滤
+  gap: 间距
+  hide_mode:
+    always: 总是
+    never: 从不
+    on_overlap: 重叠时
+  import_error: 无法导入任务栏项目
+  import_from_taskbar:
+    button: 从 Windows 任务栏导入
+    label: 导入固定项目
+  import_no_items: 在 Windows 任务栏中找不到固定项目
+  import_success: 已成功从 Windows 任务栏导入 {{count}} 项
+  items:
+    gap: 项目间间距
+    hover_show_app_name: 悬停时显示应用名称
+    icon_magnification: 悬停时图标放大强度（0 为关闭）
+    label: 项目
+    middle_click_action:
+      close_app: 关闭应用
+      label: 中键操作
+      open_new_instance: 打开新实例
+    pinned_visibility:
+      always: 总是
+      label: 固定项目可见性
+      when_primary: 当显示器为主显示器时
+    show_instance_counter: 显示打开窗口计数
+    show_window_title: 显示打开窗口标题（仅水平方向）
+    size: 项目大小
+    split_windows: 拆分窗口（每个窗口一项）
+    temporal_visibility:
+      all: 全部
+      label: 未固定项目的可见性
+      on_monitor: 在显示器上
+  label: 停靠栏/任务栏
+  margin: 边距
+  mode:
+    full_width: 全屏宽度
+    min_content: 尽可能小
+  padding: 内边距
+  reveal_on_attention:
+    label: 当应用请求关注时显示
+    never: 绝不
+    until_activated: 直到应用程序打开
+    while_flashing: 当它闪烁时
+  show_end_task: 在任务栏中显示结束任务
+  width: 宽度
+general:
+  accent_color: 强调色
+  date_format: 日期格式
+  date_format_how_to: 日期格式怎么写？
+  hardware_acceleration: 硬件加速
+  hardware_acceleration_description: 禁用硬件加速可减少内存占用。如果您没有使用大量动画，禁用是安全的，但个别部件仍可能无视此设置强制使用 GPU。
+  icon_pack:
+    available: 可用图标包
+    selected: 当前图标包
+  language: 语言
+  monday: 星期一
+  performance_mode:
+    label: 优化
+    on_battery: 使用电池时
+    on_energy_saver: 节电模式下
+    options:
+      disabled: 禁用
+      extreme: 极致
+      minimal: 最小
+    plugged: 插电或充电时
+  polling_interval: 系统轮询间隔
+  polling_interval_description: DockBar 检查 CPU、RAM、网络和磁盘活动等系统资源的频率（单位为秒）。数值越小更新越频繁，但资源占用会稍高。
+  saturday: 星期六
+  start_of_week: 每周起始日
+  startup: 开机自启
+  sunday: 星期日
+  suspend_on_game_mode: 在游戏模式下暂停部件
+  suspend_on_game_mode_description: 当 Windows 游戏模式启用时，所有部件 Web 视图都会被销毁，为游戏释放 CPU 和内存。游戏模式结束后，部件会自动恢复。
+  theme:
+    available: 可用主题
+    selected: 当前主题
+global: 全局
+header:
+  labels:
+    developer: 开发者选项
+    general: 通用设置
+    monitors: 显示器
+    shortcuts: 快捷键
+    widget: 部件
+inProgress: 进行中…
+inherit: 继承
+insert: 插入
+join_us: 加入我们
+loading: 加载中…
+miscellaneous: 杂项
+monitors_configurations:
+  label: 显示器 {{index}}
+more: 更多
+'no': 否
+open: 打开
+quit: 退出
+remove: 移除
+reset_all_to_default: 全部重置为默认值
+reset_configurations: 重置配置
+reset_to_default: 重置为默认值
+resources:
+review_request:
+  not_now: 暂不
+  sure: 当然
+  title: 喜欢 DockBar 吗？
+save: 保存
+save_and_restart: 保存并重启
+search: 搜索
+see_more: 查看更多
+session:
+  logout: 退出登录
+  plan: 计划
+  sign_in: 登录
+  sign_in_hint: 浏览器将打开，以便您安全登录。
+  upgrade_to: 升级至
+shortcuts:
+  disabled_tooltip: 部件及其快捷键已被禁用
+  duplicate_error: 检测到冲突的快捷键
+  duplicate_error_hint: 部分快捷键被分配给了多个操作。禁用其中一个冲突的部件，或重新分配重复的按键绑定即可解决。
+  enable: 启用内置快捷键系统
+  enable_tooltip: 如果您要用 DockBar 客户端实现自己的快捷键系统，请禁用此项。
+  labels:
+    create_new_workspace: 创建工作区
+    create_new_workspace_row: 新建工作区行
+    destroy_current_workspace: 销毁当前工作区
+    misc_force_quit: 强制退出
+    misc_force_restart: 强制重启
+    move_to_workspace: 移动到工作区 {{0}}
+    pause_toggle: 暂停/恢复快捷键
+    send_to_next_workspace: 将窗口发送到下一个工作区
+    send_to_previous_workspace: 将窗口发送到上一个工作区
+    send_to_workspace: 发送到工作区 {{0}}
+    send_to_workspace_down: 将窗口发送到下面的工作区
+    send_to_workspace_up: 将窗口发送到上面的工作区
+    switch_to_next_workspace: 切换到下一个工作区
+    switch_to_previous_workspace: 切换到上一个工作区
+    switch_to_workspace_down: 切换到下面的工作区
+    switch_to_workspace_up: 切换到上面的工作区
+    switch_workspace: 切换到工作区 {{0}}
+  readonly_tooltip: 这是只读快捷键
+  reset: 重置为默认值
+sides:
+  bottom: 下方
+  left: 左侧
+  right: 右侧
+  top: 顶部
+wall:
+  blur: 模糊度
+  cancel: 取消
+  close: 关闭
+  collection_name: 集合名称
+  collections: 集合
+  contrast: 对比度
+  corrupted_wallpapers_message: 以下壁纸已损坏，建议删除：
+  coverage_pause_threshold: 暂停阈值（窗口覆盖率）
+  create: 创建
+  create_collection: 创建集合
+  default_collection: 默认壁纸或集合
+  default_collection_description: 应用于所有未单独指定集合的显示器与工作区。
+  delete_collection: 删除集合
+  edit_collection: 编辑集合
+  extend: 跨屏扩展
+  fit:
+    contain: 适应
+    cover: 覆盖
+    fill: 填充
+  flipHorizontal: 水平翻转
+  flipVertical: 垂直翻转
+  generating_thumbnails: 生成壁纸缩略图
+  hours: 小时
+  interval: 更换壁纸间隔
+  minutes: 分钟
+  monitor_collection: 显示器集合
+  multimonitor_behaviour: 多显示器行为
+  muted: 静音视频声音
+  no_background: 幻灯片为空，将改用主题背景。
+  no_collections: 尚未创建任何集合。点击「+」按钮创建一个。
+  objectFit: 背景适应方式
+  objectPosition: 背景位置
+  overlayColor: 叠加层颜色
+  overlayMixBlendMode: 叠加层混合模式
+  per_monitor: 每台显示器
+  per_monitor_config: 每个显示器的配置
+  playback: 播放速度
+  position:
+    bottom: 底部
+    center: 居中
+    left: 左侧
+    right: 右侧
+    top: 顶部
+  processing_video: 处理视频
+  random: 随机播放幻灯片
+  saturation: 饱和度
+  seconds: 秒
+  select_collection: 选择集合
+  thumbnail_generation_complete: 缩略图生成完成
+  thumbnail_generation_finished: 缩略图已成功生成
+  use_accent_color: 使用壁纸强调色
+  wallpaper_collection: 壁纸集合
+  wallpaper_settings: 壁纸设置
+  wallpapers: 壁纸
+  wallpapers_and_collections: 壁纸和集合
+  withOverlay: 启用叠加层
+  workspace_collections: 工作区集合
+welcome:
+  give_a_review: 写评价
+  message: DockBar 是一款面向 Windows 的免费开源桌面环境。 您可以完全掌控桌面的外观与行为，自定义每一处细节，以契合您的工作流程与风格。
+  ok: 开始使用
+  review: 如果您喜欢使用 DockBar，欢迎在商店留下评价——您的反馈有助于项目成长和改进。
+  title: 欢迎使用 DockBar
+widget:
+  default_instance: 默认实例
+  default_instance_hint: 始终处于活动状态，使用根部件配置
+  enable: 启用此部件
+  enable_for_monitor: 在此显示器上启用
+  extra_instances: 额外实例
+  instance: 实例
+  instances: 实例
+wm:
+  animations:
+    duration: 动画时长（毫秒）
+    ease_function: 动画缓动函数
+    enable: 启用窗口动画
+  author: 作者
+  auto_stack: 按应用类别自动堆叠
+  border:
+    enable: 启用窗口边框
+    offset: 边框偏移
+    width: 边框宽度
+  description: 描述
+  drag_behavior: 拖动行为
+  drag_behavior_options:
+    sort: 排序（拖动时重新排序窗口）
+    swap: 交换（拖动结束时交换窗口）
+  floating:
+    height: 浮动窗口高度
+    title: 浮动窗口大小
+    width: 浮动窗口宽度
+  layout: 布局
+  resize_delta: 调整大小增量（%）
+  space_between_containers: 容器间间距
+  stack_bar_visibility: 堆叠栏可见性
+  stack_bar_visibility_options:
+    always: 总是
+    as_needed: 根据需要
+  workspace_offset: 工作区偏移（边距）
+  workspace_padding: 工作区内边距
+'yes': 是

@@ -1,0 +1,28 @@
+app_menu:
+  close: بستن
+  close_multiple: همه را ببندید
+  copy_handles: دسته کپی کردن
+  edit_app_icon: ویرایش نماد برنامه
+  kill: فرآیند کشتن
+  kill_multiple: کشتن تمام فرآیندها
+  open_file_location: مکان فایل را باز کنید
+  pin: پین کردن
+  pin_to_center: پین به مرکز
+  pin_to_left: پین به سمت چپ
+  pin_to_right: پین به راست
+  run_as: به عنوان مدیر اجرا کنید
+  unpin: باز کردن
+context_menu:
+  edit_icon: ویرایش نماد
+  remove_separator: جداکننده را بردارید
+  reorder_disable: نوار وظیفه قفل
+  reorder_enable: نوار کار را باز کنید
+taskbar_menu:
+  add_apps: افزودن برنامه‌ها
+  add_file: پرونده سفارشی
+  add_separator: جداکننده را اضافه کنید
+  media: مدیا پلیر
+  settings: تنظیمات
+  task_manager: Task Manager
+weg:
+  empty: هیچ موردی برای نمایش وجود ندارد

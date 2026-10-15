@@ -1,0 +1,28 @@
+app_menu:
+  close: Tanca
+  close_multiple: Tanca tot
+  copy_handles: Manelles de còpia
+  edit_app_icon: Edita la icona de l'aplicació
+  kill: Procés de matança
+  kill_multiple: Mata tots els processos
+  open_file_location: Obriu la ubicació del fitxer
+  pin: Agulla
+  pin_to_center: Pin al centre
+  pin_to_left: Pin a l’esquerra
+  pin_to_right: Pin a la dreta
+  run_as: Executa com administrador
+  unpin: Desfeta
+context_menu:
+  edit_icon: Icona d'edició
+  remove_separator: Elimina el separador
+  reorder_disable: Barra de tasques de bloqueig
+  reorder_enable: Desbloqueja la barra de tasques
+taskbar_menu:
+  add_apps: Afegeix aplicacions
+  add_file: Pin el fitxer personalitzat
+  add_separator: Afegeix un separador
+  media: Reproductor multimèdia
+  settings: Configuració
+  task_manager: Gestor de tasques
+weg:
+  empty: No hi ha elements per mostrar

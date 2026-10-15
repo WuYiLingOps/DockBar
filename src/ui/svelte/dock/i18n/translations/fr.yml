@@ -1,0 +1,28 @@
+app_menu:
+  close: Fermer
+  close_multiple: Tout fermer
+  copy_handles: Copier l'ID du processus
+  edit_app_icon: Modifier l'icône de l'application
+  kill: Terminer le processus
+  kill_multiple: Terminer tous les processus
+  open_file_location: Ouvrir l'emplacement du fichier
+  pin: Épingler
+  pin_to_center: Épingler au centre
+  pin_to_left: Épingler à gauche
+  pin_to_right: Épingler à droite
+  run_as: Exécuter en tant qu'administrateur
+  unpin: Détacher
+context_menu:
+  edit_icon: Modifier l'icône
+  remove_separator: Supprimer le séparateur
+  reorder_disable: Verrouiller la barre des tâches
+  reorder_enable: Déverrouiller la barre des tâches
+taskbar_menu:
+  add_apps: Ajouter des applications
+  add_file: Épingler un fichier
+  add_separator: Ajouter un séparateur
+  media: Lecteur multimédia
+  settings: Paramètres
+  task_manager: Gestionnaire des tâches
+weg:
+  empty: Aucun élément à afficher

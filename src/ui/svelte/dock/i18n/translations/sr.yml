@@ -1,0 +1,28 @@
+app_menu:
+  close: Близу
+  close_multiple: Затворите све
+  copy_handles: Копирајте ручке
+  edit_app_icon: Уреди икону апликације
+  kill: Килл Процесс
+  kill_multiple: Убијте све процесе
+  open_file_location: Отворите локацију датотеке
+  pin: Пин
+  pin_to_center: ПИН до центра
+  pin_to_left: Игните лево
+  pin_to_right: Пин удесно
+  run_as: Покрени као администратор
+  unpin: Развелити
+context_menu:
+  edit_icon: Едит Ицон
+  remove_separator: Уклоните сепаратор
+  reorder_disable: Закључајте траку задатака
+  reorder_enable: Откључајте траку задатака
+taskbar_menu:
+  add_apps: Додај апликације
+  add_file: ПИН Прилагођена датотека
+  add_separator: Додај сепаратор
+  media: Медиа Плаиер
+  settings: Подешавања
+  task_manager: Таск Манагер
+weg:
+  empty: Нема ставки за приказ

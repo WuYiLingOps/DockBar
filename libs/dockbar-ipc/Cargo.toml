@@ -1,0 +1,28 @@
+[package]
+name = "dockbar-ipc"
+version = "1.0.0"
+edition = "2024"
+
+[lints]
+workspace = true
+
+[dependencies]
+clap = { workspace = true, features = ["derive"] }
+tokio = { workspace = true, features = ["rt", "time", "sync"] }
+thiserror = { workspace = true }
+log = { workspace = true }
+interprocess = { workspace = true, features = ["tokio"] }
+dockbar-core = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+uuid = { workspace = true, features = ["serde"] }
+widestring = { workspace = true }
+windows = { workspace = true, features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Security_Authorization",
+    "Win32_System_IO",
+    "Win32_System_RemoteDesktop",
+    "Win32_System_Pipes",
+    "Win32_System_Threading",
+] }

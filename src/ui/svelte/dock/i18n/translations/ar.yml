@@ -1,0 +1,28 @@
+app_menu:
+  close: اغلق
+  close_multiple: اغلق الكل
+  copy_handles: انسخ الرمز
+  edit_app_icon: تحرير أيقونة التطبيق
+  kill: قتل العملية
+  kill_multiple: اقتل جميع العمليات
+  open_file_location: افتح مكان الملف
+  pin: ثبت الملف
+  pin_to_center: ثبت الملف في الوسط
+  pin_to_left: ثبت الملف على اليسار
+  pin_to_right: ثبت الملف على اليمين
+  run_as: تشغيل كمسؤول
+  unpin: إزالة التثبيت
+context_menu:
+  edit_icon: تحرير أيقونة
+  remove_separator: إزالة الفاصل
+  reorder_disable: قفل شريط المهام
+  reorder_enable: فتح شريط المهام
+taskbar_menu:
+  add_apps: إضافة تطبيقات
+  add_file: ثبت الملف
+  add_separator: إضافة فاصل
+  media: مشغل الوسائط
+  settings: الأعدادات
+  task_manager: مدير المهام
+weg:
+  empty: لا توجد عناصر لعرضها

@@ -1,0 +1,18 @@
+[package]
+name = "dockbar-utils"
+version = "1.0.0"
+edition = "2024"
+rust-version = "1.97"
+
+[dependencies]
+sha2 = { workspace = true }
+base64 = { workspace = true }
+windows = { workspace = true, features = [
+  "Win32_Foundation",
+  "Win32_UI_WindowsAndMessaging",
+  "Win32_UI_Input_KeyboardAndMouse",
+  "Win32_System_Threading",
+] }
+
+[lints]
+workspace = true

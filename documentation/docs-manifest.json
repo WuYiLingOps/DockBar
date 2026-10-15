@@ -1,0 +1,90 @@
+{
+  "$schemaVersion": 1,
+  "description": "Navigation/metadata manifest for the DockBar documentation viewer. Markdown files remain the source of truth for content; this file only describes structure, ordering and status. TOC/headings should be extracted from each file at build time, not duplicated here.",
+  "categories": [
+    { "id": "resources", "title": "Resources — Shared Concepts", "order": 1 },
+    { "id": "resource-kinds", "title": "Resource Kinds", "order": 2 },
+    { "id": "themes", "title": "Themes", "order": 3 },
+    { "id": "widgets", "title": "Widgets", "order": 4 },
+    { "id": "reference", "title": "Reference", "order": 5 }
+  ],
+  "docs": [
+    {
+      "id": "resource-guidelines",
+      "title": "Resource Guidelines",
+      "description": "Shared concepts for all resource kinds: resource IDs, metadata, i18n, extended YAML (!include/!extend), folder structure, loading/bundling with the slu CLI.",
+      "file": "resource-guidelines.md",
+      "slug": "resource-guidelines",
+      "category": "resources",
+      "order": 1,
+      "audience": ["dev"],
+      "status": "published"
+    },
+    {
+      "id": "resource-text",
+      "title": "ResourceText & Translations",
+      "description": "The ResourceText type used for every user-facing string in a resource, and the slu resource translate workflow.",
+      "file": "resource-text.md",
+      "slug": "resource-text",
+      "category": "resources",
+      "order": 2,
+      "audience": ["dev"],
+      "status": "published"
+    },
+    {
+      "id": "supported-languages",
+      "title": "Supported Languages",
+      "description": "Where the canonical language list lives and how it drives the language picker and translation tooling.",
+      "file": "supported-languages.md",
+      "slug": "supported-languages",
+      "category": "resources",
+      "order": 3,
+      "audience": ["dev"],
+      "status": "published"
+    },
+    {
+      "id": "design-system",
+      "title": "Design System & Manifesto",
+      "description": "The DockBar design contract: flat, simple, light/dark-adaptive design built on shared tokens and data-skin standard components, kept minimal so themes can mod everything.",
+      "file": "design-system.md",
+      "slug": "design-system",
+      "category": "themes",
+      "order": 1,
+      "audience": ["dev"],
+      "status": "published"
+    },
+    {
+      "id": "theme-guidelines",
+      "title": "Theme Guidelines",
+      "description": "How to create a theme: per-widget styles, shared styles, CSS variable settings, system CSS variables.",
+      "file": "theme-guidelines.md",
+      "slug": "theme-guidelines",
+      "category": "themes",
+      "order": 2,
+      "audience": ["dev"],
+      "status": "published"
+    },
+    {
+      "id": "widget-guidelines",
+      "title": "Widget Guidelines",
+      "description": "How to build a custom widget: metadata.yml, presets/instances, settings schema, CSS conventions.",
+      "file": "widget-guidelines.md",
+      "slug": "widget-guidelines",
+      "category": "widgets",
+      "order": 1,
+      "audience": ["dev"],
+      "status": "published"
+    },
+    {
+      "id": "widget-js-api",
+      "title": "Widget JS API",
+      "description": "The @dockbar/lib runtime API: Widget.self.init()/.ready() lifecycle, the invoke/subscribe wrappers, and where commands/events are actually declared (Rust) and generated (TS).",
+      "file": "widget-js-api.md",
+      "slug": "widget-js-api",
+      "category": "widgets",
+      "order": 2,
+      "audience": ["dev"],
+      "status": "published"
+    }
+  ]
+}

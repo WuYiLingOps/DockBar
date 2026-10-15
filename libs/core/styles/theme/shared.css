@@ -1,0 +1,474 @@
+/*
+ * The idea with this feature of Shared styles over all widgets, is to provide a way to
+ * reusable components and styles that can be used across all widgets.
+ *
+ * As example all bundled widgets related to popups uses these shared styles.
+ *
+ * By default we shouldn't touch global scopes like `body`, `button`, `input` etc.
+ * Instead we use data attributes to target specific elements, and only if the developer
+ * decides to use these shared components/styles in their widgets.
+ */
+input[type="checkbox"][data-skin="switch"]:disabled,
+input[type="checkbox"][data-skin="default"]:disabled,
+input[type="radio"][data-skin="default"]:disabled,
+input[type="text"][data-skin="transparent"]:disabled,
+input[type="search"][data-skin="transparent"]:disabled,
+input[type="password"][data-skin="transparent"]:disabled,
+input[type="email"][data-skin="transparent"]:disabled,
+input[type="number"][data-skin="transparent"]:disabled,
+input[type="tel"][data-skin="transparent"]:disabled,
+input[type="url"][data-skin="transparent"]:disabled,
+input[type="color"][data-skin="transparent"]:disabled,
+input[type="file"][data-skin="transparent"]:disabled,
+select[data-skin="transparent"]:disabled,
+input[type="text"][data-skin="default"]:disabled,
+input[type="search"][data-skin="default"]:disabled,
+input[type="password"][data-skin="default"]:disabled,
+input[type="email"][data-skin="default"]:disabled,
+input[type="number"][data-skin="default"]:disabled,
+input[type="tel"][data-skin="default"]:disabled,
+input[type="url"][data-skin="default"]:disabled,
+input[type="color"][data-skin="default"]:disabled,
+input[type="file"][data-skin="default"]:disabled,
+select[data-skin="default"]:disabled,
+input[type="range"][data-skin="flat"]:disabled {
+  opacity: 0.5;
+}
+
+input[type="range"][data-skin="flat"] {
+  appearance: none;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  height: 1.5rem;
+  border-radius: var(--radius-s);
+  background: var(--dockbar-std-ui-hover-overlay);
+}
+input[type="range"][data-skin="flat"]::-webkit-slider-runnable-track {
+  appearance: none;
+}
+input[type="range"][data-skin="flat"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 0;
+  height: 0;
+  box-shadow: -100vw 0 0 100vw var(--dockbar-std-ui-color);
+}
+input[type="range"][data-skin="flat"][data-orientation="vertical"] {
+  width: 1.5rem;
+  height: 100%;
+  writing-mode: vertical-lr;
+  direction: rtl;
+}
+input[type="range"][data-skin="flat"][data-orientation="vertical"]::-webkit-slider-thumb {
+  box-shadow: 0 100vh 0 100vh var(--dockbar-std-ui-color);
+}
+
+input[type="text"][data-skin="default"],
+input[type="search"][data-skin="default"],
+input[type="password"][data-skin="default"],
+input[type="email"][data-skin="default"],
+input[type="number"][data-skin="default"],
+input[type="tel"][data-skin="default"],
+input[type="url"][data-skin="default"],
+input[type="color"][data-skin="default"],
+input[type="file"][data-skin="default"],
+select[data-skin="default"] {
+  width: 100%;
+  padding: 0.25em 0.5em;
+  background-color: var(--dockbar-std-bg-light-color);
+  border: 1px solid var(--dockbar-std-bg-dark-color);
+  border-radius: var(--radius-s);
+  font-size: inherit;
+}
+input[type="text"][data-skin="default"]:hover:enabled,
+input[type="search"][data-skin="default"]:hover:enabled,
+input[type="password"][data-skin="default"]:hover:enabled,
+input[type="email"][data-skin="default"]:hover:enabled,
+input[type="number"][data-skin="default"]:hover:enabled,
+input[type="tel"][data-skin="default"]:hover:enabled,
+input[type="url"][data-skin="default"]:hover:enabled,
+input[type="color"][data-skin="default"]:hover:enabled,
+input[type="file"][data-skin="default"]:hover:enabled,
+select[data-skin="default"]:hover:enabled {
+  border-color: var(--dockbar-std-ui-hover-color);
+}
+input[type="text"][data-skin="default"][data-error="true"],
+input[type="search"][data-skin="default"][data-error="true"],
+input[type="password"][data-skin="default"][data-error="true"],
+input[type="email"][data-skin="default"][data-error="true"],
+input[type="number"][data-skin="default"][data-error="true"],
+input[type="tel"][data-skin="default"][data-error="true"],
+input[type="url"][data-skin="default"][data-error="true"],
+input[type="color"][data-skin="default"][data-error="true"],
+input[type="file"][data-skin="default"][data-error="true"],
+select[data-skin="default"][data-error="true"] {
+  border-color: var(--color-red-600);
+}
+input[type="text"][data-skin="default"]:read-only,
+input[type="search"][data-skin="default"]:read-only,
+input[type="password"][data-skin="default"]:read-only,
+input[type="email"][data-skin="default"]:read-only,
+input[type="number"][data-skin="default"]:read-only,
+input[type="tel"][data-skin="default"]:read-only,
+input[type="url"][data-skin="default"]:read-only,
+input[type="color"][data-skin="default"]:read-only,
+input[type="file"][data-skin="default"]:read-only,
+select[data-skin="default"]:read-only {
+  background-color: var(--dockbar-std-bg-color);
+  color: var(--dockbar-std-fg-muted-color);
+  cursor: default;
+}
+
+input[type="text"][data-skin="transparent"],
+input[type="search"][data-skin="transparent"],
+input[type="password"][data-skin="transparent"],
+input[type="email"][data-skin="transparent"],
+input[type="number"][data-skin="transparent"],
+input[type="tel"][data-skin="transparent"],
+input[type="url"][data-skin="transparent"],
+input[type="color"][data-skin="transparent"],
+input[type="file"][data-skin="transparent"],
+select[data-skin="transparent"] {
+  width: 100%;
+  padding: 0.25em 0.5em;
+  background-color: transparent;
+  color: inherit;
+  border: 1px solid transparent;
+  border-radius: var(--radius-s);
+  font-size: inherit;
+}
+input[type="text"][data-skin="transparent"]:focus,
+input[type="search"][data-skin="transparent"]:focus,
+input[type="password"][data-skin="transparent"]:focus,
+input[type="email"][data-skin="transparent"]:focus,
+input[type="number"][data-skin="transparent"]:focus,
+input[type="tel"][data-skin="transparent"]:focus,
+input[type="url"][data-skin="transparent"]:focus,
+input[type="color"][data-skin="transparent"]:focus,
+input[type="file"][data-skin="transparent"]:focus,
+select[data-skin="transparent"]:focus {
+  outline: none;
+}
+input[type="text"][data-skin="transparent"][data-error="true"],
+input[type="search"][data-skin="transparent"][data-error="true"],
+input[type="password"][data-skin="transparent"][data-error="true"],
+input[type="email"][data-skin="transparent"][data-error="true"],
+input[type="number"][data-skin="transparent"][data-error="true"],
+input[type="tel"][data-skin="transparent"][data-error="true"],
+input[type="url"][data-skin="transparent"][data-error="true"],
+input[type="color"][data-skin="transparent"][data-error="true"],
+input[type="file"][data-skin="transparent"][data-error="true"],
+select[data-skin="transparent"][data-error="true"] {
+  border-color: var(--color-red-600);
+}
+input[type="text"][data-skin="transparent"]:read-only,
+input[type="search"][data-skin="transparent"]:read-only,
+input[type="password"][data-skin="transparent"]:read-only,
+input[type="email"][data-skin="transparent"]:read-only,
+input[type="number"][data-skin="transparent"]:read-only,
+input[type="tel"][data-skin="transparent"]:read-only,
+input[type="url"][data-skin="transparent"]:read-only,
+input[type="color"][data-skin="transparent"]:read-only,
+input[type="file"][data-skin="transparent"]:read-only,
+select[data-skin="transparent"]:read-only {
+  background-color: transparent;
+  cursor: default;
+}
+
+input[type="radio"][data-skin="default"] {
+  appearance: none;
+  position: relative;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--color-gray-400);
+  background-color: transparent;
+  flex-shrink: 0;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  cursor: pointer;
+}
+input[type="radio"][data-skin="default"]::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background-color: var(--dockbar-std-ui-fg-color);
+  transform: scale(0);
+  transition: transform 0.2s ease;
+}
+input[type="radio"][data-skin="default"]:checked {
+  border-color: var(--dockbar-std-ui-color);
+  background-color: var(--dockbar-std-ui-color);
+}
+input[type="radio"][data-skin="default"]:checked::before {
+  transform: scale(1);
+}
+input[type="radio"][data-skin="default"]:hover:enabled:not(:checked) {
+  border-color: var(--dockbar-std-ui-hover-color);
+}
+input[type="radio"][data-skin="default"]:hover:enabled:checked {
+  background-color: var(--dockbar-std-ui-hover-color);
+}
+
+input[type="checkbox"][data-skin="default"] {
+  appearance: none;
+  position: relative;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-xs);
+  border: 2px solid var(--color-gray-400);
+  background-color: transparent;
+  flex-shrink: 0;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  cursor: pointer;
+}
+input[type="checkbox"][data-skin="default"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--dockbar-std-ui-fg-color);
+  clip-path: polygon(0% 55%, 15% 40%, 40% 60%, 85% 10%, 100% 25%, 40% 90%);
+  transform: scale(0);
+  transition: transform 0.15s ease;
+}
+input[type="checkbox"][data-skin="default"]:checked {
+  border-color: var(--dockbar-std-ui-color);
+  background-color: var(--dockbar-std-ui-color);
+}
+input[type="checkbox"][data-skin="default"]:checked::before {
+  transform: scale(0.7);
+}
+input[type="checkbox"][data-skin="default"]:hover:enabled:not(:checked) {
+  border-color: var(--dockbar-std-ui-hover-color);
+}
+input[type="checkbox"][data-skin="default"]:hover:enabled:checked {
+  background-color: var(--dockbar-std-ui-hover-color);
+}
+
+input[type="checkbox"][data-skin="switch"] {
+  appearance: none;
+  position: relative;
+  width: 36px;
+  height: 18px;
+  background-color: var(--color-gray-400);
+  border-radius: var(--radius-full);
+  transition: background-color 0.3s ease;
+}
+input[type="checkbox"][data-skin="switch"]::before {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--dockbar-std-ui-fg-color);
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
+}
+input[type="checkbox"][data-skin="switch"]:checked {
+  background-color: var(--dockbar-std-ui-color);
+}
+input[type="checkbox"][data-skin="switch"]:checked::before {
+  transform: translateX(18px);
+}
+input[type="checkbox"][data-skin="switch"]:hover:enabled {
+  background-color: var(--color-gray-500);
+}
+input[type="checkbox"][data-skin="switch"]:hover:enabled:checked {
+  background-color: var(--dockbar-std-ui-hover-color);
+}
+
+::picker(select) {
+  appearance: base-select;
+  border: none;
+  box-shadow: var(--shadow-s);
+  border-radius: var(--radius-m);
+  background-color: var(--dockbar-std-bg-light-color);
+  padding: 0.25em;
+}
+
+select[data-skin="default"],
+select[data-skin="transparent"] {
+  display: flex;
+  align-items: center;
+  appearance: base-select;
+}
+select[data-skin="default"]::picker-icon,
+select[data-skin="transparent"]::picker-icon {
+  color: var(--dockbar-std-fg-muted-color);
+  width: min-content;
+  height: min-content;
+  transition: transform 0.4s ease;
+}
+select[data-skin="default"]:open::picker-icon,
+select[data-skin="transparent"]:open::picker-icon {
+  transform: rotate(180deg);
+}
+select[data-skin="default"] option,
+select[data-skin="transparent"] option {
+  padding: 0.25em 0.5em;
+  border-radius: var(--radius-s);
+  margin-bottom: 0.5em;
+}
+select[data-skin="default"] option:last-of-type,
+select[data-skin="transparent"] option:last-of-type {
+  margin-bottom: 0;
+}
+select[data-skin="default"] option:hover,
+select[data-skin="transparent"] option:hover {
+  background-color: var(--dockbar-std-ui-hover-overlay);
+}
+select[data-skin="default"] option:checked,
+select[data-skin="transparent"] option:checked {
+  background-color: var(--dockbar-std-ui-selected-overlay);
+  font-weight: 600;
+}
+
+select[data-skin="transparent"]:hover:enabled {
+  background-color: var(--dockbar-std-ui-hover-overlay);
+}
+select[data-skin="transparent"]:active:enabled {
+  background-color: var(--dockbar-std-ui-pressed-overlay);
+}
+
+button[data-skin="default"],
+button[data-skin="solid"],
+button[data-skin="transparent"] {
+  padding: 0.25em 0.5em;
+  border-radius: var(--radius-s);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+}
+button[data-skin="default"]:enabled:active,
+button[data-skin="solid"]:enabled:active,
+button[data-skin="transparent"]:enabled:active {
+  transform: translateY(1px) scale(0.98);
+}
+button[data-skin="default"]:disabled,
+button[data-skin="solid"]:disabled,
+button[data-skin="transparent"]:disabled {
+  opacity: 0.5;
+}
+
+div[data-behavior="group"] {
+  display: flex;
+  border-radius: var(--radius-s);
+  box-shadow: var(--shadow-s);
+}
+div[data-behavior="group"] > button {
+  box-shadow: none;
+}
+div[data-behavior="group"] > button:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+div[data-behavior="group"] > button:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+button[data-skin="transparent"]:hover:enabled {
+  background-color: var(--dockbar-std-ui-hover-overlay);
+}
+button[data-skin="transparent"]:active:enabled {
+  background-color: var(--dockbar-std-ui-pressed-overlay);
+}
+
+button[data-skin="solid"] {
+  background-color: var(--dockbar-std-ui-color);
+  color: var(--dockbar-std-ui-fg-color);
+  box-shadow: var(--shadow-s);
+}
+button[data-skin="solid"]:hover:enabled {
+  background-color: var(--dockbar-std-ui-hover-color);
+}
+
+button[data-skin="default"] {
+  background-color: var(--dockbar-std-bg-light-color);
+  box-shadow: var(--shadow-s);
+}
+button[data-skin="default"]:hover:enabled {
+  color: var(--dockbar-std-ui-hover-color);
+}
+
+:root {
+  --dockbar-std-fg-color: var(--color-gray-900);
+  --dockbar-std-fg-secondary-color: var(--color-gray-700);
+  --dockbar-std-fg-muted-color: var(--color-gray-500);
+  --dockbar-std-fg-disabled-color: var(--color-gray-400);
+  --dockbar-std-bg-dark-color: light-dark(var(--color-gray-75), var(--color-gray-25));
+  --dockbar-std-bg-color: var(--color-gray-50);
+  --dockbar-std-bg-light-color: light-dark(var(--color-gray-25), var(--color-gray-75));
+  --dockbar-std-ui-color: light-dark(var(--system-accent-dark-color), var(--system-accent-light-color));
+  --dockbar-std-ui-fg-color: var(--color-gray-100);
+  --dockbar-std-ui-hover-color: light-dark(
+    var(--system-accent-darker-color),
+    var(--system-accent-lighter-color)
+  );
+  --dockbar-std-ui-hover-overlay: oklch(from var(--system-accent-color) l c h / 0.2);
+  --dockbar-std-ui-pressed-overlay: oklch(from var(--system-accent-color) l c h / 0.3);
+  --dockbar-std-ui-selected-overlay: oklch(from var(--system-accent-color) l c h / 0.1);
+}
+
+:root {
+  opacity: 1;
+  transition: opacity 150ms ease-out;
+}
+:root[data-widget-hidden] {
+  opacity: 0;
+}
+
+*:focus-visible {
+  outline-offset: 2px;
+  outline-style: solid;
+  outline-width: 2px;
+  outline-color: var(--system-accent-color);
+}
+
+* ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+* ::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+* ::-webkit-scrollbar-thumb {
+  background-color: var(--color-gray-300);
+  border-radius: var(--radius-full);
+}
+* ::-webkit-scrollbar-thumb:active {
+  background-color: var(--color-gray-400);
+}
+
+body {
+  color: var(--dockbar-std-fg-color);
+  background-color: var(--dockbar-std-bg-color);
+}
+
+body:has(> div > .slu-std-popover) {
+  background-color: transparent;
+  overflow: hidden;
+}
+body:has(> div > .slu-std-popover) > #root,
+body:has(> div > .slu-std-popover) > #app {
+  width: min-content;
+  height: min-content;
+  overflow: hidden;
+}
+
+.slu-std-popover {
+  width: 300px;
+  max-height: 700px;
+  overflow: auto;
+  padding: var(--spacing-xs);
+  margin: 10px;
+  background-color: var(--dockbar-std-bg-color);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-m);
+  font-size: 0.8rem;
+}
+.slu-std-popover .svg-icon {
+  height: 1rem;
+}

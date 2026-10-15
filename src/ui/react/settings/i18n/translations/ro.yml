@@ -1,0 +1,301 @@
+action:
+  confirm: Ești sigur?
+  confirm_body: Această acțiune nu poate fi anulată.
+cancel: Anulare
+close: Aproape
+delete: Șterge
+devtools:
+  app_folders: Foldere de aplicații
+  color_palette: Paleta de culori
+  color_palette_note: Aceste culori se adaptează automat la modul de lumină/întuneric — fiecare nuanță este raportată la contrastul cu fundalul curent, nu o valoare fixă. Folosiți-le în loc de culorile codificate pentru a obține suport automat pentru teme.
+  custom_config_file: Încărcați fișierul de configurare personalizat
+  data_folder: Folder de date
+  enable: Activați instrumentele pentru dezvoltatori
+  enable_description: Deblochează instrumente avansate pentru inspectarea și depanarea elementelor interne ale interfeței de utilizare DockBar. Nu este destinat utilizării regulate.
+  icons: Pictograme stocate în cache
+  install_folder: Folder de instalare
+  load: Sarcină
+  settings_file: Fișier de setări
+  shared_components: Componente standard SLU
+  simulate_dialog:
+    label: Dialog Simulare
+    trigger: Trigger
+  simulate_perm:
+    label: Simulați cererea de permisiune pentru widget
+    result_allowed: ✓ Permisiune acordată
+    result_denied: ✗ Permisiune refuzată
+    trigger: Simula
+    widget_id_placeholder: '@autor/nume-widget'
+  tools: Instrumente
+  unlock_shortcuts: Deblocați comenzi rapide numai pentru citire
+  unlock_shortcuts_description: Permiteți editarea comenzilor rapide care sunt în mod normal numai pentru citire (de exemplu, suprascrieri de sistem).
+  unstable_optimizations: Optimizări instabile
+  unstable_optimizations_description: 'Activați semnalizatoarele Chromium experimentale care reduc utilizarea RAM.
+
+    Avertisment: dacă un widget se blochează, toate widget-urile care partajează același încărcător se vor bloca împreună.'
+  widgets_debug:
+    actions: Acțiuni
+    empty: Niciun widget încărcat. Faceți clic pe Reîmprospătare.
+    instance_id: ID de instanță
+    monitor_id: ID monitor
+    open_devtools: DevTools
+    refresh: Reîmprospăta
+    status: Stare
+    tab: Widgeturi
+    widget_id: ID widget
+discord_banner:
+  message: Conectați-vă cu alți utilizatori DockBar, obțineți ajutor, partajați teme și fiți la curent cu cele mai recente știri.
+  title: Alăturați-vă comunității noastre
+dock:
+  auto_hide: Ascundere automată
+  auto_hide_touch_disabled: Ascunderea automată nu este disponibilă pe dispozitivele cu ecran tactil
+  delay_to_hide: Întârzie să te ascunzi
+  delay_to_show: Întârzieți afișarea
+  dock_side: Poziţie
+  filtering: Filtrarea elementelor
+  gap: Decalaj
+  hide_mode:
+    always: Întotdeauna
+    never: Nu
+    on_overlap: Pe suprapunere
+  import_error: Nu s-au putut importa elementele din bara de activități
+  import_from_taskbar:
+    button: Importați din bara de activități Windows
+    label: Importați elemente fixate
+  import_no_items: Nu s-au găsit elemente fixate în bara de activități Windows
+  import_success: S-au importat {{count}} articole din bara de activități Windows
+  items:
+    gap: Spațiu între articole
+    label: Articole
+    middle_click_action:
+      close_app: Închideți aplicația
+      label: Acțiune de clic din mijloc
+      open_new_instance: Deschideți o nouă instanță
+    pinned_visibility:
+      always: Întotdeauna
+      label: Vizibilitatea elementelor fixate
+      when_primary: Când monitorul este principal
+    show_instance_counter: Afișați contorul ferestrelor deschise
+    show_window_title: Afișează titlul ferestrei deschise (numai orizontal)
+    size: Dimensiunea articolului
+    split_windows: Divizarea ferestrelor (un element pe fereastră)
+    temporal_visibility:
+      all: Toate
+      label: Vizibilitatea elementelor nefixate
+      on_monitor: Pe monitor
+  label: Dock/Bara de activități
+  margin: Marjă
+  mode:
+    full_width: Lățimea ecranului complet
+    min_content: Cât de mic poate fi
+  padding: Căptușeală
+  reveal_on_attention:
+    label: Afișează când o aplicație solicită atenție
+    never: Nu
+    until_activated: Până când se deschide aplicația
+    while_flashing: În timp ce clipește
+  show_end_task: Afișarea sarcinii finale în bara de activități
+  width: Lăţime
+general:
+  accent_color: Culoare de accent
+  date_format: Formatul datei
+  date_format_how_to: Cum se scrie un format de dată?
+  hardware_acceleration: Accelerație hardware
+  hardware_acceleration_description: Dezactivarea accelerației hardware va reduce utilizarea memoriei. Este sigur să dezactivați dacă nu utilizați animații grele, deși widgeturile individuale pot forța în continuare utilizarea GPU-ului, indiferent de această setare.
+  icon_pack:
+    available: Pachete de pictograme disponibile
+    selected: Pachete de pictograme active
+  language: Limba
+  monday: luni
+  performance_mode:
+    label: Optimizări
+    on_battery: Pe baterie
+    on_energy_saver: Pe economia de energie
+    options:
+      disabled: Dezactivat
+      extreme: Extrem
+      minimal: Minim
+    plugged: Conectat sau încărcat
+  polling_interval: Interval de interogare a sistemului
+  polling_interval_description: Cât de des (în secunde) DockBar verifică resursele sistemului, cum ar fi CPU, RAM, rețea și activitatea discului. Un număr mai mic înseamnă actualizări mai frecvente, dar o utilizare ușor mai mare a resurselor.
+  saturday: sâmbătă
+  start_of_week: Începutul săptămânii
+  startup: Rulați la pornire?
+  sunday: duminică
+  suspend_on_game_mode: Suspendați widget-urile în modul Joc
+  suspend_on_game_mode_description: Când Windows Game Mode este activ, toate vizualizările web widget sunt distruse pentru a elibera CPU și memorie pentru joc. Widgeturile sunt restaurate automat când se încheie Modul Joc.
+  theme:
+    available: Teme disponibile
+    selected: Teme active
+global: Global
+header:
+  labels:
+    developer: Pentru dezvoltatori
+    general: General
+    monitors: Monitoare
+    shortcuts: Comitete rapide
+    widget: Widget-uri
+inProgress: În curs...
+inherit: Moşteni
+insert: Introduce
+join_us: Alăturaţi-ne!
+loading: Se încarcă...
+miscellaneous: Diverse
+monitors_configurations:
+  label: Monitor {{index}}
+more: Mai mult
+'no': Nu
+open: Deschis
+quit: Părăsi
+remove: Elimina
+reset_all_to_default: Resetați toate la valorile implicite
+reset_configurations: Resetați configurațiile
+reset_to_default: Resetare la valoarea implicită
+resources:
+review_request:
+  not_now: Nu acum
+  sure: Sigur!
+  title: Vă bucurați de DockBar?
+save: Salvați
+save_and_restart: Salvați și reporniți
+search: Căutare
+see_more: A se vedea mai mult
+session:
+  logout: Sign out
+  plan: Plan
+  sign_in: Conectare
+  sign_in_hint: Browserul se va deschide astfel încât să vă puteți conecta în siguranță.
+  upgrade_to: Upgrade la
+shortcuts:
+  disabled_tooltip: Widgetul și comenzile rapide ale acestuia sunt dezactivate
+  duplicate_error: S-au detectat comenzi rapide conflictuale
+  duplicate_error_hint: Unele comenzi rapide sunt atribuite mai multor acțiuni. Dezactivați unul dintre widget-urile aflate în conflict sau reatribuiți legarea tastelor duplicate pentru rezolvare.
+  enable: Activați sistemul de comenzi rapide încorporate
+  enable_tooltip: Dezactivați dacă veți implementa propriul sistem de comenzi rapide folosind clientul UI DockBar
+  labels:
+    create_new_workspace: Creați un spațiu de lucru nou
+    create_new_workspace_row: Creați un nou rând de spațiu de lucru
+    destroy_current_workspace: Distrugeți spațiul de lucru actual
+    misc_force_quit: Forța a renunțat
+    misc_force_restart: Forțați repornirea
+    move_to_workspace: Treceți la Workspace {{0}}
+    pause_toggle: Întrerupeți/Reluați comenzile rapide
+    send_to_next_workspace: Trimiteți fereastra la următorul spațiu de lucru
+    send_to_previous_workspace: Trimiteți fereastra în spațiul de lucru anterior
+    send_to_workspace: Trimiteți la Workspace {{0}}
+    send_to_workspace_down: Trimiteți fereastra la spațiul de lucru de mai jos
+    send_to_workspace_up: Trimiteți fereastra în spațiul de lucru de mai sus
+    switch_to_next_workspace: Treceți la următorul spațiu de lucru
+    switch_to_previous_workspace: Treceți la spațiul de lucru anterior
+    switch_to_workspace_down: Comutați la spațiul de lucru de mai jos
+    switch_to_workspace_up: Comutați la spațiul de lucru de mai sus
+    switch_workspace: Treceți la Workspace {{0}}
+  readonly_tooltip: Aceasta este o scurtătură numai pentru citire
+  reset: Resetați la valorile implicite
+sides:
+  bottom: Fund
+  left: Stânga
+  right: Dreapta
+  top: Top
+wall:
+  blur: Ceață
+  cancel: Anula
+  close: Aproape
+  collection_name: Numele colecției
+  collections: Colecții
+  contrast: Contrast
+  corrupted_wallpapers_message: 'Imagini de fundal corupte, luați în considerare ștergerea acestora:'
+  coverage_pause_threshold: Pragul de pauză (acoperire fereastră)
+  create: Crea
+  create_collection: Creați o colecție
+  default_collection: Tapet sau colecție implicită
+  default_collection_description: Se aplică tuturor monitoarelor și spațiilor de lucru care nu au un set de suprareglare specific.
+  delete_collection: Șterge colecția
+  edit_collection: Editați colecția
+  extend: Extindeți primarul
+  fit:
+    contain: Conține
+    cover: Acoperire
+    fill: Umpleți
+  flipHorizontal: Flip orizontal
+  flipVertical: Flip vertical
+  generating_thumbnails: Generarea miniaturilor de fundal
+  hours: ore
+  interval: Schimbați tapet fiecare
+  minutes: minute
+  monitor_collection: Colecția de monitor
+  multimonitor_behaviour: Comportamentul multimonitor
+  muted: Dezactivați sunetul video
+  no_background: Slideshow gol, folosind în schimb fundalul temei.
+  no_collections: Nicio colecție încă creată. Faceți clic pe butonul + pentru a crea unul.
+  objectFit: Potrivire în fundal
+  objectPosition: Poziția de fundal
+  overlayColor: Culoare suprapunere
+  overlayMixBlendMode: Mod de amestecare suprapunere Mix
+  per_monitor: Per monitor
+  per_monitor_config: Configurație pe monitor
+  playback: Viteza de redare
+  position:
+    bottom: Fund
+    center: Centrul
+    left: Stânga
+    right: Corect
+    top: Sus
+  processing_video: Se procesează videoclipul
+  random: Prezentare de diapozitive aleatorie
+  saturation: Saturație
+  seconds: secunde
+  select_collection: Selectați Colecție
+  thumbnail_generation_complete: Generarea miniaturii finalizată
+  thumbnail_generation_finished: Generarea miniaturilor s-a încheiat cu succes
+  use_accent_color: Utilizați culoarea de accent pentru tapet
+  wallpaper_collection: Colecția de imagini de fundal
+  wallpaper_settings: Setări de fundal
+  wallpapers: Imagini de fundal
+  wallpapers_and_collections: Imagini de fundal și colecții
+  withOverlay: Cu suprapunere
+  workspace_collections: Colecții de spațiu de lucru
+welcome:
+  give_a_review: Dă o recenzie
+  message: DockBar este un mediu desktop gratuit și open source pentru Windows. Aici aveți control deplin asupra modului în care arată și se comportă desktopul, permițându-vă să personalizați fiecare detaliu pentru a se potrivi cu fluxul și stilul dvs. de lucru.
+  ok: Să începem!
+  review: Dacă vă place să utilizați DockBar, luați în considerare să lăsați o recenzie în magazin - feedbackul dvs. ajută proiectul să crească și să se îmbunătățească.
+  title: Bun venit la DockBar!
+widget:
+  default_instance: Instanță implicită
+  default_instance_hint: Întotdeauna activ, folosește configurația widget rădăcină
+  enable: Activați acest widget
+  enable_for_monitor: Activați pe acest monitor
+  extra_instances: Instanțe suplimentare
+  instance: Exemplu
+  instances: Instanțe
+wm:
+  animations:
+    duration: Durata de animație (MS)
+    ease_function: Funcția de ușurare a animației
+    enable: Activați animațiile Window
+  author: Autor
+  auto_stack: Stack automat în funcție de categoria de aplicație
+  border:
+    enable: Activați granița ferestrei
+    offset: Offset de frontieră
+    width: Lățimea graniței
+  description: Descriere
+  drag_behavior: Comportament de tragere
+  drag_behavior_options:
+    sort: Sortare (reordonează ferestrele în timp ce trageți)
+    swap: Schimbați (schimbați ferestrele la capătul de tragere)
+  floating:
+    height: Înălțimea ferestrelor plutitoare
+    title: Dimensiunea ferestrelor plutitoare
+    width: Lățimea ferestrelor plutitoare
+  layout: Aspect
+  resize_delta: Redimensionați delta (%)
+  space_between_containers: Spațiu între containere
+  stack_bar_visibility: Stack Bar Vizibilitate
+  stack_bar_visibility_options:
+    always: Întotdeauna
+    as_needed: La nevoie
+  workspace_offset: Spații de lucru Offset (marje)
+  workspace_padding: Padding spații de lucru
+'yes': Da

@@ -1,0 +1,67 @@
+auth:
+  login_failed_body: 登录期间出现问题。如果这种情况仍然存在，请确保 Windows「凭据管理器」服务（VaultSvc）已启用并正在运行，然后重试。
+  login_failed_title: 登录失败
+cancel: 取消
+done: 完成
+elevated:
+  description: |-
+    DockBar 正在以管理员权限运行。
+    这不会添加或改进任何功能，并且可能会带来安全风险。
+    为了更好的安全性，请在没有管理员权限的情况下重新启动它。
+  title: 以管理员身份运行
+file_explorer: 文件浏览器
+resource:
+  added: 已添加新资源
+  download_failed_body: 下载资源时出现问题，请向 DockBar 开发团队报告。
+  download_failed_title: 资源下载失败
+  downloading: 正在下载资源...
+  downloading_body: 这可能需要几秒钟，请不要关闭窗口。
+  enable: 启用
+  login_required_action: 登录
+  login_required_body: 您需要登录才能下载此资源。
+  login_required_title: 需要登录
+runtime:
+  corrupted_data: 数据损坏
+  corrupted_file: 配置文件已损坏，正在使用默认值。
+  corrupted_file_path: 损坏的文件路径
+  download: 前往下载页面
+  files_integrity: |-
+    我们无法验证应用文件的完整性。
+    文件被修改、损坏或安装不完整时，都可能出现这种情况。
+    出于安全考虑，DockBar 无法继续运行。
+    请从官方网站重新安装。
+  files_integrity_title: 安全警报：文件完整性检查失败
+  not_found: 未找到 WebView2 运行时
+  not_found_description: DockBar 需要 Webview2 运行时。请安装它。
+  outdated: WebView2 运行时版本过旧
+  outdated_description: DockBar 需要 Webview2 运行时 %{min_version} 或更高版本。请更新它。
+service:
+  not_running: DockBar 服务未运行
+  not_running_description: DockBar 服务（dockbar-service）是应用正常运行的依赖组件。
+  not_running_ok: 启动服务
+shortcut:
+  conflicts:
+    body: 部分快捷键被分配给了多个操作，请重新分配。
+    dismiss: 忽略
+    review: 查看
+    title: 检测到快捷键冲突
+  register:
+    placeholder: 按下任意组合键
+    title: 注册新快捷键
+widget_liveness:
+  failed_description: |-
+    部件「%{widget_name}」停止响应的次数过多。
+
+    您可以尝试重新启动应用。
+  failed_title: 部件错误
+widget_permissions:
+  perm_kill_processes: 强制关闭应用程序
+  perm_manage_app_windows: 控制其他应用程序的窗口（聚焦、关闭、最小化、移动）
+  perm_modify_configuration: 修改DockBar配置
+  perm_open_file: 打开文件
+  perm_run: 运行程序
+  request_description: |-
+    部件「%{widget_name}」正在请求 %{command} 的权限。
+
+    是否允许？
+  request_title: 部件权限请求

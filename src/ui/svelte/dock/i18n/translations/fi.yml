@@ -1,0 +1,27 @@
+app_menu:
+  close: kiinni
+  close_multiple: Sulje kaikki
+  copy_handles: Kopiokahvat
+  edit_app_icon: Muokkaa sovelluskuvaketta
+  kill: Tappoprosessi
+  kill_multiple: Tapa kaikki prosessit
+  open_file_location: Avaa tiedoston sijainti
+  pin: Nasta
+  pin_to_center: Pintää keskustaan
+  pin_to_left: Vasemmalle
+  pin_to_right: Pistä oikealle
+  run_as: Suorita järjestelmänvalvojana
+  unpin: Purkaa
+context_menu:
+  edit_icon: Muokkaa kuvaketta
+  remove_separator: Poista erotin
+  reorder_disable: Lukitse tehtäväpalkki
+  reorder_enable: Tehtäväpalkin lukituksen avaaminen
+taskbar_menu:
+  add_apps: Lisää sovelluksia
+  add_file: Pin mukautettu tiedosto
+  add_separator: Lisää erotin
+  settings: Asetukset
+  task_manager: Tehtävienhallinta
+weg:
+  empty: Ei näytettäviä kohteita

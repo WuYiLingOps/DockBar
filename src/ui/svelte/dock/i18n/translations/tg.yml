@@ -1,0 +1,28 @@
+app_menu:
+  close: Наздик
+  close_multiple: Ҳамаашро пӯшед
+  copy_handles: Дасткор
+  edit_app_icon: Тасвири барномаро таҳрир кунед
+  kill: Раванди куштан
+  kill_multiple: Ҳама равандҳоро кушед
+  open_file_location: Кушодани макони кушод
+  pin: PIN
+  pin_to_center: PIN ба марказ
+  pin_to_left: PIN ба чап
+  pin_to_right: PIN ба рост
+  run_as: Ҳамчун мудир кор кунед
+  unpin: Ватанӣ
+context_menu:
+  edit_icon: Таҳрири Нишона
+  remove_separator: Ҷудокунандаро хориҷ кунед
+  reorder_disable: Қулфи супоришҳо
+  reorder_enable: Қулфи панел
+taskbar_menu:
+  add_apps: Илова кардани барномаҳо
+  add_file: Файли фармоишии PIN
+  add_separator: Иловаи ҷудокунанда
+  media: Плеери медиа
+  settings: Танзимотҳо
+  task_manager: Менеҷери вазифа
+weg:
+  empty: Ягон ашё барои нишон додан

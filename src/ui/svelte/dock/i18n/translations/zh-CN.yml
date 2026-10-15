@@ -1,0 +1,28 @@
+app_menu:
+  close: 关闭
+  close_multiple: 关闭全部
+  copy_handles: 复制句柄
+  edit_app_icon: 编辑应用图标
+  kill: 结束进程
+  kill_multiple: 结束所有进程
+  open_file_location: 打开文件所在位置
+  pin: 固定
+  pin_to_center: 固定到中心
+  pin_to_left: 固定到左侧
+  pin_to_right: 固定到右侧
+  run_as: 以管理员身份运行
+  unpin: 取消固定
+context_menu:
+  edit_icon: 编辑图标
+  remove_separator: 移除分隔符
+  reorder_disable: 锁定任务栏
+  reorder_enable: 解锁任务栏
+taskbar_menu:
+  add_apps: 添加应用
+  add_file: 固定自定义文件
+  add_separator: 添加分隔符
+  media: 媒体播放器
+  settings: 设置
+  task_manager: 任务管理器
+weg:
+  empty: 暂无内容显示

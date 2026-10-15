@@ -1,0 +1,27 @@
+app_menu:
+  close: Close
+  close_multiple: Close All
+  copy_handles: Copy Handles
+  edit_app_icon: Edit App Icon
+  kill: Kill Process
+  kill_multiple: Kill All Processes
+  open_file_location: Open File Location
+  pin: Pin
+  pin_to_center: Pin to Center
+  pin_to_left: Pin to Left
+  pin_to_right: Pin to Right
+  run_as: Run as Administrator
+  unpin: Unpin
+context_menu:
+  edit_icon: Edit Icon
+  remove_separator: Remove Separator
+  reorder_disable: Lock taskbar
+  reorder_enable: Unlock taskbar
+taskbar_menu:
+  add_apps: Add apps
+  add_file: Pin Custom File
+  add_separator: Add Separator
+  settings: Settings
+  task_manager: Task Manager
+weg:
+  empty: No items to show

@@ -1,0 +1,28 @@
+app_menu:
+  close: Sulge
+  close_multiple: Sulgege kõik
+  copy_handles: Koopiakäepidemed
+  edit_app_icon: Rakenduse ikooni muutmine
+  kill: Tapmisprotsess
+  kill_multiple: Tapke kõik protsessid
+  open_file_location: Ava faili asukoht
+  pin: Nööpnõel
+  pin_to_center: Tihvt keskele
+  pin_to_left: Tihvt vasakule
+  pin_to_right: Tihvt paremal
+  run_as: Joosta administraatorina
+  unpin: Lahti keelama
+context_menu:
+  edit_icon: Redigeerimise ikoon
+  remove_separator: Eemalda eraldaja
+  reorder_disable: Ülesanderiba lukustamine
+  reorder_enable: Avage tegumiriba avamine
+taskbar_menu:
+  add_apps: Rakenduste lisamine
+  add_file: PIN -i kohandatud fail
+  add_separator: Lisa eraldaja
+  media: Meediumipleier
+  settings: Seaded
+  task_manager: Tegumihaldur
+weg:
+  empty: Kuvatavaid üksusi pole

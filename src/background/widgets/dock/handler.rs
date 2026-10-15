@@ -1,0 +1,109 @@
+use std::{os::windows::process::CommandExt, path::PathBuf};
+
+use dockbar_core::{handlers::DockBarEvent, state::DockItemData};
+
+use crate::{
+    app::emit_to_webviews,
+    error::Result,
+    modules::start::application::StartMenuManager,
+    state::application::DOCK_ITEMS_MANAGER,
+    widgets::permissions::{WidgetPerm, request_widget_permission},
+    windows_api::{WindowsApi, window::Window},
+};
+use windows::Win32::{
+    System::Threading::CREATE_NO_WINDOW,
+    UI::WindowsAndMessaging::{SW_MINIMIZE, WM_CLOSE},
+};
+
+impl crate::tauri_handlers::Handlers {
+    pub fn dock_close_app(webview: tauri::WebviewWindow, hwnd: isize) -> Result<()> {
+        request_widget_permission(&webview, WidgetPerm::ManageAppWindows)?;
+        let window = Window::from(hwnd);
+        WindowsApi::post_message(window.hwnd(), WM_CLOSE, 0, 0)?;
+        Ok(())
+    }
+
+    pub fn dock_kill_app(webview: tauri::WebviewWindow, hwnd: isize) -> Result<()> {
+        request_widget_permission(&webview, WidgetPerm::KillProcesses)?;
+        let window = Window::from(hwnd);
+        std::process::Command::new("taskkill.exe")
+            .args(["/F", "/PID", &window.process().id().to_string()])
+            .creation_flags(CREATE_NO_WINDOW.0)
+            .spawn()?;
+        Ok(())
+    }
+
+    pub fn dock_toggle_window_state(
+        webview: tauri::WebviewWindow,
+        hwnd: isize,
+        was_focused: bool,
+    ) -> Result<()> {
+        request_widget_permission(&webview, WidgetPerm::ManageAppWindows)?;
+        let window = Window::from(hwnd);
+        // was_focused is intented to know if the window was focused before click on the dock item
+        // on click the items makes the dock being focused.
+        if was_focused {
+            window.show_window_async(SW_MINIMIZE)?;
+        } else {
+            window.unminimize()?;
+            window.focus()?;
+        }
+        Ok(())
+    }
+
+    pub fn dock_pin_item(
+        webview: tauri::WebviewWindow,
+        path: PathBuf,
+        umid: Option<String>,
+    ) -> Result<()> {
+        request_widget_permission(&webview, WidgetPerm::ModifyConfiguration)?;
+
+        // packaged apps have no path, only the umid
+        let (umid, display_name) = if path.as_os_str().is_empty() {
+            let umid = umid.ok_or("Invalid path")?;
+            let display_name = StartMenuManager::instance()
+                .get_by_file_umid(&umid)
+                .map(|item| item.display_name.clone())
+                .unwrap_or_else(|| umid.clone());
+            (Some(umid), display_name)
+        } else {
+            if !path.exists() || path.is_dir() {
+                return Err("Invalid path".into());
+            }
+            let umid = umid.or_else(|| WindowsApi::get_file_umid(&path).ok());
+            let display_name =
+                WindowsApi::get_executable_display_name(&path).unwrap_or_else(|_| {
+                    path.file_stem()
+                        .map(|s| s.to_string_lossy().to_string())
+                        .unwrap_or_else(|| "Unknown".to_string())
+                });
+            (umid, display_name)
+        };
+
+        let item = DockItemData {
+            id: uuid::Uuid::new_v4(),
+            display_name,
+            umid,
+            path,
+            pinned: true,
+            prevent_pinning: false,
+            relaunch: None,
+        };
+
+        emit_to_webviews(DockBarEvent::DockAddItem, &item);
+        Ok(())
+    }
+
+    pub fn dock_import_pinned_taskbar_items(webview: tauri::WebviewWindow) -> Result<usize> {
+        request_widget_permission(&webview, WidgetPerm::ModifyConfiguration)?;
+        let count = DOCK_ITEMS_MANAGER.import_from_windows_taskbar()?;
+
+        // Emit event to notify all webviews about the updated items
+        if count > 0 {
+            let items = DOCK_ITEMS_MANAGER.get();
+            emit_to_webviews(DockBarEvent::DockItemsChanged, items);
+        }
+
+        Ok(count)
+    }
+}

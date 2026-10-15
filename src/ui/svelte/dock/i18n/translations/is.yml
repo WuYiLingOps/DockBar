@@ -1,0 +1,28 @@
+app_menu:
+  close: Lokaðu
+  close_multiple: Lokaðu öllu
+  copy_handles: Afrit handföng
+  edit_app_icon: Breyta forritatákni
+  kill: Kill Process
+  kill_multiple: Drepa alla ferla
+  open_file_location: Opnaðu staðsetningu skráar
+  pin: PIN
+  pin_to_center: Pinna í miðju
+  pin_to_left: Pinna til vinstri
+  pin_to_right: Pinna til hægri
+  run_as: Hlaupa sem stjórnandi
+  unpin: Taka úr
+context_menu:
+  edit_icon: Breyta táknmynd
+  remove_separator: Fjarlægðu skiljuna
+  reorder_disable: Læstu verkstiku
+  reorder_enable: Opnaðu verkefnastiku
+taskbar_menu:
+  add_apps: Bæta við forritum
+  add_file: Pinna sérsniðna skrá
+  add_separator: Bæta við skilju
+  media: Fjölmiðlaspilari
+  settings: Stillingar
+  task_manager: Verkefnastjóri
+weg:
+  empty: Engin atriði til að sýna

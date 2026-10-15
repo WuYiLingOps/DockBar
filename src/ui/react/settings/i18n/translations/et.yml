@@ -1,0 +1,301 @@
+action:
+  confirm: Kas olete kindel?
+  confirm_body: Seda toimingut ei saa tagasi võtta.
+cancel: Tühistama
+close: Sulgur
+delete: Kustutama
+devtools:
+  app_folders: Rakenduse kaustad
+  color_palette: Värvipalett
+  color_palette_note: Need värvid kohanduvad automaatselt heleda/tumeda režiimiga – iga varjund on kontrasti suhtes praeguse taustaga, mitte fikseeritud väärtus. Automaatse teematoe saamiseks kasutage neid kodeeritud värvide asemel.
+  custom_config_file: Laadige kohandatud konfiguratsioonifail
+  data_folder: Andmekaust
+  enable: Luba arendaja tööriistad
+  enable_description: Avab täiustatud tööriistad DockBari kasutajaliidese sisemiste kontrollimiseks ja silumiseks. Ei ole ette nähtud regulaarseks kasutamiseks.
+  icons: Vahemällu salvestatud ikoonid
+  install_folder: Installi kaust
+  load: Laadima
+  settings_file: Seadete fail
+  shared_components: SLU standardkomponendid
+  simulate_dialog:
+    label: Simuleeri dialoogi
+    trigger: Päästik
+  simulate_perm:
+    label: Simuleeri vidina loa taotlust
+    result_allowed: ✓ Luba antud
+    result_denied: ✗ Luba ei antud
+    trigger: Simuleerida
+    widget_id_placeholder: '@autor/vidina nimi'
+  tools: Tööriistad
+  unlock_shortcuts: Avage kirjutuskaitstud otseteed
+  unlock_shortcuts_description: Lubage redigeerida otseteid, mis on tavaliselt kirjutuskaitstud (nt süsteemi alistamised).
+  unstable_optimizations: Ebastabiilsed optimeerimised
+  unstable_optimizations_description: 'Lubage eksperimentaalsed Chromiumi lipud, mis vähendavad RAM-i kasutamist.
+
+    Hoiatus: kui mõni vidin jookseb kokku, jooksevad kokku kõik sama laadijat jagavad vidinad.'
+  widgets_debug:
+    actions: Tegevused
+    empty: Ühtegi vidinat pole laaditud. Klõpsake Värskenda.
+    instance_id: Eksemplari ID
+    monitor_id: Monitori ID
+    open_devtools: DevTools
+    refresh: Värskenda
+    status: Olek
+    tab: Vidinad
+    widget_id: Vidina ID
+discord_banner:
+  message: Võtke ühendust teiste DockBari kasutajaliidese kasutajatega, hankige abi, jagage teemasid ja olge kursis viimaste uudistega.
+  title: Liituge meie kogukonnaga
+dock:
+  auto_hide: Automaatne peida
+  auto_hide_touch_disabled: Automaatne peitmine pole puuteekraaniga seadmetes saadaval
+  delay_to_hide: Viivitage peitmine
+  delay_to_show: Näitamisega viivitus
+  dock_side: Positsioon
+  filtering: Objektide filtreerimine
+  gap: Lüngad
+  hide_mode:
+    always: Alati
+    never: Mitte kunagi
+    on_overlap: Kattumises
+  import_error: Tegumiriba üksuste importimine ebaõnnestus
+  import_from_taskbar:
+    button: Importige Windowsi tegumiribalt
+    label: Kinnitatud üksuste importimine
+  import_no_items: Windowsi tegumiribal ei leitud kinnitatud üksusi
+  import_success: Windowsi tegumiribalt imporditi edukalt {{count}} üksust
+  items:
+    gap: Esemete vaheline ruum
+    label: Esemed
+    middle_click_action:
+      close_app: Sulgege rakendus
+      label: Keskmise klõpsuga toiming
+      open_new_instance: Avage uus eksemplar
+    pinned_visibility:
+      always: Alati
+      label: Kinnitatud üksuste nähtavus
+      when_primary: Kui monitor on esmane
+    show_instance_counter: Näita avatud akende loendurit
+    show_window_title: Näita avatud akna pealkirja (ainult horisontaalne)
+    size: Üksuse suurus
+    split_windows: Poolitatud aknad (üks üksus akna kohta)
+    temporal_visibility:
+      all: Kõik
+      label: Kinnitamata üksuste nähtavus
+      on_monitor: Monitoril
+  label: Dokk/ülesanderiba
+  margin: Marginaal
+  mode:
+    full_width: Täisekraani laius
+    min_content: Nii väike kui olla saab
+  padding: Polsterdamine
+  reveal_on_attention:
+    label: Näita, kui rakendus nõuab tähelepanu
+    never: Mitte kunagi
+    until_activated: Kuni rakenduse avamiseni
+    while_flashing: Kuni see vilgub
+  show_end_task: Ülesande lõpuülesande kuvamine tegumiribal
+  width: Laius
+general:
+  accent_color: Aktsentvärv
+  date_format: Kuupäeva vorming
+  date_format_how_to: Kuidas kirjutada kuupäevavormingut?
+  hardware_acceleration: Riistvaraline kiirendus
+  hardware_acceleration_description: Riistvaralise kiirenduse keelamine vähendab mälukasutust. Kui te ei kasuta raskeid animatsioone, on selle keelamine ohutu, kuigi üksikud vidinad võivad GPU kasutamist siiski sundida sõltumata sellest sättest.
+  icon_pack:
+    available: Saadaval ikoonipaketid
+    selected: Aktiivsed ikoonipaketid
+  language: Keel
+  monday: esmaspäev
+  performance_mode:
+    label: Optimeerimised
+    on_battery: Akul
+    on_energy_saver: Energiasäästjal
+    options:
+      disabled: Puudega
+      extreme: Äärmuslik
+      minimal: Minimaalne
+    plugged: Ühendatud või laadimine
+  polling_interval: Süsteemi küsitlusintervall
+  polling_interval_description: Kui sageli (sekundites) DockBar kontrollib süsteemiressursse, nagu protsessor, RAM, võrk ja ketta aktiivsus. Väiksem arv tähendab sagedasemaid uuendusi, kuid veidi suuremat ressursikasutust.
+  saturday: laupäeval
+  start_of_week: Nädala algus
+  startup: Kas joosta startup?
+  sunday: pühapäev
+  suspend_on_game_mode: Peatage vidinad mängurežiimis
+  suspend_on_game_mode_description: Kui Windowsi mängurežiim on aktiivne, hävitatakse kõik vidinate veebivaated, et vabastada mängu jaoks protsessor ja mälu. Vidinad taastatakse automaatselt, kui mängurežiim lõpeb.
+  theme:
+    available: Saadaolevad teemad
+    selected: Aktiivsed teemad
+global: Globaalne
+header:
+  labels:
+    developer: Arendajatele
+    general: Üld-
+    monitors: Monitorid
+    shortcuts: Otseteed
+    widget: Vidinad
+inProgress: Pooleli ...
+inherit: Pärima
+insert: Sisestama
+join_us: Liituge meiega!
+loading: Laadimine ...
+miscellaneous: Mitmesuguseid
+monitors_configurations:
+  label: Monitor {{indeks}}
+more: Rohkem
+'no': Mitte
+open: Avatud
+quit: Loobuma
+remove: Eemaldama
+reset_all_to_default: Nullida kõik vaikeväärtused
+reset_configurations: Lähtestage konfiguratsioonid
+reset_to_default: Nullida vaikimisi väärtus
+resources:
+review_request:
+  not_now: Mitte praegu
+  sure: Muidugi!
+  title: Kas teile meeldib DockBari kasutajaliides?
+save: Kokkuhoid
+save_and_restart: Salvesta ja taaskäivitage
+search: Otsi
+see_more: Vaata lähemalt
+session:
+  logout: Logi välja
+  plan: Plaan
+  sign_in: Logi sisse
+  sign_in_hint: Teie brauser avaneb, et saaksite turvaliselt sisse logida.
+  upgrade_to: Uuenda versioonile
+shortcuts:
+  disabled_tooltip: Vidin ja selle otseteed on keelatud
+  duplicate_error: Tuvastati vastuolulised otseteed
+  duplicate_error_hint: Mõned otseteed on määratud mitmele toimingule. Keelake üks konfliktsetest vidinatest või määrake lahendamiseks uuesti duplikaatvõtme sidumine.
+  enable: Luba sisseehitatud otseteede süsteem
+  enable_tooltip: Keelake, kui rakendate oma otseteede süsteemi, kasutades seeneni kasutajaliidese klienti
+  labels:
+    create_new_workspace: Looge uus tööruum
+    create_new_workspace_row: Looge uus tööruumi rida
+    destroy_current_workspace: Hävitada praegune tööruum
+    misc_force_quit: Sund lõpetama
+    misc_force_restart: Taaskäivituse sundimine
+    move_to_workspace: Liikuge tööruumi {{0}} saidile
+    pause_toggle: Peata/jätka otseteed
+    send_to_next_workspace: Saada aken järgmisele tööalale
+    send_to_previous_workspace: Saada aken eelmisele tööalale
+    send_to_workspace: Saada tööruumi {{0}}
+    send_to_workspace_down: Saada aken allolevasse tööruumi
+    send_to_workspace_up: Saada aken ülalolevasse tööruumi
+    switch_to_next_workspace: Lülitage järgmisele tööalale
+    switch_to_previous_workspace: Lülitage eelmisele tööalale
+    switch_to_workspace_down: Lülituge allolevale tööruumile
+    switch_to_workspace_up: Lülituge ülalolevale tööruumile
+    switch_workspace: Lülitage tööruumi {{0}}
+  readonly_tooltip: See on kirjutuskaitstud otsetee
+  reset: Lähtestage vaikeseadetele
+sides:
+  bottom: Alumine
+  left: Vasakul
+  right: Paremale
+  top: Tipus
+wall:
+  blur: Blur
+  cancel: Tühista
+  close: Sule
+  collection_name: Kollektsiooni nimi
+  collections: Kollektsioonid
+  contrast: Kontrast
+  corrupted_wallpapers_message: 'Rikutud taustapildid, kaaluge nende kustutamist:'
+  coverage_pause_threshold: Peatamise lävi (akna katvus)
+  create: Loo
+  create_collection: Loo kollektsioon
+  default_collection: Vaike taustpilt või kogu
+  default_collection_description: Rakendatakse kõikidele monitoridele ja tööruumidele, millel pole konkreetset alistamise komplekti.
+  delete_collection: Kustuta kogu
+  edit_collection: Redigeeri kogu
+  extend: Laiendage esmast
+  fit:
+    contain: Sisaldab
+    cover: Kaane
+    fill: Täitke
+  flipHorizontal: Flip Horisontaalne
+  flipVertical: Flip vertikaalne
+  generating_thumbnails: Taustapildi pisipiltide loomine
+  hours: tööaeg
+  interval: Vahetage tapeeti iga
+  minutes: protokoll
+  monitor_collection: Monitori kollektsioon
+  multimonitor_behaviour: Mitme monitori käitumine
+  muted: Video heli vaigistamine
+  no_background: Tühi slaidiseanss, kasutades selle asemel teema tausta.
+  no_collections: Ühtegi kogu pole veel loodud. Selle loomiseks klõpsake nuppu +.
+  objectFit: Taust sobivus
+  objectPosition: Taustapositsioon
+  overlayColor: Kattekihi värv
+  overlayMixBlendMode: Overlay Mix segamisrežiim
+  per_monitor: Monitori kohta
+  per_monitor_config: Monitoripõhine konfiguratsioon
+  playback: Taasesituse kiirus
+  position:
+    bottom: Alumine
+    center: Keskus
+    left: Vasakpoolne
+    right: Õigus
+    top: Top
+  processing_video: Video töötlemine
+  random: Randoriseeri slaidiseanss
+  saturation: Küllastumine
+  seconds: sekundid
+  select_collection: Valige Kogu
+  thumbnail_generation_complete: Pisipiltide genereerimine on lõpetatud
+  thumbnail_generation_finished: Pisipiltide genereerimine on edukalt lõppenud
+  use_accent_color: Kasutage tapeedi aktsentvärvi
+  wallpaper_collection: Tapeedikogu
+  wallpaper_settings: Taustapildi seaded
+  wallpapers: Taustapildid
+  wallpapers_and_collections: Taustapildid ja kollektsioonid
+  withOverlay: Koos kattekihiga
+  workspace_collections: Tööruumi kogud
+welcome:
+  give_a_review: Andke ülevaade
+  message: DockBar on tasuta ja avatud lähtekoodiga töölauakeskkond Windowsi jaoks. Siin on teil täielik kontroll selle üle, kuidas teie töölaud välja näeb ja käitub, võimaldades teil kohandada iga detaili oma töövoo ja stiiliga sobivaks.
+  ok: Alustame!
+  review: Kui teile meeldib DockBari kasutajaliidese kasutamine, kaaluge poes arvustuse jätmist – teie tagasiside aitab projektil kasvada ja täiustada.
+  title: Tere tulemast DockBari kasutajaliidese!
+widget:
+  default_instance: Vaikimisi eksemplar
+  default_instance_hint: Alati aktiivne, kasutab juurvidina konfiguratsiooni
+  enable: Võta see vidin kasutusele
+  enable_for_monitor: Lubatud sellel monitoril
+  extra_instances: Lisajuhtumid
+  instance: Näide
+  instances: Instants
+wm:
+  animations:
+    duration: Animatsiooni kestus (MS)
+    ease_function: Animatsiooni leevendusfunktsioon
+    enable: Luba akna animatsioonid
+  author: Autor
+  auto_stack: Automaatne virnastamine rakenduse kategooria järgi
+  border:
+    enable: Luba akna piir
+    offset: Piiride nihke
+    width: Piirilaius
+  description: Kirjeldus
+  drag_behavior: Lohistuskäitumine
+  drag_behavior_options:
+    sort: Sorteeri (akende järjestamine lohistamise ajal ümber)
+    swap: Vaheta (vahetage aknad lohistamise lõpus)
+  floating:
+    height: Ujuv akna kõrgus
+    title: Ujuv Windowsi suurus
+    width: Ujuv akende laius
+  layout: Paigutus
+  resize_delta: Suuruse muutmine delta (%)
+  space_between_containers: Konteinerite vaheline ruum
+  stack_bar_visibility: Virnariba nähtavus
+  stack_bar_visibility_options:
+    always: Alati
+    as_needed: Vastavalt vajadusele
+  workspace_offset: Tööruumide nihkumine (veerised)
+  workspace_padding: Tööruumide polsterdus
+'yes': Jah

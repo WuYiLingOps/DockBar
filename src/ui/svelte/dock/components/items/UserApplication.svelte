@@ -1,0 +1,30 @@
+<script lang="ts">
+  import type { AppOrFileDockItem } from "../../types.ts";
+  import { settingsState } from "../../state/settings.svelte.ts";
+  import { getWindowsForItem, windowsState } from "../../state/windows.svelte.ts";
+  import UserApplicationItem from "./UserApplicationItem.svelte";
+
+  interface Props {
+    item: AppOrFileDockItem;
+    isOverlay?: boolean;
+  }
+
+  let { item, isOverlay = false }: Props = $props();
+
+  const windows = $derived(getWindowsForItem(item, windowsState.dockWindows));
+  const settings = $derived(settingsState.value as any);
+  const showAsSeparatedItems = $derived(settings?.splitWindows);
+</script>
+
+{#if showAsSeparatedItems && windows.length > 1}
+  <div
+    class="dock-split-items"
+    style="display: flex; align-items: center; gap: {settings?.spaceBetweenItems ?? 0}px;"
+  >
+    {#each windows as win (win.hwnd)}
+      <UserApplicationItem {item} windows={[win]} />
+    {/each}
+  </div>
+{:else}
+  <UserApplicationItem {item} {windows} />
+{/if}

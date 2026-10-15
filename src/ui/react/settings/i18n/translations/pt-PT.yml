@@ -1,0 +1,301 @@
+action:
+  confirm: Tem certeza?
+  confirm_body: Esta ação não pode ser desfeita.
+cancel: Cancelar
+close: Perto
+delete: Eliminar
+devtools:
+  app_folders: Pastas de aplicativos
+  color_palette: Paleta de cores
+  color_palette_note: Estas cores adaptam-se automaticamente ao modo claro/escuro – cada tonalidade tem um contraste relativo ao fundo atual, e não um valor fixo. Utilize-as em vez de cores codificadas para obter suporte automático do tema.
+  custom_config_file: Carregar o arquivo de configuração personalizado
+  data_folder: Pasta de dados
+  enable: Ativar ferramentas de desenvolvedor
+  enable_description: Desbloqueia ferramentas avançadas para inspecionar e depurar os componentes internos da UI do DockBar. Não se destina a uma utilização regular.
+  icons: Ícones em cache
+  install_folder: Pasta de instalação
+  load: Carga
+  settings_file: Arquivo de configurações
+  shared_components: Componentes standard SLU
+  simulate_dialog:
+    label: Simular caixa de diálogo
+    trigger: Gatilho
+  simulate_perm:
+    label: Simular pedido de permissão de widget
+    result_allowed: ✓ Permissão concedida
+    result_denied: ✗ Permissão negada
+    trigger: Simular
+    widget_id_placeholder: '@autor/nome do widget'
+  tools: Ferramentas
+  unlock_shortcuts: Desbloquear atalhos de leitura apenas
+  unlock_shortcuts_description: Permitir a edição de atalhos que são normalmente de leitura apenas (por exemplo, substituições do sistema).
+  unstable_optimizations: Otimizações instáveis
+  unstable_optimizations_description: 'Ative os sinalizadores experimentais do Chromium que reduzem a utilização de RAM.
+
+    Aviso: se um widget falhar, todos os widgets que partilham o mesmo carregador irão falhar em conjunto.'
+  widgets_debug:
+    actions: Ações
+    empty: Nenhum widget carregado. Clique em Atualizar.
+    instance_id: ID da instância
+    monitor_id: ID do monitor
+    open_devtools: Ferramentas de desenvolvimento
+    refresh: Atualizar
+    status: Estatuto
+    tab: Widgets
+    widget_id: ID do widget
+discord_banner:
+  message: Estabeleça ligação com outros utilizadores da DockBar, obtenha ajuda, partilhe temas e mantenha-se atualizado com as últimas notícias.
+  title: Junte-se à nossa comunidade
+dock:
+  auto_hide: Esconda automática
+  auto_hide_touch_disabled: A ocultação automática não está disponível em dispositivos com ecrã táctil
+  delay_to_hide: Atraso para se esconder
+  delay_to_show: Atraso para mostrar
+  dock_side: Posição
+  filtering: Filtragem de itens
+  gap: Lacuna
+  hide_mode:
+    always: Sempre
+    never: Nunca
+    on_overlap: Em sobreposição
+  import_error: Falha ao importar itens da barra de tarefas
+  import_from_taskbar:
+    button: Importar da barra de tarefas do Windows
+    label: Importar artigos fixados
+  import_no_items: Nenhum item fixado encontrado na barra de tarefas do Windows
+  import_success: '{{count}} itens importados com sucesso da barra de tarefas do Windows'
+  items:
+    gap: Espaço entre itens
+    label: Artigos
+    middle_click_action:
+      close_app: Fechar aplicação
+      label: Ação do clique do meio
+      open_new_instance: Abrir nova instância
+    pinned_visibility:
+      always: Sempre
+      label: Visibilidade dos itens fixados
+      when_primary: Quando o monitor é primário
+    show_instance_counter: Mostre o balcão do Windows aberto
+    show_window_title: Mostrar título de janela aberta (apenas horizontal)
+    size: Tamanho do item
+    split_windows: Dividir janelas (um item por janela)
+    temporal_visibility:
+      all: Tudo
+      label: Visibilidade dos itens não ingênicos
+      on_monitor: No monitor
+  label: Dock/Task Bar
+  margin: Margem
+  mode:
+    full_width: Largura da tela inteira
+    min_content: Pequeno como pode ser
+  padding: Preenchimento
+  reveal_on_attention:
+    label: Mostrar quando uma aplicação solicita atenção
+    never: Nunca
+    until_activated: Até que a aplicação seja aberta
+    while_flashing: Enquanto pisca
+  show_end_task: Mostre a tarefa final na barra de tarefas
+  width: Largura
+general:
+  accent_color: Cor de destaque
+  date_format: Formato de data
+  date_format_how_to: Como escrever um formato de data?
+  hardware_acceleration: Aceleração de Hardware
+  hardware_acceleration_description: Desativar a aceleração de hardware reduzirá a utilização de memória. É seguro desativar se não estiver a utilizar animações pesadas, embora os widgets individuais ainda possam forçar o uso da GPU, independentemente desta configuração.
+  icon_pack:
+    available: Pacotes de ícones disponíveis
+    selected: Pacotes de ícones ativos
+  language: Idioma
+  monday: Segunda-feira
+  performance_mode:
+    label: Otimizações
+    on_battery: Na bateria
+    on_energy_saver: Em economia de energia
+    options:
+      disabled: Desativado
+      extreme: Extremo
+      minimal: Mínimo
+    plugged: Conectado ou carregamento
+  polling_interval: Intervalo de pesquisa do sistema
+  polling_interval_description: Com que frequência (em segundos) o DockBar verifica os recursos do sistema, como CPU, RAM, rede e atividade de disco. Um número mais reduzido significa atualizações mais frequentes, mas uma utilização de recursos ligeiramente maior.
+  saturday: Sábado
+  start_of_week: Início da semana
+  startup: Correr na inicialização?
+  sunday: Domingo
+  suspend_on_game_mode: Suspender widgets no modo de jogo
+  suspend_on_game_mode_description: Quando o Modo de Jogo do Windows está ativo, todas as visualizações web do widget são destruídas para libertar CPU e memória para o jogo. Os widgets são restaurados automaticamente quando o Modo de Jogo termina.
+  theme:
+    available: Temas disponíveis
+    selected: Temas ativos
+global: Global
+header:
+  labels:
+    developer: Para desenvolvedores
+    general: General
+    monitors: Monitores
+    shortcuts: Atalhos
+    widget: Widgets
+inProgress: Em andamento...
+inherit: Herdar
+insert: Inserir
+join_us: Junte-se a nós!
+loading: Carregando...
+miscellaneous: Diversas
+monitors_configurations:
+  label: Monitor {{index}}
+more: Mais
+'no': Não
+open: Aberto
+quit: Despedir-se
+remove: Remover
+reset_all_to_default: Redefina tudo para valores padrão
+reset_configurations: Redefinir as configurações
+reset_to_default: Redefinir para o valor padrão
+resources:
+review_request:
+  not_now: Agora não
+  sure: Clara!
+  title: Gostando da interface do DockBar?
+save: Guardar
+save_and_restart: Salve e reinicie
+search: Pesquisa
+see_more: Veja mais
+session:
+  logout: Sair
+  plan: Plano
+  sign_in: Entrar
+  sign_in_hint: O seu navegador será aberto para que possa fazer login com segurança.
+  upgrade_to: Atualizar para
+shortcuts:
+  disabled_tooltip: O widget e os seus atalhos estão desativados
+  duplicate_error: Atalhos conflituantes detectados
+  duplicate_error_hint: Alguns atalhos são atribuídos a múltiplas ações. Desative um dos widgets conflituantes ou reatribua a ligação de chave duplicada para resolver.
+  enable: Habilitar o sistema de atalhos embutidos
+  enable_tooltip: Desative se você implementar seu próprio sistema de atalhos usando o DockBar UI Client
+  labels:
+    create_new_workspace: Crie um novo espaço de trabalho
+    create_new_workspace_row: Criar nova linha do espaço de trabalho
+    destroy_current_workspace: Destrua o espaço de trabalho atual
+    misc_force_quit: Force parou
+    misc_force_restart: Reiniciar força
+    move_to_workspace: Mova para o espaço de trabalho {{0}}
+    pause_toggle: Pausar/retomar atalhos
+    send_to_next_workspace: Enviar janela para o próximo espaço de trabalho
+    send_to_previous_workspace: Enviar janela para o espaço de trabalho anterior
+    send_to_workspace: Enviar para o espaço de trabalho {{0}}
+    send_to_workspace_down: Enviar janela para o espaço de trabalho abaixo
+    send_to_workspace_up: Enviar janela para o ambiente de trabalho acima
+    switch_to_next_workspace: Mude para o próximo espaço de trabalho
+    switch_to_previous_workspace: Mudar para o espaço de trabalho anterior
+    switch_to_workspace_down: Mudar para o espaço de trabalho abaixo
+    switch_to_workspace_up: Mudar para o espaço de trabalho acima
+    switch_workspace: Mudar para o espaço de trabalho {{0}}
+  readonly_tooltip: Este é um atalho somente leitura
+  reset: Redefinir para padrões
+sides:
+  bottom: Fundo
+  left: Esquerda
+  right: Certa
+  top: Topo
+wall:
+  blur: Borrão
+  cancel: Cancelar
+  close: Perto
+  collection_name: Nome da coleção
+  collections: Coleções
+  contrast: Contraste
+  corrupted_wallpapers_message: 'Papéis de parede corrompidos, considere excluí-los:'
+  coverage_pause_threshold: Limite de pausa (cobertura da janela)
+  create: Criar
+  create_collection: Criar coleção
+  default_collection: Papel de parede ou coleção padrão
+  default_collection_description: Aplicado a todos os monitores e áreas de trabalho que não possuam um conjunto de substituição específico.
+  delete_collection: Excluir coleção
+  edit_collection: Editar coleção
+  extend: Estender primário
+  fit:
+    contain: Conter
+    cover: Cobertura
+    fill: Preencher
+  flipHorizontal: Flip Horizontal
+  flipVertical: Flip vertical
+  generating_thumbnails: Gerando miniaturas de papel de parede
+  hours: horas
+  interval: Troque o papel de parede todos
+  minutes: minutos
+  monitor_collection: Coleção de monitores
+  multimonitor_behaviour: Comportamento multimonitor
+  muted: Silenciar áudio de vídeo
+  no_background: A apresentação de slides vazia, usando o plano de fundo do tema.
+  no_collections: Nenhuma coleção criada ainda. Clique no botão + para criar um.
+  objectFit: Ajuste de fundo
+  objectPosition: Posição de fundo
+  overlayColor: Cor de sobreposição
+  overlayMixBlendMode: Modo de mistura de sobreposição
+  per_monitor: Por monitor
+  per_monitor_config: Configuração por monitor
+  playback: Velocidade de reprodução
+  position:
+    bottom: Fundo
+    center: Centro
+    left: Esquerda
+    right: Certa
+    top: Topo
+  processing_video: Processando vídeo
+  random: Randomize Slideshow
+  saturation: Saturação
+  seconds: segundas
+  select_collection: Selecione a coleção
+  thumbnail_generation_complete: Geração de miniaturas concluída
+  thumbnail_generation_finished: A geração da miniatura foi concluída com sucesso
+  use_accent_color: Utilize a cor de destaque do papel de parede
+  wallpaper_collection: Coleção de papéis de parede
+  wallpaper_settings: Configurações de papel de parede
+  wallpapers: Papéis de parede
+  wallpapers_and_collections: Papéis de parede e coleções
+  withOverlay: Com sobreposição
+  workspace_collections: Coleções de espaço de trabalho
+welcome:
+  give_a_review: Dê uma avaliação
+  message: DockBar é um ambiente de desktop gratuito e de código aberto para Windows. Aqui você tem controle total sobre a aparência e o comportamento de sua área de trabalho, permitindo personalizar cada detalhe para combinar com seu fluxo de trabalho e estilo.
+  ok: Vamos começar!
+  review: Se você gosta de usar a UI DockBar, considere deixar um comentário na loja – seu feedback ajuda o projeto a crescer e melhorar.
+  title: Bem-vindo à UI da DockBar!
+widget:
+  default_instance: Instância padrão
+  default_instance_hint: Sempre ativo, utiliza a configuração do widget raiz
+  enable: Ative este widget
+  enable_for_monitor: Ativar neste monitor
+  extra_instances: Instâncias extra
+  instance: Exemplo
+  instances: Instâncias
+wm:
+  animations:
+    duration: Duração da animação (MS)
+    ease_function: Função de flexibilização da animação
+    enable: Ativar animações da Window
+  author: Autora
+  auto_stack: Pilha automática por categoria de aplicação
+  border:
+    enable: Ativar a fronteira da janela
+    offset: Offset de borda
+    width: Largura da fronteira
+  description: Descrição
+  drag_behavior: Comportamento de arrastar
+  drag_behavior_options:
+    sort: Classificar (reordenar janelas enquanto arrasta)
+    swap: Trocar (trocar janelas ao arrastar)
+  floating:
+    height: Altura flutuante das janelas
+    title: Tamanho flutuante das janelas
+    width: Largura flutuante das janelas
+  layout: Esquema
+  resize_delta: Redimensionar delta (%)
+  space_between_containers: Espaço entre recipientes
+  stack_bar_visibility: Visibilidade da barra de pilha
+  stack_bar_visibility_options:
+    always: Sempre
+    as_needed: Conforme necessário
+  workspace_offset: Espaços de trabalho Offset (margens)
+  workspace_padding: Espaços de trabalho preenchem
+'yes': Sim

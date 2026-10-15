@@ -1,0 +1,301 @@
+action:
+  confirm: Er du sikker?
+  confirm_body: Denne handling kan ikke fortrydes.
+cancel: Afbestille
+close: Tæt
+delete: Slet
+devtools:
+  app_folders: Appmapper
+  color_palette: Farvepalet
+  color_palette_note: Disse farver tilpasser sig automatisk til lys/mørke tilstand - hver nuance er kontrast i forhold til den aktuelle baggrund, ikke en fast værdi. Brug dem i stedet for hårdkodede farver for at få automatisk temaunderstøttelse.
+  custom_config_file: Indlæs brugerdefineret konfigurationsfil
+  data_folder: Datamappe
+  enable: Aktivér udviklerværktøjer
+  enable_description: Låser op avancerede værktøjer til inspektion og fejlretning af DockBar UI-internal. Not intended for regular use.
+  icons: Cachelagrede ikoner
+  install_folder: Installationsmappe
+  load: belastning
+  settings_file: Indstillinger fil
+  shared_components: SLU standardkomponenter
+  simulate_dialog:
+    label: Simuler dialog
+    trigger: Udløser
+  simulate_perm:
+    label: Simuler anmodning om widgettilladelse
+    result_allowed: ✓ Tilladelse givet
+    result_denied: ✗ Tilladelse nægtet
+    trigger: Simuler
+    widget_id_placeholder: '@forfatter/widget-navn'
+  tools: Værktøjer
+  unlock_shortcuts: Lås skrivebeskyttede genveje op
+  unlock_shortcuts_description: Tillad redigeringsgenveje, der normalt er skrivebeskyttede (f.eks. systemtilsidesættelser).
+  unstable_optimizations: Ustabile optimeringer
+  unstable_optimizations_description: 'Aktiver eksperimentelle Chromium-flag, der reducerer RAM-forbrug.
+
+    Advarsel: Hvis en widget går ned, vil alle widgets, der deler den samme loader, gå ned sammen.'
+  widgets_debug:
+    actions: Handlinger
+    empty: Ingen widgets indlæst. Klik på Opdater.
+    instance_id: Forekomst-id
+    monitor_id: Monitor ID
+    open_devtools: DevTools
+    refresh: Opfriske
+    status: Status
+    tab: Widgets
+    widget_id: Widget ID
+discord_banner:
+  message: Få forbindelse til andre DockBar-brugere, få hjælp, del temaer, og hold dig opdateret med de seneste nyheder.
+  title: Tilmeld dig vores fællesskab
+dock:
+  auto_hide: Auto skjul
+  auto_hide_touch_disabled: Automatisk skjul er ikke tilgængelig på enheder med berøringsskærm
+  delay_to_hide: Forsink med at skjule
+  delay_to_show: Forsinket fremvisning
+  dock_side: Position
+  filtering: Filtrering af varer
+  gap: Gap
+  hide_mode:
+    always: Altid
+    never: Aldrig
+    on_overlap: På overlapning
+  import_error: Kunne ikke importere proceslinjeelementer
+  import_from_taskbar:
+    button: Importer fra Windows proceslinje
+    label: Importer fastgjorte elementer
+  import_no_items: Der blev ikke fundet nogen fastgjorte elementer på proceslinjen i Windows
+  import_success: '{{count}} emne(r) blev importeret fra proceslinjen i Windows'
+  items:
+    gap: Rum mellem genstande
+    label: Genstande
+    middle_click_action:
+      close_app: Luk app
+      label: Mellemklik handling
+      open_new_instance: Åbn Ny instans
+    pinned_visibility:
+      always: Altid
+      label: Fastgjorte elementers synlighed
+      when_primary: Når monitoren er primær
+    show_instance_counter: Vis tæller for åbne vinduer
+    show_window_title: Vis titel på åbent vindue (kun vandret)
+    size: Varestørrelse
+    split_windows: Opdelte vinduer (et element pr. vindue)
+    temporal_visibility:
+      all: Alle
+      label: Synlighed af frigjorte elementer
+      on_monitor: På monitor
+  label: Dock/proceslinje
+  margin: Margin
+  mode:
+    full_width: Fuld skærmbredde
+    min_content: Så lille som det kan være
+  padding: Polstring
+  reveal_on_attention:
+    label: Vis, når en app anmoder om opmærksomhed
+    never: Aldrig
+    until_activated: Indtil appen åbnes
+    while_flashing: Mens den blinker
+  show_end_task: Vis afslutning af opgave på proceslinjen
+  width: Bredde
+general:
+  accent_color: Accentfarve
+  date_format: Datoformat
+  date_format_how_to: Hvordan skriver man et datoformat?
+  hardware_acceleration: Hardwareacceleration
+  hardware_acceleration_description: Deaktivering af hardwareacceleration vil reducere hukommelsesforbruget. Det er sikkert at deaktivere, hvis du ikke bruger tunge animationer, selvom individuelle widgets stadig kan tvinge GPU-brug uanset denne indstilling.
+  icon_pack:
+    available: Tilgængelige ikonpakker
+    selected: Aktive ikonpakker
+  language: Sprog
+  monday: mandag
+  performance_mode:
+    label: Optimeringer
+    on_battery: På batteri
+    on_energy_saver: På energibesparende
+    options:
+      disabled: Handicappet
+      extreme: Ekstrem
+      minimal: Minimal
+    plugged: Tilsluttet eller opladning
+  polling_interval: System polling interval
+  polling_interval_description: Hvor ofte (i sekunder) DockBar kontrollerer systemressourcer som CPU, RAM, netværk og diskaktivitet. Et mindre antal betyder hyppigere opdateringer, men lidt højere ressourceforbrug.
+  saturday: lørdag
+  start_of_week: Start på ugen
+  startup: Kør ved opstart?
+  sunday: søndag
+  suspend_on_game_mode: Suspender widgets i spiltilstand
+  suspend_on_game_mode_description: Når Windows Game Mode er aktiv, ødelægges alle widget-webvisninger for at frigøre CPU og hukommelse til spillet. Widgets gendannes automatisk, når Game Mode slutter.
+  theme:
+    available: Tilgængelige temaer
+    selected: Aktive temaer
+global: Global
+header:
+  labels:
+    developer: For udviklere
+    general: Generel
+    monitors: Monitors
+    shortcuts: Genveje
+    widget: Widgets
+inProgress: I gang...
+inherit: Arve
+insert: Indsæt
+join_us: Slut dig til os!
+loading: Indlæser...
+miscellaneous: Diverse
+monitors_configurations:
+  label: Monitor {{index}}
+more: Mere
+'no': Ingen
+open: Åben
+quit: Afslut
+remove: Fjerne
+reset_all_to_default: Nulstil alt til standardværdier
+reset_configurations: Nulstil konfigurationer
+reset_to_default: Nulstil til standardværdi
+resources:
+review_request:
+  not_now: Ikke nu
+  sure: Sikker!
+  title: Nyder du DockBar?
+save: Gemme
+save_and_restart: Gem & genstart
+search: Søge
+see_more: Se mere
+session:
+  logout: Log ud
+  plan: Plan
+  sign_in: Log ind
+  sign_in_hint: Din browser åbnes, så du kan logge på sikkert.
+  upgrade_to: Opgrader til
+shortcuts:
+  disabled_tooltip: Widgetten og dens genveje er deaktiveret
+  duplicate_error: Der er fundet modstridende genveje
+  duplicate_error_hint: Nogle genveje er tildelt flere handlinger. Deaktiver en af ​​de modstridende widgets eller gentildel den dubletnøglebinding for at løse.
+  enable: Aktivér det indbyggede genvejssystem
+  enable_tooltip: Deaktiver, hvis du vil implementere dit eget genvejssystem ved hjælp af DockBar Client
+  labels:
+    create_new_workspace: Opret et nyt arbejdsområde
+    create_new_workspace_row: Opret ny arbejdsområderække
+    destroy_current_workspace: Ødelæg det nuværende arbejdsområde
+    misc_force_quit: Force stopper
+    misc_force_restart: Fremtving genstart
+    move_to_workspace: Flyt til arbejdsområde {{0}}
+    pause_toggle: Pause/Genoptag genveje
+    send_to_next_workspace: Send vindue til næste arbejdsområde
+    send_to_previous_workspace: Send vindue til forrige arbejdsområde
+    send_to_workspace: Send til arbejdsområde {{0}}
+    send_to_workspace_down: Send vindue til arbejdsområde nedenfor
+    send_to_workspace_up: Send vindue til arbejdsområde ovenfor
+    switch_to_next_workspace: Skift til næste arbejdsområde
+    switch_to_previous_workspace: Skift til forrige arbejdsområde
+    switch_to_workspace_down: Skift til Workspace nedenfor
+    switch_to_workspace_up: Skift til Workspace ovenfor
+    switch_workspace: Skift til arbejdsområde {{0}}
+  readonly_tooltip: Dette er en skrivebeskyttet genvej
+  reset: Nulstil til standardindstillinger
+sides:
+  bottom: Bund
+  left: Venstre
+  right: Højre
+  top: Top
+wall:
+  blur: Sløring
+  cancel: Ophæve
+  close: Tæt
+  collection_name: Samlingens navn
+  collections: Samlinger
+  contrast: Kontrast
+  corrupted_wallpapers_message: 'Ødelagte tapeter, overvej at slette disse:'
+  coverage_pause_threshold: Pausegrænse (vinduesdækning)
+  create: Skabe
+  create_collection: Opret samling
+  default_collection: Standard tapet eller samling
+  default_collection_description: Anvendes på alle skærme og arbejdsområder, der ikke har et specifikt tilsidesættelsessæt.
+  delete_collection: Slet samling
+  edit_collection: Rediger samling
+  extend: Forlæng primær
+  fit:
+    contain: Indeholder
+    cover: Omslag
+    fill: Fyld
+  flipHorizontal: Vend vandret
+  flipVertical: Vend lodret
+  generating_thumbnails: Generering af tapetminiaturer
+  hours: timer
+  interval: Skift tapet hver
+  minutes: minutter
+  monitor_collection: Monitor Indsamling
+  multimonitor_behaviour: Multimonitor-adfærd
+  muted: Slå videolyd fra
+  no_background: Tom lysbilledshow ved hjælp af temas baggrund i stedet.
+  no_collections: Ingen samlinger oprettet endnu. Klik på knappen + for at oprette en.
+  objectFit: Baggrundstilpasning
+  objectPosition: Baggrundsposition
+  overlayColor: Overlay-farve
+  overlayMixBlendMode: Overlay Mix Blend Mode
+  per_monitor: Per skærm
+  per_monitor_config: Konfiguration pr. skærm
+  playback: Afspilningshastighed
+  position:
+    bottom: I bunden
+    center: Center
+    left: Til venstre
+    right: Til højre
+    top: Til toppen
+  processing_video: Behandler video
+  random: Randomiser slideshow
+  saturation: Mætning
+  seconds: sekunder
+  select_collection: Vælg Samling
+  thumbnail_generation_complete: Generering af miniaturebilleder er fuldført
+  thumbnail_generation_finished: Generering af miniaturebilleder er afsluttet
+  use_accent_color: Brug tapet accentfarve
+  wallpaper_collection: Tapet samling
+  wallpaper_settings: Baggrundsindstillinger
+  wallpapers: Baggrunde
+  wallpapers_and_collections: Baggrunde og samlinger
+  withOverlay: Med overlay
+  workspace_collections: Arbejdsrumssamlinger
+welcome:
+  give_a_review: Giv en anmeldelse
+  message: DockBar er et gratis og open source-skrivebordsmiljø til Windows. Her har du fuld kontrol over, hvordan dit skrivebord ser ud og opfører sig, så du kan tilpasse hver eneste detalje, så den matcher din arbejdsgang og stil.
+  ok: Lad os starte!
+  review: Hvis du kan lide at bruge DockBar, kan du overveje at skrive en anmeldelse i butikken – din feedback hjælper projektet med at vokse og forbedre.
+  title: Velkommen til DockBar!
+widget:
+  default_instance: Standardinstans
+  default_instance_hint: Altid aktiv, bruger root-widget-konfigurationen
+  enable: Aktivér denne widget
+  enable_for_monitor: Aktiver på denne skærm
+  extra_instances: Ekstra Forekomster
+  instance: Forekomst
+  instances: Forekomster
+wm:
+  animations:
+    duration: Animationsvarighed (MS)
+    ease_function: Animationsaflastningsfunktion
+    enable: Aktivér vindues animationer
+  author: Forfatter
+  auto_stack: Automatisk stak efter appkategori
+  border:
+    enable: Aktivér vindues grænse
+    offset: Border Offset
+    width: Grænsebredde
+  description: Beskrivelse
+  drag_behavior: Træk adfærd
+  drag_behavior_options:
+    sort: Sorter (omarranger vinduer, mens du trækker)
+    swap: Swap (byt vinduer ved træk-enden)
+  floating:
+    height: Flydende vindueshøjde
+    title: Flydende vinduesstørrelse
+    width: Flydende vinduesbredde
+  layout: Layout
+  resize_delta: Ændre størrelse på Delta (%)
+  space_between_containers: Rum mellem containere
+  stack_bar_visibility: Stack Bar synlighed
+  stack_bar_visibility_options:
+    always: Altid
+    as_needed: Efter behov
+  workspace_offset: Arbejdsområder offset (marginer)
+  workspace_padding: Arbejdsområder polstring
+'yes': Ja

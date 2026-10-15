@@ -1,0 +1,28 @@
+app_menu:
+  close: Tuvs
+  close_multiple: Aizvērt visu
+  copy_handles: Kopēt rokturus
+  edit_app_icon: Rediģēt lietotnes ikonu
+  kill: Nogalināšanas process
+  kill_multiple: Nogalināt visus procesus
+  open_file_location: Atveriet faila atrašanās vietu
+  pin: Piespraust
+  pin_to_center: Piespraudiet centrā
+  pin_to_left: Piespraudiet pa kreisi
+  pin_to_right: Piespraudiet labajā pusē
+  run_as: Izpildīt kā administratoram
+  unpin: Neslēpt
+context_menu:
+  edit_icon: Rediģēšanas ikona
+  remove_separator: Noņemiet atdalītāju
+  reorder_disable: Uzdevumjoslas bloķēšana
+  reorder_enable: Uzdevumjoslas atbloķēšana
+taskbar_menu:
+  add_apps: Pievienot lietotnes
+  add_file: Piesprauž pielāgotu failu
+  add_separator: Pievienot atdalītāju
+  media: Multivides atskaņotājs
+  settings: Iestatījumi
+  task_manager: Uzdevumu pārvaldnieks
+weg:
+  empty: Nav vienumu, ko parādīt

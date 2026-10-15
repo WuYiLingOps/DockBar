@@ -1,0 +1,27 @@
+app_menu:
+  close: Stänga
+  close_multiple: Stäng alla
+  copy_handles: Kopieringshandtag
+  edit_app_icon: Redigera appikon
+  kill: Kill Process
+  kill_multiple: Döda alla processer
+  open_file_location: Öppna filplats
+  pin: Stift
+  pin_to_center: Stift till mitten
+  pin_to_left: Stämma till vänster
+  pin_to_right: Nöja sig till höger
+  run_as: Kör som administratör
+  unpin: Lutande
+context_menu:
+  edit_icon: Redigera ikon
+  remove_separator: Ta bort separatorn
+  reorder_disable: Lås aktivitetsfältet
+  reorder_enable: Lås upp aktivitetsfältet
+taskbar_menu:
+  add_apps: Lägg till appar
+  add_file: Pin Custom File
+  add_separator: Lägg till separator
+  settings: Inställningar
+  task_manager: Task Manager
+weg:
+  empty: Inga objekt att visa

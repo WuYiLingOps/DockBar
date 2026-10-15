@@ -1,0 +1,379 @@
+/* like the native taskbar: pulse while the app flashes, then stay highlighted until the window is activated */
+@keyframes dock-item-flashing {
+  from {
+    background-color: transparent;
+  }
+  to {
+    background-color: var(--dock-item-attention-color);
+  }
+}
+@keyframes shadow-on-horizontal-scroll {
+  from {
+    box-shadow: inset -20px 0 15px -10px hsl(var(--shadow-color) / 0.5);
+  }
+  to {
+    box-shadow: inset 20px 0 15px -10px hsl(var(--shadow-color) / 0.5);
+  }
+}
+@keyframes shadow-on-vertical-scroll {
+  from {
+    box-shadow: inset 0 -20px 15px -10px hsl(var(--shadow-color) / 0.5);
+  }
+  to {
+    box-shadow: inset 0 20px 15px -10px hsl(var(--shadow-color) / 0.5);
+  }
+}
+.taskbar[data-has-margin="true"],
+.taskbar[data-size="min-content"] {
+  border-radius: var(--radius-l);
+}
+.taskbar[data-has-margin="true"] > .dock-items-container,
+.taskbar[data-size="min-content"] > .dock-items-container {
+  border-radius: var(--radius-l);
+}
+
+.taskbar {
+  background-color: oklch(from var(--dockbar-std-bg-color) l c h/0.8);
+}
+.taskbar.horizontal > .dock-items-container {
+  animation: shadow-on-horizontal-scroll linear;
+  animation-timeline: scroll(x self);
+}
+.taskbar.vertical > .dock-items-container {
+  animation: shadow-on-vertical-scroll linear;
+  animation-timeline: scroll(y self);
+}
+.taskbar.temporal-only {
+  --empty-rule: "delete me on use";
+}
+
+.horizontal .dock-separator {
+  border-left: 1px solid var(--dockbar-std-fg-muted-color);
+}
+.vertical .dock-separator {
+  border-top: 1px solid var(--dockbar-std-fg-muted-color);
+}
+
+.weg-empty-state-label {
+  white-space: nowrap;
+  width: min-content;
+  line-height: var(--config-item-size);
+  vertical-align: middle;
+  font-style: italic;
+  color: var(--dockbar-std-fg-muted-color);
+  margin: 0 calc(var(--config-padding) * 2);
+}
+
+:root {
+  /* this count as x2 like there is a padding on each side */
+  --item-inner-spacing: calc(var(--config-item-size) * 0.15);
+  /* same as use 25% but this works for rectangles */
+  --item-border-radius: calc(var(--config-item-size) * 0.25);
+  --item-size-medium: calc(var(--config-item-size) * 2 + var(--config-space-between-items));
+  --item-size-large: calc(var(--config-item-size) * 3 + var(--config-space-between-items) * 2);
+  --dock-item-attention-color: var(--dockbar-std-ui-hover-overlay);
+}
+
+.dock-item-overlay {
+  position: relative;
+}
+.dock-item-overlay .dock-item-tooltip {
+  position: fixed;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  max-width: 240px;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-m);
+  background-color: var(--dockbar-std-bg-dark-color);
+  box-shadow: var(--shadow-m);
+  color: var(--dockbar-std-fg-color);
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  opacity: 1;
+  scale: 1;
+  transition: opacity 150ms ease, scale 150ms ease;
+}
+@starting-style {
+  .dock-item-overlay .dock-item-tooltip {
+    opacity: 0;
+    scale: 0.9;
+  }
+}
+.dock-item-overlay .dock-item-tooltip[data-unmounting] {
+  opacity: 0;
+  scale: 0.9;
+}
+/* anchored at the item's edge via left/top inline styles; transform centers it */
+.dock-item-overlay .dock-item-tooltip {
+  transform: translate(-50%, -100%);
+}
+.dock-item-overlay .dock-item-tooltip.dock-item-tooltip-below {
+  transform: translate(-50%, 0);
+}
+.dock-item-overlay .dock-item-badge {
+  opacity: 1;
+  scale: 1;
+  transition: opacity 200ms ease, scale 200ms ease;
+}
+@starting-style {
+  .dock-item-overlay .dock-item-badge {
+    opacity: 0;
+    scale: 0.4;
+  }
+}
+.dock-item-overlay .dock-item-badge[data-unmounting] {
+  opacity: 0;
+  scale: 0.4;
+}
+.dock-item-overlay .dock-item-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  translate: 25% -25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 16px;
+  min-width: 16px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background-color: var(--dockbar-std-ui-color);
+  color: var(--dockbar-std-ui-fg-color);
+  font-size: 0.625rem;
+  font-weight: 600;
+}
+.dock-item-overlay .dock-item-badge:has(img) {
+  background-color: transparent;
+}
+.dock-item-overlay .dock-item-badge > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dock-item-overlay .dock-item-instance-counter-badge {
+  opacity: 1;
+  scale: 1;
+  transition: opacity 200ms ease, scale 200ms ease;
+}
+@starting-style {
+  .dock-item-overlay .dock-item-instance-counter-badge {
+    opacity: 0;
+    scale: 0.4;
+  }
+}
+.dock-item-overlay .dock-item-instance-counter-badge[data-unmounting] {
+  opacity: 0;
+  scale: 0.4;
+}
+.dock-item-overlay .dock-item-instance-counter-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  translate: 25% -25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 16px;
+  min-width: 16px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-gray-400);
+  color: var(--color-gray-100);
+  font-size: 0.625rem;
+  font-weight: 600;
+}
+.dock-item-overlay .dock-item-open-sign {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-gray-600);
+  opacity: 0;
+  transition-property: width, height, opacity, background-color, border-radius;
+  transition-duration: 0.2s;
+  transition-timing-function: linear;
+}
+.top .dock-item-overlay .dock-item-open-sign {
+  left: 50%;
+  top: calc(var(--config-padding) / 2 * -1);
+  transform: translate(-50%, -50%);
+}
+.bottom .dock-item-overlay .dock-item-open-sign {
+  left: 50%;
+  bottom: calc(var(--config-padding) / 2 * -1);
+  transform: translate(-50%, 50%);
+}
+.left .dock-item-overlay .dock-item-open-sign {
+  top: 50%;
+  left: calc(var(--config-padding) / 2 * -1);
+  transform: translate(-50%, -50%);
+}
+.right .dock-item-overlay .dock-item-open-sign {
+  top: 50%;
+  right: calc(var(--config-padding) / 2 * -1);
+  transform: translate(50%, -50%);
+}
+.dock-item-overlay .dock-item-open-sign.dock-item-open-sign-active {
+  opacity: 1;
+}
+.dock-item-overlay .dock-item-open-sign.dock-item-open-sign-focused {
+  background-color: var(--dockbar-std-ui-color);
+}
+.vertical .dock-item-overlay .dock-item-open-sign.dock-item-open-sign-focused {
+  height: 50%;
+}
+.horizontal .dock-item-overlay .dock-item-open-sign.dock-item-open-sign-focused {
+  width: 50%;
+}
+.dock-item-overlay .dock-item-open-sign.dock-item-open-sign-attention {
+  background-color: var(--dockbar-std-ui-color);
+}
+
+.dock-item {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  gap: var(--item-inner-spacing);
+  padding: var(--item-inner-spacing);
+  background-color: var(--dockbar-std-bg-light-color);
+  box-shadow: var(--shadow-s);
+  border-radius: var(--item-border-radius);
+  height: var(--config-item-size);
+  width: var(--config-item-size);
+  transition: width 200ms ease, height 200ms ease, padding 200ms ease, border-radius 200ms ease;
+}
+@starting-style {
+  .dock-item-drag-container[data-mounting] .dock-item {
+    width: 0;
+    height: 0;
+    padding: 0;
+    border-radius: 0;
+  }
+}
+.dock-item-drag-container[data-unmounting] .dock-item {
+  width: 0;
+  height: 0;
+  padding: 0;
+  border-radius: 0;
+}
+.horizontal .dock-item.dock-item-medium {
+  width: var(--item-size-medium);
+}
+.vertical .dock-item.dock-item-medium {
+  height: var(--item-size-medium);
+}
+.horizontal .dock-item.dock-item-large {
+  width: var(--item-size-large);
+}
+.vertical .dock-item.dock-item-large {
+  height: var(--item-size-large);
+}
+.dock-item:hover {
+  background-color: var(--dockbar-std-bg-dark-color);
+}
+/*
+ * macOS-style magnification, fully driven by magnify.svelte.ts springs:
+ * --mx/--my are the per-axis scale (stretched off the dock axis, slightly
+ * squashed along it), --push-* shoves the item aside along the dock axis.
+ * The transform-origin faces the screen edge the dock sits on so items
+ * grow away from it. No CSS transition: the spring integrates every frame.
+ */
+.dock-item {
+  transform: translate(var(--push-x, 0), var(--push-y, 0)) scale(var(--mx, 1), var(--my, 1));
+}
+.bottom .dock-item {
+  transform-origin: center bottom;
+}
+.top .dock-item {
+  transform-origin: center top;
+}
+.left .dock-item {
+  transform-origin: left center;
+}
+.right .dock-item {
+  transform-origin: right center;
+}
+/*
+ * transform alone doesn't reflow the flex line, so growing items would
+ * overlap neighbors. While magnifying, give the scroller vertical breathing
+ * room on the dock-facing axis instead (clip is on the scroller, see below).
+ */
+.dock-item:active {
+  transform: translateY(2px) translate(var(--push-x, 0), var(--push-y, 0))
+    scale(var(--mx, 1), var(--my, 1));
+}
+.dock-item:hover .dock-item-icon,
+.dock-item:hover .dock-item-canvas {
+  filter: brightness(1.05) saturate(1.1);
+}
+.dock-item:has(.dock-item-icon[data-shape="square"]) {
+  padding: 0;
+}
+/*
+ * macOS lets magnified items bulge past the bar. The scroller is a scroll
+ * container (overflow: auto) which clips transformed descendants; while
+ * magnifying, magnify.svelte.ts flips it to overflow: visible via an inline
+ * style (inline beats any stylesheet subtlety) and restores it on settle —
+ * scrolling is briefly unnecessary while the user is interacting with items.
+ * body/html keep their overflow except body[data-magnifying] (the auto-hide
+ * slide needs body's clip, lifted here since the dock is visible anyway).
+ */
+.dock-items-container[data-magnifying] {
+  overflow: visible;
+}
+body[data-magnifying],
+html[data-magnifying] {
+  overflow: visible;
+}
+.dock-item .dock-item-attention-indicator {
+  position: absolute;
+  inset: 0;
+  background-color: var(--dock-item-attention-color);
+}
+.dock-item .dock-item-attention-indicator.dock-item-attention-indicator-flashing {
+  animation: dock-item-flashing 0.5s ease-in-out infinite alternate;
+}
+.dock-item .dock-item-icon {
+  height: 100%;
+  width: unset;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+}
+.dock-item {
+  /* this is needed for the apps window title text */
+}
+.horizontal .dock-item:has(.dock-item-title) {
+  width: fit-content;
+  padding-right: var(--item-inner-spacing);
+  min-width: var(--config-item-size);
+  max-width: var(--item-size-large);
+}
+.dock-item .dock-item-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  font-size: max(var(--config-item-size) / 3, 0.75rem);
+  font-weight: 600;
+  z-index: 1;
+}
+.vertical .dock-item .dock-item-title {
+  display: none;
+}
+
+.dock-item.media-session-container {
+  overflow: hidden;
+  padding: 0;
+}
+.dock-item.media-session-container:active {
+  transform: none;
+}
+.dock-item.media-session-container .media-session {
+  overflow: hidden;
+}

@@ -1,0 +1,14 @@
+- name: Base
+  identifier:
+    id: (?i)((install)|(setup)|(complete)|(menu)|(notification))
+    kind: Title
+    matchingStrategy: Regex
+  options:
+    - unmanage
+- name: DockBar
+  identifier:
+    id: dockbar.exe
+    kind: Exe
+    matchingStrategy: Equals
+  options:
+    - unmanage

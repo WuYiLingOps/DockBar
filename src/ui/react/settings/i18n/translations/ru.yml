@@ -1,0 +1,301 @@
+action:
+  confirm: Вы уверены?
+  confirm_body: Это действие не может быть отменено.
+cancel: Отменить
+close: Закрыть
+delete: Удалить
+devtools:
+  app_folders: Папки приложения
+  color_palette: Цветовая палитра
+  color_palette_note: Эти цвета автоматически адаптируются к светлому/темному режиму — каждый оттенок имеет контрастность относительно текущего фона, а не фиксированное значение. Используйте их вместо жестко запрограммированных цветов, чтобы получить автоматическую поддержку тем.
+  custom_config_file: Загрузить пользовательский файл конфигурации
+  data_folder: Папка данных
+  enable: Включить инструменты разработчика
+  enable_description: Разблокирует расширенные инструменты для проверки и отладки внутренних компонентов DockBar. Не предназначен для регулярного использования.
+  icons: Кэшированные значки
+  install_folder: Папка установки
+  load: Загрузить
+  settings_file: Файл настроек
+  shared_components: Стандартные компоненты SLU
+  simulate_dialog:
+    label: Имитировать диалог
+    trigger: Триггер
+  simulate_perm:
+    label: Имитировать запрос разрешения виджета
+    result_allowed: ✓ Разрешение получено
+    result_denied: ✗ Разрешение отклонено
+    trigger: Имитировать
+    widget_id_placeholder: '@author/widget-name'
+  tools: Инструменты
+  unlock_shortcuts: Разблокировать ярлыки только для чтения
+  unlock_shortcuts_description: Разрешить редактирование ярлыков, которые обычно доступны только для чтения (например, системные переопределения).
+  unstable_optimizations: Нестабильные оптимизации
+  unstable_optimizations_description: 'Включите экспериментальные флаги Chromium, которые уменьшают использование оперативной памяти.
+
+    Предупреждение: если виджет выйдет из строя, все виджеты, использующие один и тот же загрузчик, аварийно завершатся вместе.'
+  widgets_debug:
+    actions: Действия
+    empty: Виджеты не загружены. Нажмите «Обновить».
+    instance_id: ID экземпляра
+    monitor_id: ID монитора
+    open_devtools: Инструменты разработчика
+    refresh: Обновить
+    status: Статус
+    tab: Виджеты
+    widget_id: ID виджета
+discord_banner:
+  message: Общайтесь с другими пользователями DockBar, получайте помощь, делитесь темами и будьте в курсе последних новостей.
+  title: Присоединяйтесь к нашему сообществу
+dock:
+  auto_hide: Автоскрытие
+  auto_hide_touch_disabled: Автоматическое скрытие недоступно на устройствах с сенсорным экраном.
+  delay_to_hide: Задержка, чтобы скрыть
+  delay_to_show: Задержка показа
+  dock_side: Расположение
+  filtering: Фильтрация элементов
+  gap: Расстояние
+  hide_mode:
+    always: Всегда
+    never: Никогда
+    on_overlap: При перекрытии
+  import_error: Не удалось импортировать элементы панели задач.
+  import_from_taskbar:
+    button: Импорт из панели задач Windows
+    label: Импортировать закрепленные элементы
+  import_no_items: На панели задач Windows не найдено закрепленных элементов.
+  import_success: Успешно импортировано {{count}} элементов с панели задач Windows.
+  items:
+    gap: Расстояние между элементами
+    label: Элементы
+    middle_click_action:
+      close_app: Закрыть приложение
+      label: Действие среднего щелчка
+      open_new_instance: Открыть новый экземпляр
+    pinned_visibility:
+      always: Всегда
+      label: Видимость закрепленных элементов
+      when_primary: Если монитор основной
+    show_instance_counter: Показать счетчик открытых окон
+    show_window_title: Показать заголовок открытого окна (только горизонтально)
+    size: Размер элементов
+    split_windows: Разделение окон (по одному элементу в окне)
+    temporal_visibility:
+      all: Все
+      label: Видимость незакрепленных элементов
+      on_monitor: На мониторе
+  label: Панель задач
+  margin: Внешний отступ
+  mode:
+    full_width: По ширине экрана
+    min_content: Минимальная
+  padding: Внутренний отступ
+  reveal_on_attention:
+    label: Показывать, когда приложение требует внимания
+    never: Никогда
+    until_activated: Пока приложение не откроется
+    while_flashing: Пока он мигает
+  show_end_task: Показать завершение задачи на панели задач
+  width: Ширина
+general:
+  accent_color: Акцентный цвет
+  date_format: Формат даты
+  date_format_how_to: Как написать формат даты?
+  hardware_acceleration: Аппаратное ускорение
+  hardware_acceleration_description: Отключение аппаратного ускорения уменьшит использование памяти. Его можно безопасно отключить, если вы не используете тяжелую анимацию, хотя отдельные виджеты все равно могут принудительно использовать графический процессор независимо от этого параметра.
+  icon_pack:
+    available: Доступные пакеты значков
+    selected: Активные пакеты значков
+  language: Язык
+  monday: Понедельник
+  performance_mode:
+    label: Оптимизации
+    on_battery: На батареи
+    on_energy_saver: На энергетическую экономию
+    options:
+      disabled: Неполноценный
+      extreme: Крайний
+      minimal: Минимальный
+    plugged: Подключено или заряжается
+  polling_interval: Интервал опроса системы
+  polling_interval_description: Как часто (в секундах) DockBar проверяет системные ресурсы, такие как ЦП, ОЗУ, сеть и активность диска. Меньшее число означает более частые обновления, но немного большее использование ресурсов.
+  saturday: Суббота
+  start_of_week: Начало недели
+  startup: Автозапуск при включении системы
+  sunday: Воскресенье
+  suspend_on_game_mode: Приостановить виджеты в игровом режиме
+  suspend_on_game_mode_description: Когда игровой режим Windows активен, все веб-просмотры виджетов уничтожаются, чтобы освободить процессор и память для игры. Виджеты автоматически восстанавливаются после выхода из игрового режима.
+  theme:
+    available: Доступные темы
+    selected: Активные темы
+global: Глобальный
+header:
+  labels:
+    developer: Для разработчиков
+    general: Общее
+    monitors: Мониторы
+    shortcuts: Сочетания клавиш
+    widget: Виджеты
+inProgress: В процессе...
+inherit: Наследовать
+insert: Вставить
+join_us: Присоединяйтесь к нам!
+loading: Загрузка...
+miscellaneous: Разное
+monitors_configurations:
+  label: Монитор {{index}}
+more: Подробнее
+'no': Нет
+open: Открыть
+quit: Закрыть
+remove: Удалить
+reset_all_to_default: Сброс всех значений по умолчанию
+reset_configurations: Сброс настроек
+reset_to_default: Сброс на значение по умолчанию
+resources:
+review_request:
+  not_now: Не сейчас
+  sure: Конечно!
+  title: Нравится интерфейс DockBar?
+save: Сохранить
+save_and_restart: Сохранить и перезапустить
+search: Поиск
+see_more: См. подробнее
+session:
+  logout: Выход
+  plan: План
+  sign_in: Войти
+  sign_in_hint: Ваш браузер откроется, и вы сможете безопасно войти в систему.
+  upgrade_to: Обновите до
+shortcuts:
+  disabled_tooltip: Виджет и его ярлыки отключены.
+  duplicate_error: Обнаружены конфликтующие ярлыки
+  duplicate_error_hint: Некоторые сочетания клавиш назначены нескольким действиям. Отключите один из конфликтующих виджетов или переназначьте повторяющуюся привязку клавиш для разрешения.
+  enable: Включить встроенную систему сочетаний клавиш
+  enable_tooltip: Отключите, если вы будете реализовать свою собственную систему сочетаний клавиш, используя клиент DockBar
+  labels:
+    create_new_workspace: Создать новое рабочее пространство
+    create_new_workspace_row: Создать новую строку рабочего пространства
+    destroy_current_workspace: Уничтожить текущее рабочее пространство
+    misc_force_quit: Принудительный выход
+    misc_force_restart: Принудительный перезапуск
+    move_to_workspace: Перейти в рабочее пространство {{0}}
+    pause_toggle: Пауза/возобновление ярлыков
+    send_to_next_workspace: Отправить окно в следующее рабочее пространство
+    send_to_previous_workspace: Отправить окно в предыдущее рабочее пространство
+    send_to_workspace: Отправить в рабочее пространство {{0}}
+    send_to_workspace_down: Отправить окно в рабочее пространство ниже
+    send_to_workspace_up: Отправить окно в рабочее пространство выше
+    switch_to_next_workspace: Переключить на следующее рабочее пространство
+    switch_to_previous_workspace: Переключить на предыдущее рабочее пространство
+    switch_to_workspace_down: Переключить на рабочее пространство ниже
+    switch_to_workspace_up: Переключить на рабочее пространство выше
+    switch_workspace: Переключить на рабочее пространство {{0}}
+  readonly_tooltip: Это ярлык только для чтения
+  reset: Сбросить по умолчанию
+sides:
+  bottom: Снизу
+  left: Слева
+  right: Справа
+  top: Сверху
+wall:
+  blur: Размытие
+  cancel: Отменить
+  close: Закрыть
+  collection_name: Название коллекции
+  collections: Коллекции
+  contrast: Контраст
+  corrupted_wallpapers_message: 'Поврежденные обои, рассмотрите возможность их удаления:'
+  coverage_pause_threshold: Порог паузы (покрытие окна)
+  create: Создать
+  create_collection: Создать коллекцию
+  default_collection: Обои или коллекция по умолчанию
+  default_collection_description: Применяется ко всем мониторам и рабочим пространствам, для которых не задан специальный набор переопределений.
+  delete_collection: Удалить коллекцию
+  edit_collection: Редактировать коллекцию
+  extend: Продлить основной
+  fit:
+    contain: Вписать
+    cover: Заполнить
+    fill: Растянуть
+  flipHorizontal: Отразить по горизонтали
+  flipVertical: Отразить по вертикали
+  generating_thumbnails: Создание миниатюр обоев
+  hours: часы
+  interval: Менять обои через
+  minutes: минуты
+  monitor_collection: Коллекция мониторов
+  multimonitor_behaviour: Поведение нескольких мониторов
+  muted: Отключить звук видео
+  no_background: Пустое слайд-шоу (используется фон темы)
+  no_collections: Коллекции пока не созданы. Нажмите кнопку +, чтобы создать его.
+  objectFit: Фоновая подгонка
+  objectPosition: Фоновая позиция
+  overlayColor: Цвет наложения
+  overlayMixBlendMode: Режим смешивания оверлея
+  per_monitor: На монитор
+  per_monitor_config: Конфигурация для каждого монитора
+  playback: Скорость воспроизведения
+  position:
+    bottom: Снизу
+    center: По центру
+    left: Слева
+    right: Справа
+    top: Сверху
+  processing_video: Обработка видео
+  random: Случайный порядок слайд-шоу
+  saturation: Насыщенность
+  seconds: секунды
+  select_collection: Выбрать коллекцию
+  thumbnail_generation_complete: Создание миниатюр завершено
+  thumbnail_generation_finished: Создание миниатюр успешно завершено
+  use_accent_color: Используйте акцентный цвет обоев
+  wallpaper_collection: Коллекция обоев
+  wallpaper_settings: Настройки обоев
+  wallpapers: Обои
+  wallpapers_and_collections: Обои и коллекции
+  withOverlay: С наложением
+  workspace_collections: Коллекции рабочих пространств
+welcome:
+  give_a_review: Оставить отзыв
+  message: DockBar — это бесплатная среда рабочего стола с открытым исходным кодом для Windows. Здесь у вас есть полный контроль над тем, как выглядит и ведет себя ваш рабочий стол, что позволяет вам настроить каждую деталь в соответствии с вашим рабочим процессом и стилем.
+  ok: Начнем!
+  review: Если вам нравится использовать DockBar, оставьте отзыв в магазине — ваш отзыв поможет проекту расти и совершенствоваться.
+  title: Добро пожаловать в DockBar!
+widget:
+  default_instance: Экземпляр по умолчанию
+  default_instance_hint: Всегда активен, использует конфигурацию корневого виджета
+  enable: Включите этот виджет
+  enable_for_monitor: Включить на этом мониторе
+  extra_instances: Дополнительные экземпляры
+  instance: Экземпляр
+  instances: Экземпляры
+wm:
+  animations:
+    duration: Продолжительность анимации (мс)
+    ease_function: Функция сглаживания анимации
+    enable: Включить анимацию Window
+  author: Автор
+  auto_stack: Автоматическое объединение по категориям приложений
+  border:
+    enable: Включить границу окон
+    offset: Смещение границы
+    width: Ширина границы
+  description: Описание
+  drag_behavior: Поведение перетаскивания
+  drag_behavior_options:
+    sort: Сортировка (изменение порядка окон при перетаскивании)
+    swap: Обмен (обмен окон местами после завершения перетаскивания)
+  floating:
+    height: Плавающая высота окон
+    title: Плавающий размер окна
+    width: Плавающая ширина окна
+  layout: Макет
+  resize_delta: Шаг изменения размера (%)
+  space_between_containers: Пространство между контейнерами
+  stack_bar_visibility: Видимость панели стека
+  stack_bar_visibility_options:
+    always: Всегда
+    as_needed: По мере необходимости
+  workspace_offset: Смещение (внешний отступ) рабочего пространства
+  workspace_padding: Внутренний отступ рабочего пространства
+'yes': Да

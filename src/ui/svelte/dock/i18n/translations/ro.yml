@@ -1,0 +1,27 @@
+app_menu:
+  close: Închide
+  close_multiple: Inchide tot
+  copy_handles: Copiați mânerele
+  edit_app_icon: Editați pictograma aplicației
+  kill: Procesul de ucidere
+  kill_multiple: Omoara toate procesele
+  open_file_location: Deschide locația fișierului
+  pin: Ac
+  pin_to_center: Pin în centru
+  pin_to_left: Pin la stânga
+  pin_to_right: Pin la dreapta
+  run_as: Rulat ca administrator
+  unpin: Unpin
+context_menu:
+  edit_icon: Editare pictogramă
+  remove_separator: Scoateți separatorul
+  reorder_disable: Blocarea barei de activități
+  reorder_enable: Deblocați bara de activități
+taskbar_menu:
+  add_apps: Adaugă aplicații
+  add_file: Fișier personalizat
+  add_separator: Adăugați separator
+  settings: Setări
+  task_manager: Manager de activități
+weg:
+  empty: Nu există elemente de afișat

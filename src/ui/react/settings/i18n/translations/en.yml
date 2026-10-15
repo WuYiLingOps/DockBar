@@ -1,0 +1,303 @@
+action:
+  confirm: Are you sure?
+  confirm_body: This action cannot be undone.
+cancel: Cancel
+close: Close
+delete: Delete
+devtools:
+  app_folders: App Folders
+  color_palette: Color Palette
+  color_palette_note: These colors automatically adapt to light/dark mode — each shade is contrast-relative to the current background, not a fixed value. Use them instead of hardcoded colors to get automatic theme support.
+  custom_config_file: Load Custom Config File
+  data_folder: Data Folder
+  enable: Enable Developer Tools
+  enable_description: Unlocks advanced tools for inspecting and debugging DockBar internals. Not intended for regular use.
+  icons: Cached Icons
+  install_folder: Installation Folder
+  load: Load
+  settings_file: Settings File
+  shared_components: SLU Standard Components
+  simulate_dialog:
+    label: Simulate Dialog
+    trigger: Trigger
+  simulate_perm:
+    label: Simulate Widget Permission Request
+    result_allowed: ✓ Permission granted
+    result_denied: ✗ Permission denied
+    trigger: Simulate
+    widget_id_placeholder: '@author/widget-name'
+  tools: Tools
+  unlock_shortcuts: Unlock Read-Only Shortcuts
+  unlock_shortcuts_description: Allow editing shortcuts that are normally read-only (e.g. system overrides).
+  unstable_optimizations: Unstable Optimizations
+  unstable_optimizations_description: 'Enable experimental Chromium flags that reduce RAM usage.
+
+    Warning: if a widget crashes, all widgets sharing the same loader will crash together.'
+  widgets_debug:
+    actions: Actions
+    empty: No widgets loaded. Click Refresh.
+    instance_id: Instance ID
+    monitor_id: Monitor ID
+    open_devtools: DevTools
+    refresh: Refresh
+    status: Status
+    tab: Widgets
+    widget_id: Widget ID
+discord_banner:
+  message: Connect with other DockBar users, get help, share themes, and stay up to date with the latest news.
+  title: Join our Community
+dock:
+  auto_hide: Auto Hide
+  auto_hide_touch_disabled: Auto hide is not available on touch screen devices
+  delay_to_hide: Delay to hide
+  delay_to_show: Delay to show
+  dock_side: Position
+  filtering: Item Filtering
+  gap: Gap
+  hide_mode:
+    always: Always
+    never: Never
+    on_overlap: On overlap
+  import_error: Failed to import taskbar items
+  import_from_taskbar:
+    button: Import from Windows Taskbar
+    label: Import Pinned Items
+  import_no_items: No pinned items found in Windows taskbar
+  import_success: Successfully imported {{count}} item(s) from Windows taskbar
+  items:
+    gap: Space Between Items
+    hover_show_app_name: Show app name on hover
+    icon_magnification: Icon magnification on hover (0 = off)
+    label: Items
+    middle_click_action:
+      close_app: Close App
+      label: Middle Click Action
+      open_new_instance: Open New Instance
+    pinned_visibility:
+      always: Always
+      label: Pinned Items Visibility
+      when_primary: When the monitor is primary
+    show_instance_counter: Show open windows counter
+    show_window_title: Show open window title (only horizontal)
+    size: Item Size
+    split_windows: Split Windows (one item per window)
+    temporal_visibility:
+      all: All
+      label: Unpinned Items Visibility
+      on_monitor: On Monitor
+  label: Dock/Taskbar
+  margin: Margin
+  mode:
+    full_width: Full screen width
+    min_content: Small as can be
+  padding: Padding
+  reveal_on_attention:
+    label: Show when an app requests attention
+    never: Never
+    until_activated: Until the app is opened
+    while_flashing: While it flashes
+  show_end_task: Show end task in taskbar
+  width: Width
+general:
+  accent_color: Accent color
+  date_format: Date format
+  date_format_how_to: How to write a date format?
+  hardware_acceleration: Hardware acceleration
+  hardware_acceleration_description: Disabling hardware acceleration will reduce memory usage. It is safe to disable if you are not using heavy animations, though individual widgets may still force GPU usage regardless of this setting.
+  icon_pack:
+    available: Available Icon Packs
+    selected: Active Icon Packs
+  language: Language
+  monday: Monday
+  performance_mode:
+    label: Optimizations
+    on_battery: On battery
+    on_energy_saver: On energy saver
+    options:
+      disabled: Disabled
+      extreme: Extreme
+      minimal: Minimal
+    plugged: Plugged or charging
+  polling_interval: System polling interval
+  polling_interval_description: How often (in seconds) DockBar checks system resources like CPU, RAM, network, and disk activity. A smaller number means more frequent updates, but slightly higher resource usage.
+  saturday: Saturday
+  start_of_week: Start of week
+  startup: Run on startup?
+  sunday: Sunday
+  suspend_on_game_mode: Suspend widgets on Game Mode
+  suspend_on_game_mode_description: When Windows Game Mode is active, all widget webviews are destroyed to free CPU and memory for the game. Widgets are automatically restored when Game Mode ends.
+  theme:
+    available: Available Themes
+    selected: Active Themes
+global: Global
+header:
+  labels:
+    developer: For developers
+    general: General
+    monitors: Monitors
+    shortcuts: Shortcuts
+    widget: Widgets
+inProgress: In Progress...
+inherit: Inherit
+insert: Insert
+join_us: Join us!
+loading: Loading...
+miscellaneous: Miscellaneous
+monitors_configurations:
+  label: Monitor {{index}}
+more: More
+'no': 'No'
+open: Open
+quit: Quit
+remove: Remove
+reset_all_to_default: Reset all to default values
+reset_configurations: Reset configurations
+reset_to_default: Reset to default value
+resources:
+review_request:
+  not_now: Not now
+  sure: Sure!
+  title: Enjoying DockBar?
+save: Save
+save_and_restart: Save & Restart
+search: Search
+see_more: See More
+session:
+  logout: Sign Out
+  plan: Plan
+  sign_in: Sign In
+  sign_in_hint: Your browser will open so you can sign in securely.
+  upgrade_to: Upgrade to
+shortcuts:
+  disabled_tooltip: The widget and its shortcuts are disabled
+  duplicate_error: Conflicting shortcuts detected
+  duplicate_error_hint: Some shortcuts are assigned to multiple actions. Disable one of the conflicting widgets or reassign the duplicate key binding to resolve.
+  enable: Enable built-in shortcuts system
+  enable_tooltip: Disable if you will implement your own shortcuts system using the DockBar Client
+  labels:
+    create_new_workspace: Create new Workspace
+    create_new_workspace_row: Create New Workspace Row
+    destroy_current_workspace: Destroy Current Workspace
+    misc_force_quit: Force Quit
+    misc_force_restart: Force Restart
+    move_to_workspace: Move to Workspace {{0}}
+    pause_toggle: Pause/Resume Shortcuts
+    send_to_next_workspace: Send Window to Next Workspace
+    send_to_previous_workspace: Send Window to Previous Workspace
+    send_to_workspace: Send to Workspace {{0}}
+    send_to_workspace_down: Send Window to Workspace Below
+    send_to_workspace_up: Send Window to Workspace Above
+    switch_to_next_workspace: Switch to Next Workspace
+    switch_to_previous_workspace: Switch to Previous Workspace
+    switch_to_workspace_down: Switch to Workspace Below
+    switch_to_workspace_up: Switch to Workspace Above
+    switch_workspace: Switch to Workspace {{0}}
+  readonly_tooltip: This is a read-only shortcut
+  reset: Reset to Defaults
+sides:
+  bottom: Bottom
+  left: Left
+  right: Right
+  top: Top
+wall:
+  blur: Blur
+  cancel: Cancel
+  close: Close
+  collection_name: Collection Name
+  collections: Collections
+  contrast: Contrast
+  corrupted_wallpapers_message: 'Corrupted wallpapers, consider deleting these:'
+  coverage_pause_threshold: Pause threshold (window coverage)
+  create: Create
+  create_collection: Create Collection
+  default_collection: Default wallpaper or collection
+  default_collection_description: Applied to all monitors and workspaces that do not have a specific override set.
+  delete_collection: Delete Collection
+  edit_collection: Edit Collection
+  extend: Extend primary
+  fit:
+    contain: Contain
+    cover: Cover
+    fill: Fill
+  flipHorizontal: Flip Horizontal
+  flipVertical: Flip Vertical
+  generating_thumbnails: Generating Wallpaper Thumbnails
+  hours: hours
+  interval: Change wallpaper every
+  minutes: minutes
+  monitor_collection: Monitor Collection
+  multimonitor_behaviour: Multimonitor Behaviour
+  muted: Mute video audio
+  no_background: Empty slideshow, using theme's background instead.
+  no_collections: No collections created yet. Click the + button to create one.
+  objectFit: Background Fit
+  objectPosition: Background Position
+  overlayColor: Overlay Color
+  overlayMixBlendMode: Overlay Mix Blend Mode
+  per_monitor: Per monitor
+  per_monitor_config: Per-Monitor Configuration
+  playback: Playback speed
+  position:
+    bottom: Bottom
+    center: Center
+    left: Left
+    right: Right
+    top: Top
+  processing_video: Processing video
+  random: Randomize slideshow
+  saturation: Saturation
+  seconds: seconds
+  select_collection: Select Collection
+  thumbnail_generation_complete: Thumbnail Generation Complete
+  thumbnail_generation_finished: Thumbnail generation has finished successfully
+  use_accent_color: Use wallpaper accent color
+  wallpaper_collection: Wallpaper Collection
+  wallpaper_settings: Wallpaper Settings
+  wallpapers: Wallpapers
+  wallpapers_and_collections: Wallpapers & Collections
+  withOverlay: With Overlay
+  workspace_collections: Workspace Collections
+welcome:
+  give_a_review: Give a Review
+  message: DockBar is a free and open source desktop environment for Windows. Here you have full control over how your desktop looks and behaves, allowing you to customize every detail to match your workflow and style.
+  ok: Let's start!
+  review: If you enjoy using DockBar, consider leaving a review on the store — your feedback helps the project grow and improve.
+  title: Welcome to DockBar!
+widget:
+  default_instance: Default Instance
+  default_instance_hint: Always active, uses the root widget config
+  enable: Enable this widget
+  enable_for_monitor: Enable on this monitor
+  extra_instances: Extra Instances
+  instance: Instance
+  instances: Instances
+wm:
+  animations:
+    duration: Animation Duration (ms)
+    ease_function: Animation Easing Function
+    enable: Enable Window's Animations
+  author: Author
+  auto_stack: Auto stack by app category
+  border:
+    enable: Enable Window's Border
+    offset: Border Offset
+    width: Border Width
+  description: Description
+  drag_behavior: Drag Behavior
+  drag_behavior_options:
+    sort: Sort (reorder windows while dragging)
+    swap: Swap (swap windows on drag end)
+  floating:
+    height: Floating Windows Height
+    title: Floating Windows Size
+    width: Floating Windows Width
+  layout: Layout
+  resize_delta: Resize Delta (%)
+  space_between_containers: Space Between Containers
+  stack_bar_visibility: Stack Bar Visibility
+  stack_bar_visibility_options:
+    always: Always
+    as_needed: As needed
+  workspace_offset: Workspaces Offset (Margins)
+  workspace_padding: Workspaces Padding
+'yes': 'Yes'

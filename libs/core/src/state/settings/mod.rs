@@ -1,0 +1,485 @@
+/* In this file we use #[serde_alias(SnakeCase)] as backward compatibility from versions below v1.9.8 */
+pub mod by_monitor;
+pub mod by_widget;
+pub mod settings_by_app;
+pub mod shortcuts;
+
+pub use settings_by_app::*;
+
+use std::collections::{HashMap, HashSet};
+use std::fs::File;
+use std::io::Write;
+use std::path::Path;
+
+use schemars::JsonSchema;
+use serde::{Deserialize, Serialize};
+use serde_alias::serde_alias;
+
+use crate::resource::WidgetId;
+use crate::system_state::MonitorId;
+use crate::{
+    error::Result,
+    resource::IconPackId,
+    state::{
+        by_monitor::MonitorConfiguration, by_widget::SettingsByWidget,
+        shortcuts::DockBarShortcutsSettings,
+    },
+};
+
+// ============== DockBar Settings ==============
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), derive(ts_rs::TS))]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), ts(repr(enum = name)))]
+pub enum DockBarMode {
+    #[serde(alias = "Full-Width")]
+    FullWidth,
+    #[serde(alias = "Min-Content")]
+    MinContent,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), derive(ts_rs::TS))]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), ts(repr(enum = name)))]
+pub enum WegTemporalItemsVisibility {
+    All,
+    OnMonitor,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), derive(ts_rs::TS))]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), ts(repr(enum = name)))]
+pub enum WegPinnedItemsVisibility {
+    Always,
+    WhenPrimary,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), derive(ts_rs::TS))]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), ts(repr(enum = name)))]
+pub enum HideMode {
+    /// never hide
+    Never,
+    /// auto-hide always on
+    Always,
+    /// auto-hide only if is overlaped by the focused window
+    #[serde(alias = "On-Overlap")]
+    OnOverlap,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), derive(ts_rs::TS))]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), ts(repr(enum = name)))]
+pub enum WegMiddleClickAction {
+    /// Close the focused window of the app (default)
+    CloseApp,
+    /// Open a new instance of the app
+    OpenNewInstance,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), derive(ts_rs::TS))]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), ts(repr(enum = name)))]
+pub enum WegAttentionReveal {
+    /// Keep the dock hidden, only the item is highlighted
+    Never,
+    /// Show the dock while a window is flashing
+    WhileFlashing,
+    /// Show the dock until the window requesting attention is activated (like the native taskbar)
+    UntilActivated,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), derive(ts_rs::TS))]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), ts(repr(enum = name)))]
+pub enum DockBarSide {
+    Left,
+    Right,
+    Top,
+    Bottom,
+}
+
+#[serde_alias(SnakeCase)]
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), derive(ts_rs::TS))]
+#[serde(default, rename_all = "camelCase")]
+pub struct DockBarSettings {
+    /// enable or disable the dockbarweg
+    pub enabled: bool,
+    /// Key overrides for widget-declared shortcuts (`shortcut_id -> keys`).
+    #[serde(rename = "$shortcuts")]
+    pub shortcuts: Option<std::collections::HashMap<String, Vec<String>>>,
+    /// Dock/Taskbar mode
+    pub mode: DockBarMode,
+    /// When to hide the dock
+    pub hide_mode: HideMode,
+    /// Split windows into separated items instead of grouped.
+    pub split_windows: bool,
+    /// Which temporal items to show on the dock instance (this can be overridden per monitor)
+    pub temporal_items_visibility: WegTemporalItemsVisibility,
+    /// Determines is the pinned item should be shown or not (this can be overridden per monitor).
+    pub pinned_items_visibility: WegPinnedItemsVisibility,
+    /// Dock position
+    pub position: DockBarSide,
+    /// enable or disable the instance counter visibility on weg instance
+    pub show_instance_counter: bool,
+    /// enable or disable the window title visibility for opened apps
+    pub show_window_title: bool,
+    /// item size in px
+    pub size: u32,
+    /// Dock/Taskbar margin in px
+    pub margin: u32,
+    /// Dock/Taskbar padding in px
+    pub padding: u32,
+    /// space between items in px
+    pub space_between_items: u32,
+    /// delay to show the toolbar on Mouse Hover in milliseconds
+    pub delay_to_show: u32,
+    /// delay to hide the toolbar on Mouse Leave in milliseconds
+    pub delay_to_hide: u32,
+    /// Show the auto-hidden dock when a window requests attention
+    pub reveal_on_attention: WegAttentionReveal,
+    /// show end task button on context menu (needs developer mode enabled)
+    pub show_end_task: bool,
+    /// Action to perform when middle-clicking a dock item
+    pub middle_click_action: WegMiddleClickAction,
+    /// show a tooltip with the app name when hovering a dock item
+    pub hover_show_app_name: bool,
+    /// magnification strength of the hovered icon (0 = disabled, 100 = max)
+    pub icon_magnification: u32,
+}
+
+impl Default for DockBarSettings {
+    fn default() -> Self {
+        Self {
+            enabled: true,
+            shortcuts: None,
+            mode: DockBarMode::MinContent,
+            hide_mode: HideMode::OnOverlap,
+            position: DockBarSide::Bottom,
+            show_instance_counter: true,
+            show_window_title: false,
+            temporal_items_visibility: WegTemporalItemsVisibility::All,
+            pinned_items_visibility: WegPinnedItemsVisibility::Always,
+            size: 40,
+            margin: 8,
+            padding: 8,
+            space_between_items: 8,
+            delay_to_show: 100,
+            delay_to_hide: 800,
+            reveal_on_attention: WegAttentionReveal::UntilActivated,
+            show_end_task: false,
+            split_windows: false,
+            middle_click_action: WegMiddleClickAction::OpenNewInstance,
+            hover_show_app_name: true,
+            icon_magnification: 40,
+        }
+    }
+}
+
+impl DockBarSettings {
+    /// total height or width of the dock, depending on the Position
+    pub fn total_size(&self) -> u32 {
+        self.size + (self.padding * 2) + (self.margin * 2)
+    }
+}
+
+// ========================== DockBar Updates ==============================
+
+// ========================== Start of Week ==============================
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), derive(ts_rs::TS))]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), ts(repr(enum = name)))]
+#[derive(Default)]
+pub enum StartOfWeek {
+    #[default]
+    Monday,
+    Sunday,
+    Saturday,
+}
+
+// ======================== Final Settings Struct ===============================
+#[serde_alias(SnakeCase)]
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), derive(ts_rs::TS))]
+#[serde(default, rename_all = "camelCase")]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), ts(export))]
+pub struct Settings {
+    pub by_app: AppsConfigurationList,
+    /// list of monitors and their configurations
+    pub monitors_v3: HashMap<MonitorId, MonitorConfiguration>,
+    /// app shortcuts settings
+    pub shortcuts: DockBarShortcutsSettings,
+    /// list of selected icon packs
+    pub active_icon_packs: Vec<IconPackId>,
+    /// enable or disable dev tools tab in settings
+    pub dev_tools: bool,
+    /// discord rich presence
+    pub drpc: bool,
+    /// language to use, if null the system locale is used
+    pub language: String,
+    /// MomentJS date format
+    pub date_format: String,
+    /// Start of week for calendar
+    pub start_of_week: StartOfWeek,
+    /// Custom settings for widgets
+    pub by_widget: SettingsByWidget,
+    /// Performance options
+    pub performance_mode: PerformanceModeSettings,
+    /// enable or disable hardware acceleration
+    pub hardware_acceleration: bool,
+    /// Enable unstable chromium optimizations (e.g. process-per-site). May improve RAM usage but can cause crashes.
+    pub unstable_optimizations: bool,
+    /// interval to poll for system resources like cpu, memory, network usage, etc, in seconds.
+    pub polling_interval: u64,
+    /// Streaming mode: replaces sensitive information (e.g. emails) with placeholders
+    /// to avoid exposing personal data in recordings or screenshots.
+    pub streaming_mode: bool,
+    /// Enable or disable automatic cloud backup sync.
+    pub backup_sync_enabled: bool,
+    /// Suspend all webviews when Windows GameMode is active to free resources for the game.
+    pub suspend_on_game_mode: bool,
+    /// Allow editing read-only shortcuts (e.g. system overrides). Only effective when dev_tools is enabled.
+    pub unlock_shortcuts: bool,
+}
+
+impl Default for Settings {
+    fn default() -> Self {
+        Self {
+            by_app: AppsConfigurationList::default(),
+            performance_mode: PerformanceModeSettings::default(),
+            shortcuts: DockBarShortcutsSettings::default(),
+            drpc: false,
+            active_icon_packs: vec!["@system/icon-pack".into()],
+            monitors_v3: HashMap::new(),
+            dev_tools: false,
+            language: Self::get_app_language(),
+            date_format: "ddd D MMM, hh:mm A".to_owned(),
+            start_of_week: StartOfWeek::default(),
+            by_widget: SettingsByWidget::default(),
+            hardware_acceleration: true,
+            unstable_optimizations: false,
+            polling_interval: 3,
+            streaming_mode: false,
+            backup_sync_enabled: true,
+            suspend_on_game_mode: false,
+            unlock_shortcuts: false,
+        }
+    }
+}
+
+impl Settings {
+    pub fn get_system_locale() -> Option<String> {
+        sys_locale::get_locale()
+    }
+
+    pub fn get_app_language() -> String {
+        use crate::constants::SUPPORTED_LANGUAGES;
+
+        let Some(sys_locale) = sys_locale::get_locale() else {
+            return "en".to_string();
+        };
+
+        if SUPPORTED_LANGUAGES.iter().any(|l| l.value == sys_locale) {
+            return sys_locale;
+        }
+
+        let Some(base) = sys_locale.split('-').next() else {
+            return "en".to_string();
+        };
+        if SUPPORTED_LANGUAGES.iter().any(|l| l.value == base) {
+            return base.to_string();
+        }
+
+        "en".to_string()
+    }
+
+    pub fn migrate(&mut self) -> Result<()> {
+        Ok(())
+    }
+
+    pub fn dedup_icon_packs(&mut self) {
+        let mut seen = HashSet::new();
+        self.active_icon_packs.retain(|x| seen.insert(x.clone())); // dedup
+    }
+
+    pub fn sanitize(&mut self) -> Result<()> {
+        if self.language.is_empty() {
+            self.language = Self::get_app_language();
+        }
+
+        // ensure base is always selected
+        self.active_icon_packs.insert(0, "@system/icon-pack".into());
+        self.dedup_icon_packs();
+
+        self.by_app.prepare();
+        self.by_widget.sanitize();
+        self.by_widget.dock.icon_magnification = self.by_widget.dock.icon_magnification.min(100);
+
+        self.polling_interval = self.polling_interval.max(1);
+        Ok(())
+    }
+
+    pub fn load(path: impl AsRef<Path>) -> Result<Self> {
+        let path = path.as_ref();
+
+        let stem = path
+            .file_stem()
+            .map(|s| s.to_string_lossy().into_owned())
+            .unwrap_or_default();
+        let parent = path.parent().unwrap_or(path);
+
+        let shortcuts_path = parent.join(format!("{stem}_shortcuts.json"));
+        let by_app_path = parent.join(format!("{stem}_by_app.yml"));
+
+        let (main, shortcuts, by_app) = std::thread::scope(|s| {
+            let main = s.spawn(|| -> Result<Self> {
+                let file = File::open(path)?;
+                file.lock_shared()?;
+                Ok(serde_json::from_reader(&file)?)
+            });
+
+            let shortcuts = s.spawn(|| -> Result<Option<DockBarShortcutsSettings>> {
+                if !shortcuts_path.exists() {
+                    return Ok(None);
+                }
+                let file = File::open(&shortcuts_path)?;
+                file.lock_shared()?;
+                Ok(Some(serde_json::from_reader(&file)?))
+            });
+
+            let by_app = s.spawn(|| -> Result<Option<AppsConfigurationList>> {
+                if !by_app_path.exists() {
+                    return Ok(None);
+                }
+                let file = File::open(&by_app_path)?;
+                file.lock_shared()?;
+                Ok(Some(serde_yaml::from_reader(&file)?))
+            });
+
+            (main.join(), shortcuts.join(), by_app.join())
+        });
+
+        let mut settings = main.map_err(|_| "settings thread panicked")??;
+        if let Some(s) = shortcuts.map_err(|_| "shortcuts thread panicked")?? {
+            settings.shortcuts = s;
+        }
+        if let Some(b) = by_app.map_err(|_| "by_app thread panicked")?? {
+            settings.by_app = b;
+        }
+
+        settings.migrate()?;
+        settings.sanitize()?;
+        Ok(settings)
+    }
+
+    pub fn save(&self, path: impl AsRef<Path>) -> Result<()> {
+        let path = path.as_ref();
+
+        {
+            // Create a copy without splitted fields
+            let mut settings_copy = serde_json::to_value(self)?;
+            let obj = settings_copy.as_object_mut().unwrap();
+            obj.remove("shortcuts");
+            obj.remove("byApp");
+
+            let mut file = File::create(path)?;
+            file.lock()?;
+            serde_json::to_writer_pretty(&file, &settings_copy)?;
+            file.flush()?;
+        }
+
+        // Save shortcuts to sibling file
+        if let (Some(parent), Some(stem)) = (path.parent(), path.file_stem()) {
+            let shortcuts_path = parent.join(format!("{}_shortcuts.json", stem.to_string_lossy()));
+            let mut shortcuts_file = File::create(&shortcuts_path)?;
+            shortcuts_file.lock()?;
+            serde_json::to_writer_pretty(&shortcuts_file, &self.shortcuts)?;
+            shortcuts_file.flush()?;
+
+            let by_app_path = parent.join(format!("{}_by_app.yml", stem.to_string_lossy()));
+            let mut by_app_file = File::create(&by_app_path)?;
+            by_app_file.lock()?;
+            serde_yaml::to_writer(&by_app_file, &self.by_app)?;
+            by_app_file.flush()?;
+        }
+
+        Ok(())
+    }
+
+    /// This indicates if the widget is enabled on general, doesn't take in care multi-instances
+    pub fn is_widget_enabled(&self, widget_id: &WidgetId) -> bool {
+        self.by_widget.is_enabled(widget_id)
+    }
+
+    pub fn set_widget_enabled(&mut self, widget_id: &WidgetId, enabled: bool) {
+        self.by_widget.set_enabled(widget_id, enabled);
+    }
+
+    pub fn is_widget_enabled_on_monitor(
+        &self,
+        widget_id: &WidgetId,
+        monitor_id: &MonitorId,
+    ) -> bool {
+        if !self.is_widget_enabled(widget_id) {
+            return false;
+        }
+        // default to true as new connected monitors should be enabled
+        self.monitors_v3
+            .get(monitor_id)
+            .is_none_or(|monitor_config| monitor_config.by_widget.is_widget_enabled(widget_id))
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), derive(ts_rs::TS))]
+#[serde(default, rename_all = "camelCase")]
+pub struct PerformanceModeSettings {
+    pub default: PerformanceMode,
+    pub on_battery: PerformanceMode,
+    pub on_energy_saver: PerformanceMode,
+}
+
+impl Default for PerformanceModeSettings {
+    fn default() -> Self {
+        Self {
+            default: PerformanceMode::Disabled,
+            on_battery: PerformanceMode::Minimal,
+            on_energy_saver: PerformanceMode::Extreme,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), derive(ts_rs::TS))]
+#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), ts(repr(enum = name)))]
+pub enum PerformanceMode {
+    /// Does nothing, all animations are enabled.
+    Disabled,
+    /// Disables windows animations and other heavy effects.
+    Minimal,
+    /// Disables all the animations.
+    Extreme,
+}
+
+impl From<u8> for PerformanceMode {
+    fn from(value: u8) -> Self {
+        match value {
+            0 => PerformanceMode::Disabled,
+            1 => PerformanceMode::Minimal,
+            2 => PerformanceMode::Extreme,
+            _ => PerformanceMode::Disabled,
+        }
+    }
+}
+
+impl From<PerformanceMode> for u8 {
+    fn from(value: PerformanceMode) -> Self {
+        match value {
+            PerformanceMode::Disabled => 0,
+            PerformanceMode::Minimal => 1,
+            PerformanceMode::Extreme => 2,
+        }
+    }
+}

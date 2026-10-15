@@ -1,0 +1,28 @@
+app_menu:
+  close: Tæt
+  close_multiple: Luk alt
+  copy_handles: Kopier håndtag
+  edit_app_icon: Rediger app-ikon
+  kill: Aflivningsproces
+  kill_multiple: Dræb alle processer
+  open_file_location: Åbn filplacering
+  pin: Pin
+  pin_to_center: Stift til centrum
+  pin_to_left: Pin til venstre
+  pin_to_right: Pin til højre
+  run_as: Kør som administrator
+  unpin: Unpin
+context_menu:
+  edit_icon: Rediger ikon
+  remove_separator: Fjern separatoren
+  reorder_disable: Lås proceslinjen
+  reorder_enable: Lås proceslinjen op
+taskbar_menu:
+  add_apps: Tilføj apps
+  add_file: Pin brugerdefineret fil
+  add_separator: Tilføj separator
+  media: Medieafspiller
+  settings: Indstillinger
+  task_manager: Task Manager
+weg:
+  empty: Ingen elementer at vise

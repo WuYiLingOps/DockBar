@@ -1,0 +1,301 @@
+action:
+  confirm: Ertu viss?
+  confirm_body: Ekki er hægt að afturkalla þessa aðgerð.
+cancel: Hætta við
+close: Lokaðu
+delete: Eyða
+devtools:
+  app_folders: App möppur
+  color_palette: Litapalletta
+  color_palette_note: Þessir litir laga sig sjálfkrafa að ljósum/dökkum stillingum - hver litbrigði er andstæða miðað við núverandi bakgrunn, ekki fast gildi. Notaðu þá í stað harðkóðaða lita til að fá sjálfvirkan þemastuðning.
+  custom_config_file: Hlaða sérsniðna config skrá
+  data_folder: Gagnamappa
+  enable: Virkja verktaki verktaki
+  enable_description: Opnar háþróuð verkfæri til að skoða og kemba DockBar innri. Ekki ætlað til reglulegrar notkunar.
+  icons: Tákn í skyndiminni
+  install_folder: Uppsetningarmöppu
+  load: Hlaða
+  settings_file: Stillingarskrá
+  shared_components: SLU staðalbúnaður
+  simulate_dialog:
+    label: Herma Dialog
+    trigger: Kveikja
+  simulate_perm:
+    label: Líktu eftir beiðni um leyfi fyrir græju
+    result_allowed: ✓ Leyfi veitt
+    result_denied: ✗ Leyfi hafnað
+    trigger: Herma eftir
+    widget_id_placeholder: '@höfundur/nafn búnaðar'
+  tools: Verkfæri
+  unlock_shortcuts: Opnaðu skrifvarða flýtivísa
+  unlock_shortcuts_description: Leyfa flýtileiðir til breytinga sem eru venjulega skrifvarandi (t.d. kerfishnekkingar).
+  unstable_optimizations: Óstöðugar hagræðingar
+  unstable_optimizations_description: 'Virkjaðu tilrauna Chromium fána sem draga úr vinnsluminni notkun.
+
+    Viðvörun: Ef græja hrynur munu allar græjur sem deila sama hleðslutæki hrynja saman.'
+  widgets_debug:
+    actions: Aðgerðir
+    empty: Engar græjur hlaðnar. Smelltu á Refresh.
+    instance_id: Auðkenni tilviks
+    monitor_id: Skjár auðkenni
+    open_devtools: DevTools
+    refresh: Endurnýja
+    status: Staða
+    tab: Græjur
+    widget_id: Græjuauðkenni
+discord_banner:
+  message: Tengstu öðrum notendum DockBar, fáðu hjálp, deildu þemum og fylgstu með nýjustu fréttum.
+  title: Skráðu þig í samfélag okkar
+dock:
+  auto_hide: Sjálfvirk fela
+  auto_hide_touch_disabled: Sjálfvirk fela er ekki í boði á snertiskjátækjum
+  delay_to_hide: Seinkun á að fela
+  delay_to_show: Seinkun á sýningu
+  dock_side: Staða
+  filtering: Hlut síun
+  gap: Bil
+  hide_mode:
+    always: Alltaf
+    never: Aldrei
+    on_overlap: Á skörun
+  import_error: Mistókst að flytja inn verkstikuatriði
+  import_from_taskbar:
+    button: Flytja inn frá Windows Verkefnastikunni
+    label: Flytja inn festa hluti
+  import_no_items: Engir festir hlutir fundust í Windows verkefnastikunni
+  import_success: Tókst að flytja inn {{count}} atriði af Windows verkefnastikunni
+  items:
+    gap: Rými milli atriða
+    label: Hlutir
+    middle_click_action:
+      close_app: Lokaðu appi
+      label: Miðsmellaaðgerð
+      open_new_instance: Opnaðu nýtt tilvik
+    pinned_visibility:
+      always: Alltaf
+      label: Sýnileiki festra hluta
+      when_primary: Þegar skjárinn er aðal
+    show_instance_counter: Sýna opinn Windows teljara
+    show_window_title: Sýna opinn glugga titil (aðeins lárétt)
+    size: Stærð hlutar
+    split_windows: Skiptir gluggar (einn hlutur í hverjum glugga)
+    temporal_visibility:
+      all: Allt
+      label: Sýnileiki ófestra hluta
+      on_monitor: Á Skjár
+  label: Bryggju/verkefnabar
+  margin: Framlegð
+  mode:
+    full_width: Full skjábreidd
+    min_content: Lítið eins og hægt er
+  padding: Padding
+  reveal_on_attention:
+    label: Sýna þegar app biður um athygli
+    never: Aldrei
+    until_activated: Þar til appið er opnað
+    while_flashing: Á meðan það blikkar
+  show_end_task: Sýna lokverkefni í verkstikunni
+  width: Breidd
+general:
+  accent_color: Hreim litur
+  date_format: Dagsetningarsnið
+  date_format_how_to: Hvernig á að skrifa dagsetningarsnið?
+  hardware_acceleration: Vélbúnaðarhröðun
+  hardware_acceleration_description: Að slökkva á vélbúnaðarhröðun mun draga úr minnisnotkun. Það er óhætt að slökkva á því ef þú ert ekki að nota þungar hreyfimyndir, þó að einstakar græjur gætu samt þvingað GPU-notkun óháð þessari stillingu.
+  icon_pack:
+    available: Lausir táknpakkar
+    selected: Virkir táknpakkar
+  language: Tungumál
+  monday: mánudag
+  performance_mode:
+    label: Hagræðingar
+    on_battery: Á rafhlöðu
+    on_energy_saver: Á orkusparnað
+    options:
+      disabled: Óvirkur
+      extreme: Öfgafullt
+      minimal: Lágmarks
+    plugged: Tengt eða hleðsla
+  polling_interval: Tímabil kerfiskönnunar
+  polling_interval_description: Hversu oft (í sekúndum) DockBar athugar kerfisauðlindir eins og örgjörva, vinnsluminni, netkerfi og diskvirkni. Minni tala þýðir tíðari uppfærslur, en aðeins meiri auðlindanotkun.
+  saturday: laugardag
+  start_of_week: Upphaf vikunnar
+  startup: Hlaupa í gangsetningu?
+  sunday: sunnudag
+  suspend_on_game_mode: Fresta græjum í leikjastillingu
+  suspend_on_game_mode_description: Þegar Windows Game Mode er virkt er öllum vefsýnum græju eytt til að losa örgjörva og minni fyrir leikinn. Græjur eru sjálfkrafa endurheimtar þegar leikjastillingu lýkur.
+  theme:
+    available: Þemu í boði
+    selected: Virk þemu
+global: Alþjóðlegt
+header:
+  labels:
+    developer: Fyrir verktaki
+    general: Almennt
+    monitors: Fylgist með
+    shortcuts: Flýtileiðir
+    widget: Búnaður
+inProgress: Í vinnslu...
+inherit: Erfa
+insert: Settu inn
+join_us: Vertu með!
+loading: Hleðsla ...
+miscellaneous: Ýmislegt
+monitors_configurations:
+  label: Monitor {{Index}}
+more: Meira
+'no': Nei
+open: Opið
+quit: Hættu
+remove: Fjarlægðu
+reset_all_to_default: Endurstilla allt í sjálfgefin gildi
+reset_configurations: Endurstilla stillingar
+reset_to_default: Endurstilla í sjálfgefið gildi
+resources:
+review_request:
+  not_now: Ekki núna
+  sure: Jú!
+  title: Hefurðu gaman af DockBar?
+save: Vista
+save_and_restart: Vista og endurræsa
+search: Leita
+see_more: Sjáðu meira
+session:
+  logout: Skráðu þig út
+  plan: Áætlun
+  sign_in: Skráðu þig inn
+  sign_in_hint: Vafrinn þinn opnast svo þú getir skráð þig inn á öruggan hátt.
+  upgrade_to: Uppfærðu í
+shortcuts:
+  disabled_tooltip: Græjan og flýtivísar hennar eru óvirk
+  duplicate_error: Misvísandi flýtileiðir fundust
+  duplicate_error_hint: Sumum flýtileiðum er úthlutað mörgum aðgerðum. Slökktu á einni af græjunum sem stangast á eða endurúthlutaðu tvítekinni lyklabindingu til að leysa.
+  enable: Virkja innbyggt flýtileiðkerfi
+  enable_tooltip: Slökktu á ef þú munt innleiða þitt eigið flýtileiðkerfi með DockBar viðskiptavininum
+  labels:
+    create_new_workspace: Búðu til nýja vinnusvæði
+    create_new_workspace_row: Búðu til nýja vinnusvæðislínu
+    destroy_current_workspace: Eyðileggja núverandi vinnusvæði
+    misc_force_quit: Force hætti
+    misc_force_restart: Force endurræsing
+    move_to_workspace: Fara í vinnusvæði {{0}}
+    pause_toggle: Gera hlé / halda áfram flýtileiðum
+    send_to_next_workspace: Senda glugga á næsta vinnusvæði
+    send_to_previous_workspace: Senda glugga á fyrra vinnusvæði
+    send_to_workspace: Sendu á Workspace {{0}}
+    send_to_workspace_down: Sendu glugga á vinnusvæði fyrir neðan
+    send_to_workspace_up: Sendu glugga á vinnusvæði fyrir ofan
+    switch_to_next_workspace: Skiptu yfir í næsta vinnusvæði
+    switch_to_previous_workspace: Skiptu yfir í fyrri vinnusvæði
+    switch_to_workspace_down: Skiptu yfir í vinnusvæði fyrir neðan
+    switch_to_workspace_up: Skiptu yfir í vinnusvæði hér að ofan
+    switch_workspace: Skiptu yfir í vinnusvæði {{0}}
+  readonly_tooltip: Þetta er aðeins skrifvarinn
+  reset: Endurstilla í vanskil
+sides:
+  bottom: Botn
+  left: Vinstri
+  right: Ekki satt
+  top: Efst
+wall:
+  blur: Þoka
+  cancel: Hætta við
+  close: Loka
+  collection_name: Nafn safns
+  collections: Söfn
+  contrast: Andstæður
+  corrupted_wallpapers_message: 'Skemmt veggfóður, íhugaðu að eyða þessum:'
+  coverage_pause_threshold: Þröskuldur fyrir hlé (gluggaþekju)
+  create: Búa til
+  create_collection: Búðu til safn
+  default_collection: Sjálfgefið veggfóður eða safn
+  default_collection_description: Notað á alla skjái og vinnusvæði sem eru ekki með sérstakt yfirskriftarsett.
+  delete_collection: Eyða safni
+  edit_collection: Breyta safni
+  extend: Framlengja prófkjör
+  fit:
+    contain: Inniheldur
+    cover: Cover
+    fill: Fylltu
+  flipHorizontal: Flip Lárétt
+  flipVertical: Flip lóðrétt
+  generating_thumbnails: Búa til veggfóðursmámyndir
+  hours: klukkustundir
+  interval: Skiptu um veggfóður hvert
+  minutes: mínútur
+  monitor_collection: Fylgjast með safni
+  multimonitor_behaviour: Fjölskjár hegðun
+  muted: Slökkva á myndhljóði
+  no_background: Tómar myndasýning, með því að nota bakgrunn þema í staðinn.
+  no_collections: Engin söfn búin til ennþá. Smelltu á + hnappinn til að búa til einn.
+  objectFit: Bakgrunnur passa
+  objectPosition: Bakgrunnsstaða
+  overlayColor: Yfirlag litur
+  overlayMixBlendMode: Yfirlagsblöndublöndunarstilling
+  per_monitor: Á hvern skjá
+  per_monitor_config: Stillingar á skjá
+  playback: Spilunarhraði
+  position:
+    bottom: Botn
+    center: Miðja
+    left: Vinstri
+    right: Ekki satt
+    top: Efst
+  processing_video: Vinnur myndband
+  random: Slendandi myndasýning
+  saturation: Mettun
+  seconds: sekúndur
+  select_collection: Veldu Safn
+  thumbnail_generation_complete: Smámyndagerð lokið
+  thumbnail_generation_finished: Smámyndagerð hefur lokið með góðum árangri
+  use_accent_color: Notaðu veggfóður hreim lit
+  wallpaper_collection: Veggfóður safn
+  wallpaper_settings: Veggfóðurstillingar
+  wallpapers: Veggfóður
+  wallpapers_and_collections: Veggfóður og söfn
+  withOverlay: Með yfirlagi
+  workspace_collections: Vinnusöfn
+welcome:
+  give_a_review: Gefðu umsögn
+  message: DockBar er ókeypis og opið skrifborðsumhverfi fyrir Windows. Hér hefur þú fulla stjórn á því hvernig skjáborðið þitt lítur út og hegðar sér, sem gerir þér kleift að sérsníða hvert smáatriði til að passa við vinnuflæði þitt og stíl.
+  ok: Byrjum!
+  review: Ef þú hefur gaman af því að nota DockBar skaltu íhuga að skilja eftir umsögn um verslunina - athugasemdir þínar hjálpa verkefninu að vaxa og bæta.
+  title: Velkomin í DockBar HÍ!
+widget:
+  default_instance: Sjálfgefið tilvik
+  default_instance_hint: Alltaf virk, notar stillingar rótgræjunnar
+  enable: Virkja þennan búnað
+  enable_for_monitor: Virkja á þessum skjá
+  extra_instances: Aukatilvik
+  instance: Dæmi
+  instances: Dæmi
+wm:
+  animations:
+    duration: Lengd hreyfimynda (MS)
+    ease_function: Leiðandi aðgerð
+    enable: Virkja teiknimyndir Window
+  author: Höfundur
+  auto_stack: Sjálfvirk stafla eftir forritaflokki
+  border:
+    enable: Virkja landamæri glugga
+    offset: Landamæri offset
+    width: Breidd landamæra
+  description: Lýsing
+  drag_behavior: Draga hegðun
+  drag_behavior_options:
+    sort: Raða (endurraða gluggum á meðan þú dregur)
+    swap: Skipta (skipta um glugga á dragenda)
+  floating:
+    height: Fljótandi gluggahæð
+    title: Fljótandi Windows Stærð
+    width: Fljótandi Windows Breidd
+  layout: Skipulag
+  resize_delta: Breyta stærð delta (%)
+  space_between_containers: Rými milli gáma
+  stack_bar_visibility: Sýnileiki staflastikunnar
+  stack_bar_visibility_options:
+    always: Alltaf
+    as_needed: Eftir þörfum
+  workspace_offset: Vinnusvæði offset (framlegð)
+  workspace_padding: Vinnusvæði padding
+'yes': Já

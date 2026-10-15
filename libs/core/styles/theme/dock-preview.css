@@ -1,0 +1,58 @@
+.dock-item-preview-container {
+  width: max-content;
+  padding: var(--spacing-xs);
+  background-color: oklch(from var(--dockbar-std-bg-color) l c h/0.8);
+}
+.dock-item-preview-container .dock-item-preview-list {
+  display: flex;
+  overflow: auto;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  max-width: calc(1024px + var(--spacing-xs) * 3);
+}
+.dock-item-preview-container .dock-item-preview {
+  width: 256px;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-m);
+  background-color: var(--dockbar-std-bg-light-color);
+  box-shadow: var(--shadow-s);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+.dock-item-preview-container .dock-item-preview:hover {
+  background-color: var(--dockbar-std-bg-color);
+}
+.dock-item-preview-container .dock-item-preview .dock-item-preview-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xs);
+  padding-left: var(--spacing-2xs);
+}
+.dock-item-preview-container .dock-item-preview .dock-item-preview-topbar .dock-item-preview-title {
+  flex: 1;
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+.dock-item-preview-container .dock-item-preview .dock-item-preview-image-container {
+  width: 100%;
+  aspect-ratio: 16/9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--dockbar-std-bg-dark-color);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+}
+.dock-item-preview-container .dock-item-preview .dock-item-preview-image-container .dock-item-preview-image {
+  max-height: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+.dock-item-preview-container .dock-item-preview .dock-item-preview-image-container .dock-item-no-preview {
+  width: 30px;
+}
