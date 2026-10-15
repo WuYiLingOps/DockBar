@@ -5,6 +5,7 @@ import { emit, listen } from "@tauri-apps/api/event";
 import type { AppOrFileDockItem, SeparatorDockItem } from "../types.ts";
 import { getWindowsForItem, interactables } from "./windows.svelte.ts";
 import { stableUUID } from "libs/ui/utils.ts";
+import { isSameApp } from "libs/ui/dockItemMatching.ts";
 import { wegItems } from "./getters.svelte.ts";
 import { isHorizontalDock } from "./settings.svelte.ts";
 
@@ -115,13 +116,14 @@ const emitSyncEvent = debounce((state: OptimisticDockState) => {
   emit<SyncPayload>("hidden::sync-dock-items", { source: CLIENT_ID, state });
 }, 300);
 
-/** Same umid, or same path when neither has one (paths are case insensitive on Windows). */
+/** Identity view of an item/window shared by the dedup helpers below. */
+function identityOf(item: AppOrFileDockItem) {
+  return { umid: item.umid, path: item.path, relaunchCommand: item.relaunch?.command ?? null };
+}
+
+/** Same app by umid or any exe-path coincidence (item path, relaunch command). */
 export function isSameAppOrFile(a: AppOrFileDockItem, b: AppOrFileDockItem): boolean {
-  if (a.umid && b.umid) {
-    return a.umid === b.umid;
-  }
-  const path = a.path.toLowerCase();
-  return path !== "" && path === b.path.toLowerCase();
+  return isSameApp(identityOf(a), identityOf(b));
 }
 
 export function listToGroups(items: DockItem[], includeSeparator = false) {

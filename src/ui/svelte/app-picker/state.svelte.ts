@@ -1,5 +1,6 @@
 import { DockBarCommand, invoke, Widget } from "@dockbar/lib";
 import type { DockItem, StartMenuEntry } from "@dockbar/lib/types";
+import { isSameApp } from "libs/ui/dockItemMatching.ts";
 import { lazyRune } from "libs/ui/svelte/utils/LazyRune.svelte.ts";
 
 let apps = $state<StartMenuEntry[]>([]);
@@ -49,24 +50,15 @@ export const appPickerState = new AppPickerState();
 
 export { settings };
 
-/** Same umid, or same path when neither has one (paths are case insensitive on Windows). */
-function isSameAppOrFile(
-  a: { umid: string | null; path: string },
-  b: { umid: string | null; path: string },
-): boolean {
-  if (a.umid && b.umid) {
-    return a.umid === b.umid;
-  }
-  const path = a.path.toLowerCase();
-  return path !== "" && path === b.path.toLowerCase();
-}
-
 /** Whether the app is already on the dock (pinned or just open). */
 export function isAlreadyOnDock(app: StartMenuEntry): boolean {
   return dockItems.some(
     (item) =>
       item.type === "AppOrFile" &&
-      isSameAppOrFile(item, { umid: app.umid, path: app.path.toString() }),
+      isSameApp(
+        { umid: item.umid, path: item.path, relaunchCommand: item.relaunch?.command ?? null },
+        { umid: app.umid, path: app.path.toString() },
+      ),
   );
 }
 

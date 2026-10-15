@@ -10,6 +10,7 @@ import { settingsState } from "./settings.svelte.ts";
 import { debounce } from "lodash";
 import type { AppOrFileDockItem } from "../types.ts";
 import { focused, interactables, previews, selfWinId, widgetStatuses, windowsColors } from "./getters.svelte.ts";
+import { isSameApp } from "libs/ui/dockItemMatching.ts";
 
 export { focused, interactables, previews, widgetStatuses, windowsColors };
 
@@ -92,21 +93,17 @@ class WindowsState {
 
 export const windowsState = new WindowsState();
 
-// on change of this function update src\background\widgets\weg\cli.rs too.
+// on change of this function update src\background\widgets\dock\cli.rs too.
 export function getWindowsForItem(
   item: AppOrFileDockItem,
   windows: UserAppWindow[],
 ): UserAppWindow[] {
-  const itemCommand = item.relaunch?.command.toLowerCase();
-  const itemPath = item.path.toLowerCase();
-
-  return windows.filter((w) => {
-    if (w.umid) {
-      return item.umid === w.umid;
-    }
-    const winPath = w.process.path?.toLowerCase() ?? "";
-    return winPath !== "" && (itemCommand === winPath || itemPath === winPath);
-  });
+  return windows.filter((w) =>
+    isSameApp(
+      { umid: item.umid, path: item.path, relaunchCommand: item.relaunch?.command ?? null },
+      { umid: w.umid, path: w.process.path?.toString() ?? "" },
+    )
+  );
 }
 
 $effect.root(() => {
