@@ -1,5 +1,9 @@
-name: "Release"
+name: Release
 
+# 推送 v* tag 时自动构建 NSIS 安装包（x64 / arm64）并发布 GitHub Release；
+# 也可在 Actions 页手动触发（仅构建，产物上传 artifact 不发版）。
+# 参考 dockpilot 的单 job 模式：tauri-action 在同一 job 内完成编译、打包、
+# 发布，避免跨 job 搬运二进制与草稿/发布两段式带来的复杂度。
 on:
   push:
     tags:
@@ -10,58 +14,7 @@ permissions:
   contents: write
 
 jobs:
-  continuous-integration:
-    uses: ./.github/workflows/ci.yml
-
-  get-version:
-    needs: continuous-integration
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.get-version.outputs.result }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Get version
-        id: get-version
-        uses: actions/github-script@v7
-        with:
-          result-encoding: string
-          script: |
-            const fs = require('fs');
-            const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-            return packageJson.version;
-
-  create-release:
-    needs: get-version
-    runs-on: ubuntu-latest
-    outputs:
-      release_id: ${{ steps.create-release.outputs.result }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Create release (draft)
-        id: create-release
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const version = "${{ needs.get-version.outputs.version }}";
-            const changelogContent = fs.readFileSync('changelog.md', 'utf-8');
-            const regex = new RegExp(`(?<=\\[${version}\\]\\s)([\\s\\S]*?)(?=\\s## \\[)`, 'g');
-            const releaseNotes = changelogContent.match(regex)?.[0].trim() || '';
-
-            const { data } = await github.rest.repos.createRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: `v${version}`,
-              name: `DockBar v${version}`,
-              body: releaseNotes,
-              generate_release_notes: true,
-              draft: true,
-              prerelease: false,
-            });
-            return data.id;
-
-  build-binaries:
-    needs: create-release
+  release:
     strategy:
       fail-fast: false
       matrix:
@@ -85,91 +38,14 @@ jobs:
         with:
           deno-version: 2.9.6
 
-      - name: Cache Rust dependencies
-        uses: actions/cache@v4
+      - name: Cache Rust compilation
+        uses: Swatinem/rust-cache@v2
         with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: rust-build-${{ matrix.target }}-${{ runner.os }}-${{ hashFiles('Cargo.lock') }}
-          restore-keys: |
-            rust-build-${{ matrix.target }}-${{ runner.os }}-
+          workspaces: .
+          key: ${{ matrix.target }}
 
       - name: Install frontend dependencies & Gen Core Lib
         run: npm install
-
-      # Keyless build: no update server, no signing keys. NSIS installers are
-      # bundled directly; integrity is checksum-based (no minisign signature).
-      - name: Build (no bundle)
-        run: npx tauri build --ci --verbose --no-bundle --target ${{ matrix.target }}
-
-      - name: Upload binaries to artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: binaries-${{ matrix.target }}
-          path: |
-            target/${{ matrix.target }}/release/static/**/*
-            target/${{ matrix.target }}/release/*.exe
-            target/${{ matrix.target }}/release/SHA256SUMS
-            target/${{ matrix.target }}/release/SHA256SUMS.sig
-            target/${{ matrix.target }}/release/dockbar.pdb
-
-  bundle:
-    needs:
-      - get-version
-      - build-binaries
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - platform: windows-2025
-            target: x86_64-pc-windows-msvc
-          - platform: windows-2025
-            target: aarch64-pc-windows-msvc
-
-    runs-on: ${{ matrix.platform }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: nightly-2026-05-22
-          targets: ${{ matrix.target }}
-
-      - name: Cache Rust dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: rust-bundle-${{ matrix.target }}-${{ runner.os }}-${{ hashFiles('Cargo.lock') }}
-          restore-keys: |
-            rust-bundle-${{ matrix.target }}-${{ runner.os }}-
-
-      - name: Install frontend dependencies
-        run: npm ci --ignore-scripts
-
-      - name: Download binaries
-        uses: actions/download-artifact@v4
-        with:
-          name: binaries-${{ matrix.target }}
-          path: target/${{ matrix.target }}/release
-
-      - name: Clean bundle folder from cache
-        shell: pwsh
-        run: |
-          $bundlePath = "target/${{ matrix.target }}/release/bundle"
-          if (Test-Path $bundlePath) {
-            Remove-Item -Path $bundlePath -Recurse -Force
-            Write-Output "Old bundles files deleted: $bundlePath"
-          }
 
       # Ship with a pinned WebView2 Fixed Version Runtime instead of the
       # evergreen installer; the script rewrites webviewInstallMode in
@@ -180,66 +56,55 @@ jobs:
           $arch = "${{ matrix.target }}".Contains("aarch64") ? "arm64" : "x64"
           ./scripts/SetFixedRuntime.ps1 -Architecture $arch
 
-      - name: Bundle
-        run: npx tauri bundle --ci --verbose --target ${{ matrix.target }} --no-binary-patching
+      # 从 changelog.md 提取 `## [version]` 段作为发布说明（多行内容经
+      # 定界符写入 $GITHUB_OUTPUT，供 tauri-action 的 releaseBody 引用）
+      - name: Generate release notes
+        id: notes
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          HEADER="## [$VERSION]"
+          awk -v header="$HEADER" '
+            index($0, header) == 1 { found=1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' changelog.md > release_notes.md
+          if [ ! -s release_notes.md ]; then
+            echo "未在 changelog.md 中找到 ${VERSION} 的说明段落" >&2
+            echo "- 首个发布版本" > release_notes.md
+          fi
+          {
+            echo 'body<<NOTES_EOF'
+            cat release_notes.md
+            echo 'NOTES_EOF'
+          } >> "$GITHUB_OUTPUT"
 
-      - name: Upload bundles to artifacts
+      # Keyless build: no update server, no signing keys. Integrity is
+      # checksum-based (no minisign signature). tauri-action builds, bundles
+      # and (on tag pushes) creates the release with the notes above.
+      - name: Build and release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "DockBar ${{ github.ref_name }}"
+          releaseBody: ${{ steps.notes.outputs.body }}
+          releaseDraft: false
+          prerelease: false
+          args: --target ${{ matrix.target }}
+
+      # 手动触发走完整构建（含打包）做验证，不发版；产物可在本次运行页面的 Artifacts 下载
+      - name: Build only (manual run)
+        if: github.event_name == 'workflow_dispatch'
+        run: npx tauri build --ci --target ${{ matrix.target }}
+
+      - name: Upload bundles to artifacts (manual run)
+        if: github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
         with:
           name: bundles-${{ matrix.target }}
           path: target/${{ matrix.target }}/release/bundle
-
-  merge-bundles:
-    needs: bundle
-    runs-on: ubuntu-latest
-    outputs:
-      artifact-id: ${{ steps.upload-merged.outputs.artifact-id }}
-    steps:
-      - name: Merge artifacts
-        id: upload-merged
-        uses: actions/upload-artifact/merge@v4
-        with:
-          name: bundles
-          pattern: bundles-*
-          delete-merged: true
-
-  upload-bundles:
-    needs:
-      - create-release
-      - merge-bundles
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download merged bundles
-        uses: actions/download-artifact@v4
-        with:
-          name: bundles
-          path: bundles
-
-      - name: File Tree
-        run: tree bundles
-
-      # Keyless release: installers are uploaded as-is, no updater signatures.
-      - name: Upload Installers to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          release_id: ${{ needs.create-release.outputs.release_id }}
-          file: bundles/**/*
-          file_glob: true
-
-  publish-release:
-    needs: [create-release, upload-bundles]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Publish release (un-draft)
-        uses: actions/github-script@v7
-        env:
-          releaseId: ${{ needs.create-release.outputs.release_id }}
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            await github.rest.repos.updateRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: process.env.releaseId,
-              draft: false,
-            });
+          if-no-files-found: error
