@@ -15,7 +15,6 @@
 ### Changed
 
 - 移除启动 splash 页与管理员权限告警弹窗
-- 设置加载图换为 DockBar 品牌，删除未引用的 Seelen 公司 logo
 - 内置 widget 加载时标记 bundled，不再误弹权限请求
 
 ### Build
