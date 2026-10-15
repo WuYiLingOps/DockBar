@@ -1,6 +1,6 @@
 {
   "name": "@dockbar/lib",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "DockBar Library for Widgets",
   "license": "MIT",
   "exports": {
