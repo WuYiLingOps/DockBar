@@ -14,26 +14,32 @@ use crate::{
     windows_api::{WindowsApi, window::Window},
 };
 
-/// Mirrors `getWindowsForItem` from the frontend (`windows.ts`).
+/// Mirrors the window-matching half of `libs/ui/dockItemMatching.ts`.
 ///
 /// Grouping rules:
-///   1. Window has a umid  → matched only by exact umid equality. Path is not used.
-///      If no item has that umid, a new item will be created for it.
-///   2. Window has no umid → matched by exact path (item.relaunch.command or item.path).
+///   1. Matching umids (both sides have one and they are equal) always match.
+///   2. Otherwise any exe-path coincidence matches: item path vs window
+///      process path, or item relaunch command vs process path. A window umid
+///      that differs from the item's no longer prevents an exe-path match —
+///      many win32 apps get a window AppUserModelId that their shortcut never
+///      declares, and treating it as authoritative used to duplicate the icon.
 ///
-/// note: on update of this function check src\ui\react\dockbar\modules\shared\state\windows.ts both should work the same
+/// note: on update of this function check src\ui\svelte\dock\state\windows.svelte.ts both should work the same
 fn get_windows_for_item<'a>(
     item: &DockItemData,
     interactables: &'a [UserAppWindow],
 ) -> Vec<&'a UserAppWindow> {
     let item_command = item.relaunch.as_ref().map(|r| r.command.to_lowercase());
     let item_path = item.path.to_string_lossy().to_lowercase();
+    let item_umid = item.umid.as_deref();
 
     interactables
         .iter()
         .filter(|w| {
-            if w.umid.is_some() {
-                return item.umid == w.umid;
+            if let Some(win_umid) = &w.umid
+                && item_umid == Some(win_umid.as_str())
+            {
+                return true;
             }
 
             let win_path = w
@@ -47,7 +53,7 @@ fn get_windows_for_item<'a>(
                 return false;
             }
 
-            item_command.as_deref() == Some(win_path.as_str()) || item_path == win_path
+            item_path == win_path || item_command.as_deref() == Some(win_path.as_str())
         })
         .collect()
 }

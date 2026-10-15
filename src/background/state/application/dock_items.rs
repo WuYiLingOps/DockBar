@@ -11,6 +11,7 @@ use crate::{
     error::{Result, ResultLogExt},
     modules::apps::application::msix::MsixAppsManager,
     utils::{atomic_write_file, constants::DOCKBAR_COMMON},
+    widgets::dock::handler::resolve_relaunch_from_path,
     widgets::dock::native_taskbar::get_windows_taskbar_pinned_apps,
 };
 
@@ -55,6 +56,7 @@ impl DockItemsManager {
             items.sanitize();
             resolve_msix_paths(&mut items);
             ensure_default_separator(&mut items);
+            backfill_relaunch_targets(&mut items);
             items
         } else {
             // First run: try to import from Windows taskbar
@@ -214,6 +216,39 @@ fn resolve_msix_paths(dock_items: &mut DockItems) {
     });
 }
 
+/// One-time repair for shortcut items pinned before the launch-target backfill:
+/// they stored only the `.lnk` path with `relaunch: none`, so the running
+/// program (whose window reports the target's process path) never matched its
+/// pinned icon and the dock showed the app twice. Resolves the target once and
+/// stores it in `relaunch`; items that already carry a target are untouched.
+fn backfill_relaunch_targets(items: &mut DockItems) {
+    let mut repaired = false;
+    for item in items
+        .left
+        .iter_mut()
+        .chain(items.center.iter_mut())
+        .chain(items.right.iter_mut())
+    {
+        let DockItem::AppOrFile(data) = item else {
+            continue;
+        };
+        let is_lnk = data
+            .path
+            .extension()
+            .is_some_and(|ext| ext.eq_ignore_ascii_case("lnk"));
+        if !is_lnk || data.relaunch.is_some() {
+            continue;
+        }
+        if let Some(relaunch) = resolve_relaunch_from_path(&data.path) {
+            data.relaunch = Some(relaunch);
+            repaired = true;
+        }
+    }
+    if repaired {
+        log::info!("Backfilled launch targets for shortcut dock items missing them");
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -371,5 +406,71 @@ mod tests {
         assert_eq!(items1.left.len(), items2.left.len());
         assert_eq!(items1.center.len(), items2.center.len());
         assert_eq!(items1.right.len(), items2.right.len());
+    }
+
+    fn lnk_item(path: &str, relaunch: Option<dockbar_core::system_state::Relaunch>) -> DockItem {
+        DockItem::AppOrFile(DockItemData {
+            id: Uuid::new_v4(),
+            display_name: "Shortcut".to_string(),
+            umid: None,
+            path: path.into(),
+            pinned: true,
+            prevent_pinning: false,
+            relaunch,
+        })
+    }
+
+    #[test]
+    fn test_backfill_skips_items_with_relaunch_or_non_lnk_paths() {
+        let existing_target = dockbar_core::system_state::Relaunch {
+            command: "C:\\app\\target.exe".into(),
+            args: None,
+            working_dir: None,
+            icon: None,
+        };
+        let mut items = DockItems {
+            is_reorder_disabled: false,
+            left: vec![lnk_item(
+                "C:\\shortcuts\\has-target.lnk",
+                Some(existing_target.clone()),
+            )],
+            center: vec![
+                lnk_item("C:\\shortcuts\\plain.exe", None),
+                DockItem::Separator { id: Uuid::new_v4() },
+            ],
+            right: vec![],
+        };
+
+        backfill_relaunch_targets(&mut items);
+
+        let DockItem::AppOrFile(left) = &items.left[0] else {
+            panic!("left should be an app item");
+        };
+        assert_eq!(left.relaunch.as_ref(), Some(&existing_target));
+
+        // non-lnk paths are not touched (no relaunch appears out of nowhere)
+        let DockItem::AppOrFile(center) = &items.center[0] else {
+            panic!("center should be an app item");
+        };
+        assert!(center.relaunch.is_none());
+    }
+
+    #[test]
+    fn test_backfill_leaves_unresolvable_shortcut_untouched() {
+        // A .lnk path that the shell cannot resolve must not crash or invent
+        // a relaunch entry; the item just stays as-is.
+        let mut items = DockItems {
+            is_reorder_disabled: false,
+            left: vec![],
+            center: vec![lnk_item("C:\\definitely\\missing\\app.lnk", None)],
+            right: vec![],
+        };
+
+        backfill_relaunch_targets(&mut items);
+
+        let DockItem::AppOrFile(data) = &items.center[0] else {
+            panic!("center should be an app item");
+        };
+        assert!(data.relaunch.is_none());
     }
 }

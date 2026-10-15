@@ -1,6 +1,13 @@
-use std::{os::windows::process::CommandExt, path::PathBuf};
+use std::{
+    os::windows::process::CommandExt,
+    path::{Path, PathBuf},
+};
 
-use dockbar_core::{handlers::DockBarEvent, state::DockItemData};
+use dockbar_core::{
+    handlers::DockBarEvent,
+    state::DockItemData,
+    system_state::{Relaunch, RelaunchArguments},
+};
 
 use crate::{
     app::emit_to_webviews,
@@ -14,6 +21,55 @@ use windows::Win32::{
     System::Threading::CREATE_NO_WINDOW,
     UI::WindowsAndMessaging::{SW_MINIMIZE, WM_CLOSE},
 };
+
+/// Launch info for a newly pinned item, resolved from what the user pinned.
+///
+/// `.lnk` shortcuts resolve to their target program (same fields the native
+/// taskbar import stores); a plain executable or document pins as-is. Files
+/// without a launch target stay `None`, matching the old behavior.
+pub(crate) fn resolve_relaunch_from_path(path: &Path) -> Option<Relaunch> {
+    if path
+        .extension()
+        .is_some_and(|ext| ext.eq_ignore_ascii_case("lnk"))
+    {
+        let (target, arguments, working_dir) = WindowsApi::resolve_lnk_target(path).ok()?;
+        if target.as_os_str().is_empty() {
+            return None;
+        }
+        let working_dir = if working_dir.as_os_str().is_empty() {
+            target.parent().map(|p| p.to_path_buf())
+        } else {
+            Some(working_dir)
+        };
+        let args = if arguments.is_empty() {
+            None
+        } else {
+            Some(RelaunchArguments::String(
+                arguments.to_string_lossy().to_string(),
+            ))
+        };
+        return Some(Relaunch {
+            command: target.to_string_lossy().to_string(),
+            args,
+            working_dir,
+            icon: None,
+        });
+    }
+
+    if path
+        .extension()
+        .is_some_and(|ext| ext.eq_ignore_ascii_case("exe"))
+    {
+        return Some(Relaunch {
+            command: path.to_string_lossy().to_string(),
+            args: None,
+            working_dir: None,
+            icon: None,
+        });
+    }
+
+    None
+}
 
 impl crate::tauri_handlers::Handlers {
     pub fn dock_close_app(webview: tauri::WebviewWindow, hwnd: isize) -> Result<()> {
@@ -80,6 +136,11 @@ impl crate::tauri_handlers::Handlers {
             (umid, display_name)
         };
 
+        // Shortcuts must keep their launch target: the window only ever
+        // exposes the target's process path, so without it the running app
+        // can't be matched to this item and the dock would show it twice.
+        let relaunch = resolve_relaunch_from_path(&path);
+
         let item = DockItemData {
             id: uuid::Uuid::new_v4(),
             display_name,
@@ -87,7 +148,7 @@ impl crate::tauri_handlers::Handlers {
             path,
             pinned: true,
             prevent_pinning: false,
-            relaunch: None,
+            relaunch,
         };
 
         emit_to_webviews(DockBarEvent::DockAddItem, &item);
