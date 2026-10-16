@@ -12,14 +12,19 @@
     import { dockShouldBeHidden, setDockIsDraggingItem } from "../state/hidden.svelte.ts";
   import { getWindowsForItem, windowsState } from "../state/windows.svelte.ts";
   import { getDockBarMenu } from "../dockMenu.ts";
-  import { createDragDropManager } from "libs/ui/dnd.ts";
+  import { createDragDropManager, RestrictToBoundsDescriptor } from "libs/ui/dnd.ts";
   import { setupMagnification } from "../state/magnify.svelte.ts";
   import type { SwItem } from "../types.ts";
   import DockItemsGroup from "./DockItemsGroup.svelte";
   import DockItemSwitch from "./DockItemSwitch.svelte";
 
   // Workaround for https://github.com/clauderic/dnd-kit/issues/2112
-  const manager = createDragDropManager();
+  const manager = createDragDropManager({
+    // keep the drag overlay inside the dock bar: the overlay would otherwise
+    // follow the pointer into the empty strip below the bar and poke out from
+    // behind its rounded corners as a white sliver at the screen bottom
+    modifiers: [RestrictToBoundsDescriptor],
+  });
   onDestroy(() => manager.destroy());
 
   let dockItemsEl: HTMLDivElement | null = $state(null);
@@ -81,18 +86,22 @@
     });
   }
 
-  function handleDragOver(event: any) {
-    const temp = dockState.items.map((item) => item.id);
-    const newIds = move(temp, event);
-    dockState.items = newIds.map((id) => dockState.items.find((item) => item.id === id)!);
-  }
-
   function handleDragStart() {
     setDockIsDraggingItem(true);
   }
 
-  function handleDragEnd() {
+  function handleDragEnd(event: any) {
     setDockIsDraggingItem(false);
+    // Reorder once on drop, never during the drag: the items live in three
+    // keyed each blocks (left/center/right), so an onDragOver reorder makes
+    // Svelte tear down and recreate the dragged element's DOM across groups.
+    // dnd-kit's placeholder and drop animation keep referencing the old node,
+    // which manifests as a stray white sliver flashing under the dock bar.
+    const newIds = move(
+      dockState.items.map((item) => item.id),
+      event,
+    );
+    dockState.items = newIds.map((id) => dockState.items.find((item) => item.id === id)!);
   }
 </script>
 
@@ -112,7 +121,6 @@
     <DragDropProvider
       {manager}
       onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
       <div class="dock-items" bind:this={dockItemsEl}>
