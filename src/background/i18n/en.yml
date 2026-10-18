@@ -13,6 +13,10 @@ elevated:
     For better security, please restart it without administrator permissions.
   title: Running as Administrator
 file_explorer: File Explorer
+tray:
+  open_settings: Open Settings
+  restart: Restart
+  exit: Exit
 resource:
   added: A new resource has been added
   download_failed_body: >-

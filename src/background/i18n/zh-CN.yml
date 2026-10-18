@@ -10,6 +10,10 @@ elevated:
     为了更好的安全性，请在没有管理员权限的情况下重新启动它。
   title: 以管理员身份运行
 file_explorer: 文件浏览器
+tray:
+  open_settings: 打开设置
+  restart: 重启
+  exit: 退出
 resource:
   added: 已添加新资源
   download_failed_body: 下载资源时出现问题，请向 DockBar 开发团队报告。

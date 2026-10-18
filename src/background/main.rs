@@ -16,6 +16,7 @@ mod state;
 mod tauri_context;
 mod tauri_handlers;
 mod tauri_plugins;
+mod tray;
 mod utils;
 mod widgets;
 mod windows_api;
@@ -158,6 +159,12 @@ async fn setup(_app_handle: &tauri::AppHandle<tauri::Wry>) -> Result<()> {
     server::http::start_http_server();
     DockBarApp::start().await?;
 
+    // the tray is the only interactive entry outside the widget windows, keep it
+    // alive for the whole app lifetime (tray icons are reference-counted)
+    if let Err(err) = tray::create_tray() {
+        log::error!("Failed to create tray icon: {err:?}");
+    }
+
     Ok(())
 }
 
@@ -180,11 +187,15 @@ fn app_callback(_: &tauri::AppHandle<tauri::Wry>, event: tauri::RunEvent) {
         tauri::RunEvent::Resumed => {
             log::info!("Tauri Event Loop was resumed.");
         }
-        tauri::RunEvent::ExitRequested { api, code, .. } => match code {
-            // prevent close background on webview windows closing
-            Some(_) => api.prevent_exit(),
-            None => api.prevent_exit(),
-        },
+        tauri::RunEvent::ExitRequested { api, code, .. } => {
+            // prevent close background on webview windows closing. Exits requested
+            // from the tray set the force-exit flag first, and restarts bypass
+            // `prevent_exit` internally (see `ExitRequestApi::prevent_exit`).
+            if !tray::is_force_exit() {
+                api.prevent_exit();
+            }
+            let _ = code;
+        }
         tauri::RunEvent::Exit => {
             log::info!("───────────────────── Exiting DockBar ─────────────────────");
         }
