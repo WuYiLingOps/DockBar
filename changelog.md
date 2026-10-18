@@ -1,5 +1,7 @@
 # Changelog
 
+## [1.0.1-dev]
+
 ## [1.0.1] - 2026-10-18
 
 ### Highlights
