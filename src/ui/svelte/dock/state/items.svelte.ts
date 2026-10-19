@@ -92,11 +92,35 @@ subscribe(DockBarEvent.DockAddItem, (e) => {
     return;
   }
 
-  const items = [..._dockState.items];
-  const separatorIdx = items.findIndex((i) => i.id === HARDCODED_SEPARATOR_RIGHT.id);
-  items.splice(separatorIdx, 0, item);
+  const items = insertIntoPinnedZone(_dockState.items, item);
   _dockState = { ..._dockState, items };
 });
+
+/** Inserts an item at the end of the pinned zone, before the visible divider. */
+function insertIntoPinnedZone(items: DockItem[], item: DockItem): DockItem[] {
+  const next = items.filter((i) => i.id !== item.id);
+  let insertIdx = next.findIndex((i) => i.id === HARDCODED_SEPARATOR_RIGHT.id);
+  if (insertIdx === -1) insertIdx = next.length;
+  let previous = next[insertIdx - 1];
+  while (
+    insertIdx > 0 &&
+    previous?.type === "Separator" &&
+    previous.id !== HARDCODED_SEPARATOR_LEFT.id
+  ) {
+    insertIdx--;
+    previous = next[insertIdx - 1];
+  }
+  next.splice(insertIdx, 0, item);
+  return next;
+}
+
+/** Inserts an item at the start of the temporal zone, right of the divider. */
+function insertIntoTemporalZone(items: DockItem[], item: DockItem): DockItem[] {
+  const next = items.filter((i) => i.id !== item.id);
+  const rightIdx = next.findIndex((i) => i.id === HARDCODED_SEPARATOR_RIGHT.id);
+  next.splice(rightIdx === -1 ? next.length : rightIdx + 1, 0, item);
+  return next;
+}
 
 subscribe(DockBarEvent.DockItemsChanged, (e) => {
   // Reload the entire dock state from the backend
@@ -177,16 +201,33 @@ export const dockStateActions = {
     };
   },
   pinApp(id: string) {
-    _dockState = {
-      ..._dockState,
-      items: _dockState.items.map((item) => (item.id === id ? { ...item, pinned: true } : item)),
-    };
+    const items = _dockState.items;
+    const index = items.findIndex((item) => item.id === id);
+    if (index === -1) return;
+    const item = items[index]!;
+    if (item.type !== "AppOrFile") return;
+    const pinned: AppOrFileDockItem = { ...item, pinned: true };
+    const rightIdx = items.findIndex((i) => i.id === HARDCODED_SEPARATOR_RIGHT.id);
+    // a running app being pinned moves from the temporal zone into the
+    // pinned zone, so it ends up left of the visible divider
+    const next = rightIdx !== -1 && index > rightIdx
+      ? insertIntoPinnedZone(items, pinned)
+      : items.map((item) => (item.id === id ? pinned : item));
+    _dockState = { ..._dockState, items: next };
   },
   unpinApp(id: string) {
-    _dockState = {
-      ..._dockState,
-      items: _dockState.items.map((item) => (item.id === id ? { ...item, pinned: false } : item)),
-    };
+    const items = _dockState.items;
+    const index = items.findIndex((item) => item.id === id);
+    if (index === -1) return;
+    const item = items[index]!;
+    if (item.type !== "AppOrFile") return;
+    const unpinned: AppOrFileDockItem = { ...item, pinned: false };
+    const rightIdx = items.findIndex((i) => i.id === HARDCODED_SEPARATOR_RIGHT.id);
+    // keep the temporal zone to the right of the divider when unpinning
+    const next = rightIdx !== -1 && index < rightIdx
+      ? insertIntoTemporalZone(items, unpinned)
+      : items.map((item) => (item.id === id ? unpinned : item));
+    _dockState = { ..._dockState, items: next };
   },
   /** Inserts a new separator next to whichever rendered item is closest to the given cursor position. */
   addSeparatorNear(cursor: { x: number; y: number }) {

@@ -61,16 +61,21 @@ impl DockItemsManager {
         } else {
             // First run: try to import from Windows taskbar
             let mut items = match self.import_from_windows_taskbar_internal() {
-                Ok(imported_items) if !imported_items.center.is_empty() => {
-                    log::info!(
-                        "First run: imported {} items from Windows taskbar",
-                        imported_items.center.len()
-                    );
-                    imported_items
-                }
-                Ok(_) => {
-                    log::info!("First run: no Windows pinned items found, using defaults");
-                    initial_items()
+                Ok(imported_items) => {
+                    let imported_count = imported_items
+                        .center
+                        .iter()
+                        .filter(|item| matches!(item, DockItem::AppOrFile(_)))
+                        .count();
+                    if imported_count > 0 {
+                        log::info!(
+                            "First run: imported {imported_count} items from Windows taskbar"
+                        );
+                        imported_items
+                    } else {
+                        log::info!("First run: no Windows pinned items found, using defaults");
+                        initial_items()
+                    }
                 }
                 Err(e) => {
                     log::warn!(
@@ -81,6 +86,9 @@ impl DockItemsManager {
                 }
             };
             items.sanitize();
+            // the import path replaces the default `center`, so make sure the
+            // pinned/temporal divider still exists before persisting
+            ensure_default_separator(&mut items);
             // the manager lazily initializes on first command access, which can
             // happen before main's create_main_folders has run, so make sure the
             // widget data dir exists before writing the initial state file
@@ -111,12 +119,16 @@ impl DockItemsManager {
             .map(DockItem::AppOrFile)
             .collect();
 
-        Ok(DockItems {
+        let mut items = DockItems {
             is_reorder_disabled: base.is_reorder_disabled,
             left: base.left,
             center,
             right: base.right,
-        })
+        };
+        // the imported list replaces the default center, so restore the
+        // pinned/temporal divider that `initial_items` ships with
+        ensure_default_separator(&mut items);
+        Ok(items)
     }
 
     /// Import pinned items from Windows taskbar.
@@ -144,29 +156,44 @@ impl DockItemsManager {
         items.left = keep_non_app_items(&items.left);
         items.right = keep_non_app_items(&items.right);
 
-        // Add all imported items to center, after existing non-app items
-        items.center = keep_non_app_items(&items.center);
-        for windows_item in &windows_pinned_items {
-            items.center.push(DockItem::AppOrFile(windows_item.clone()));
-        }
+        // Add all imported items to center, after existing non-app items but
+        // before the trailing pinned/temporal divider, so pinned apps stay on
+        // the left side of the visible separator.
+        let (mut center, trailing_separators) =
+            split_trailing_separators(keep_non_app_items(&items.center));
+        center.extend(
+            windows_pinned_items
+                .iter()
+                .cloned()
+                .map(DockItem::AppOrFile),
+        );
+        center.extend(trailing_separators);
+        items.center = center;
+        ensure_default_separator(&mut items);
 
         self.write(items)?;
         Ok(windows_pinned_items.len())
     }
 }
 
-/// One-time migration: states saved before the pinned/temporal split had no
-/// user separator, so the temporal zone (past the right hardcoded separator)
-/// had no visible divider. Appends one to the end of center when none exists.
-/// Users can still remove/re-add separators freely from the context menu.
-fn ensure_default_separator(items: &mut DockItems) {
-    let has_separator = items
-        .center
+/// Splits a center list into `(body, trailing_separators)` so new pinned items
+/// can be inserted before the divider that closes the pinned zone.
+fn split_trailing_separators(mut items: Vec<DockItem>) -> (Vec<DockItem>, Vec<DockItem>) {
+    let split = items
         .iter()
-        .chain(items.left.iter())
-        .chain(items.right.iter())
-        .any(|item| matches!(item, DockItem::Separator { .. }));
-    if !has_separator {
+        .rposition(|item| !matches!(item, DockItem::Separator { .. }))
+        .map_or(0, |idx| idx + 1);
+    let trailing = items.split_off(split);
+    (items, trailing)
+}
+
+/// Ensures the pinned/temporal divider exists at the end of center. The
+/// temporal zone (past the right hardcoded separator) lives in the `right`
+/// section, so a separator anywhere else (left, right, or the middle of
+/// center) must not suppress the boundary one.
+fn ensure_default_separator(items: &mut DockItems) {
+    let has_boundary_separator = matches!(items.center.last(), Some(DockItem::Separator { .. }));
+    if !has_boundary_separator {
         items
             .center
             .push(DockItem::Separator { id: Uuid::new_v4() });
@@ -476,5 +503,105 @@ mod tests {
             panic!("center should be an app item");
         };
         assert!(data.relaunch.is_none());
+    }
+
+    fn app_item(name: &str) -> DockItem {
+        DockItem::AppOrFile(DockItemData {
+            id: Uuid::new_v4(),
+            display_name: name.to_string(),
+            umid: None,
+            path: format!("C:\\{name}.exe").into(),
+            pinned: true,
+            prevent_pinning: false,
+            relaunch: None,
+        })
+    }
+
+    #[test]
+    fn test_ensure_default_separator_adds_boundary_separator() {
+        let mut items = DockItems {
+            is_reorder_disabled: false,
+            left: vec![],
+            center: vec![app_item("app")],
+            right: vec![DockItem::Media { id: Uuid::new_v4() }],
+        };
+
+        ensure_default_separator(&mut items);
+
+        assert!(
+            matches!(items.center.last(), Some(DockItem::Separator { .. })),
+            "center should end with the pinned/temporal divider"
+        );
+    }
+
+    #[test]
+    fn test_ensure_default_separator_ignores_separator_outside_center() {
+        // A user separator elsewhere (e.g. after Media in the temporal zone)
+        // must not suppress the divider at the end of center.
+        let mut items = DockItems {
+            is_reorder_disabled: false,
+            left: vec![DockItem::Separator { id: Uuid::new_v4() }],
+            center: vec![app_item("app")],
+            right: vec![
+                DockItem::Media { id: Uuid::new_v4() },
+                DockItem::Separator { id: Uuid::new_v4() },
+            ],
+        };
+
+        ensure_default_separator(&mut items);
+
+        assert!(
+            matches!(items.center.last(), Some(DockItem::Separator { .. })),
+            "a separator outside center should not count as the boundary divider"
+        );
+    }
+
+    #[test]
+    fn test_ensure_default_separator_keeps_existing_boundary() {
+        let separator_id = Uuid::new_v4();
+        let mut items = DockItems {
+            is_reorder_disabled: false,
+            left: vec![],
+            center: vec![
+                DockItem::Separator { id: Uuid::new_v4() },
+                app_item("app"),
+                DockItem::Separator { id: separator_id },
+            ],
+            right: vec![],
+        };
+
+        ensure_default_separator(&mut items);
+
+        assert_eq!(items.center.len(), 3, "existing boundary should be kept");
+        match &items.center[2] {
+            DockItem::Separator { id } => assert_eq!(*id, separator_id),
+            other => panic!("expected boundary separator, got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn test_split_trailing_separators() {
+        let boundary_id = Uuid::new_v4();
+        let (body, trailing) = split_trailing_separators(vec![
+            app_item("app"),
+            DockItem::Separator { id: Uuid::new_v4() },
+            app_item("other"),
+            DockItem::Separator { id: boundary_id },
+        ]);
+
+        assert_eq!(body.len(), 3, "middle separators stay in the body");
+        assert_eq!(trailing.len(), 1);
+        match &trailing[0] {
+            DockItem::Separator { id } => assert_eq!(*id, boundary_id),
+            other => panic!("expected trailing separator, got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn test_split_trailing_separators_without_trailing() {
+        let (body, trailing) = split_trailing_separators(vec![app_item("app")]);
+
+        assert_eq!(body.len(), 1);
+        assert!(trailing.is_empty());
     }
 }
