@@ -1,5 +1,5 @@
 use std::sync::{
-    LazyLock,
+    Arc, LazyLock,
     atomic::{AtomicBool, Ordering},
 };
 
@@ -21,8 +21,14 @@ pub static WIDGET_MANAGER: LazyLock<WidgetManager> = LazyLock::new(WidgetManager
 pub static GAME_MODE_ACTIVE: AtomicBool = AtomicBool::new(false);
 
 pub struct WidgetManager {
-    /// group of widgets instances by widget resource id
-    pub deployments: SyncHashMap<WidgetId, WidgetDeployment>,
+    /// group of widgets instances by widget resource id.
+    ///
+    /// Deployments are shared as `Arc`s so the map lock is never held while a
+    /// webview is created or destroyed: those operations dispatch to the
+    /// event-loop thread and can take seconds (specially in debug builds),
+    /// which used to stall every concurrent trigger/liveness/destroy handler
+    /// until the `TracedMutex` timeout.
+    pub deployments: SyncHashMap<WidgetId, Arc<WidgetDeployment>>,
 }
 
 impl WidgetManager {
@@ -36,32 +42,65 @@ impl WidgetManager {
         }
     }
 
-    pub fn is_ready(&self, label: &WidgetWebviewLabel) -> bool {
+    /// Snapshot of the deployment for `id`, releasing the map lock immediately.
+    /// Heavy work must run on the returned `Arc`, not inside a `deployments.get`.
+    pub fn deployment(&self, id: &WidgetId) -> Option<Arc<WidgetDeployment>> {
+        self.deployments.get(id, |deploy| deploy.clone())
+    }
+
+    /// Whether `deploy` is still the deployment registered for `id` (it may have
+    /// been replaced or removed while we were working on the snapshot).
+    fn is_current(&self, id: &WidgetId, deploy: &Arc<WidgetDeployment>) -> bool {
         self.deployments
-            .get(&label.widget_id, |deploy| {
-                deploy.pods.any(|(key, pod)| key == label && pod.is_ready())
-            })
+            .get(id, |current| Arc::ptr_eq(current, deploy))
             .unwrap_or(false)
     }
 
+    pub fn is_ready(&self, label: &WidgetWebviewLabel) -> bool {
+        self.deployment(&label.widget_id)
+            .is_some_and(|deploy| deploy.pods.any(|(key, pod)| key == label && pod.is_ready()))
+    }
+
     pub fn set_status(&self, label: &WidgetWebviewLabel, status: WidgetStatus) {
-        self.deployments.get(&label.widget_id, |deploy| {
+        if let Some(deploy) = self.deployment(&label.widget_id) {
             deploy.pods.get(label, |instance| {
                 instance.set_status(status);
             });
-        });
+        }
     }
 
     pub fn suspend_all(&self) {
         GAME_MODE_ACTIVE.store(true, Ordering::Release);
-        self.deployments.for_each(|(_, deploy)| {
+        for (_, deploy) in self
+            .deployments
+            .map(|(key, deploy)| (key.clone(), deploy.clone()))
+        {
             deploy.pods.clear();
-        });
+        }
     }
 
     pub fn resume_all(&self) -> Result<()> {
         GAME_MODE_ACTIVE.store(false, Ordering::Release);
         self.reconcile()
+    }
+
+    /// Destroys the pod for `label` (if any) and rebuilds a fresh one, starting
+    /// it unless the widget is lazy or game mode is active. This is the recovery
+    /// path for wedged windows (used by the liveness give-up and the
+    /// `WindowEvent::Destroyed` handler).
+    pub fn respawn_pod(&self, label: &WidgetWebviewLabel) {
+        let Some(deploy) = self.deployment(&label.widget_id) else {
+            return;
+        };
+
+        deploy.kill_pod(label);
+        deploy.reconcile();
+        // suspend_all() destroys every widget when game mode starts; respawning
+        // here would bring them back on top of the game. resume_all() starts
+        // them again once game mode ends.
+        if !deploy.definition.lazy && !GAME_MODE_ACTIVE.load(Ordering::Acquire) {
+            deploy.start_all_webviews();
+        }
     }
 
     pub fn reconcile(&self) -> Result<()> {
@@ -86,16 +125,24 @@ impl WidgetManager {
 
             if !self.deployments.contains_key(&id) {
                 self.deployments
-                    .upsert(id.clone(), WidgetDeployment::new(widget));
+                    .upsert(id.clone(), Arc::new(WidgetDeployment::new(widget)));
             }
         }
 
         // lazy creation of webviews to reduce startup time
         std::thread::spawn(|| {
-            fn reconcile(deployment: &WidgetDeployment) {
-                deployment.reconcile();
-                if !deployment.definition.lazy && !GAME_MODE_ACTIVE.load(Ordering::Acquire) {
-                    deployment.start_all_webviews();
+            fn reconcile_if_current(manager: &WidgetManager, id: &WidgetId) {
+                // Re-check currency before acting: the deployment could have been
+                // removed (widget disabled) or replaced while we were queued.
+                let Some(deploy) = manager.deployment(id) else {
+                    return;
+                };
+                if !manager.is_current(id, &deploy) {
+                    return;
+                }
+                deploy.reconcile();
+                if !deploy.definition.lazy && !GAME_MODE_ACTIVE.load(Ordering::Acquire) {
+                    deploy.start_all_webviews();
                 }
             }
 
@@ -105,15 +152,16 @@ impl WidgetManager {
                 WidgetId::known_toolbar(),
                 WidgetId::known_dock(),
             ] {
-                WIDGET_MANAGER.deployments.get(&priority, |deployment| {
-                    reconcile(deployment);
-                });
+                reconcile_if_current(&WIDGET_MANAGER, &priority);
             }
 
             // All other widgets
-            WIDGET_MANAGER.deployments.for_each(|(_, deployment)| {
-                reconcile(deployment);
-            });
+            for (id, _) in WIDGET_MANAGER
+                .deployments
+                .map(|(key, deploy)| (key.clone(), deploy.clone()))
+            {
+                reconcile_if_current(&WIDGET_MANAGER, &id);
+            }
         });
 
         Ok(())

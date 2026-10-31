@@ -164,13 +164,18 @@ pub fn lock_rasterization_scale_to_one(webview: &tauri::WebviewWindow) -> Result
 /// actually makes V8/Blink release freed pages back to the OS, because real pressure
 /// almost never reaches an individual background widget when the system overall has
 /// plenty of RAM free.
+///
+/// The completion handler is fire-and-forget on purpose: this closure runs on the
+/// main event-loop thread, and blocking it (e.g. `wait_for_async_operation`) with a
+/// wedged renderer would freeze the whole app — tray menu, context menus and new
+/// webview creation included.
 pub fn simulate_memory_pressure(webview: &tauri::WebviewWindow) {
     if webview.is_focused().unwrap_or(false) {
         return;
     }
 
     webview
-        .with_webview(|platform_webview| {
+        .with_webview(move |platform_webview| {
             let controller = platform_webview.controller();
             let core_webview = match unsafe { controller.CoreWebView2() } {
                 Ok(core_webview) => core_webview,
@@ -184,26 +189,29 @@ pub fn simulate_memory_pressure(webview: &tauri::WebviewWindow) {
             // crate version (0.61) which is semver-incompatible with the one this project
             // depends on directly (0.62.2), so their `PCWSTR` types don't unify. Must go
             // through webview2-com's own string helper, built against its own `windows`.
-            let result =
-                webview2_com::CallDevToolsProtocolMethodCompletedHandler::wait_for_async_operation(
-                    Box::new(move |handler| unsafe {
-                        let method = webview2_com::CoTaskMemPWSTR::from(
-                            "Memory.simulatePressureNotification",
-                        );
-                        let params = webview2_com::CoTaskMemPWSTR::from(r#"{"level":"critical"}"#);
-                        core_webview
-                            .CallDevToolsProtocolMethod(
-                                *method.as_ref().as_pcwstr(),
-                                *params.as_ref().as_pcwstr(),
-                                &handler,
-                            )
-                            .map_err(webview2_com::Error::WindowsError)
-                    }),
-                    Box::new(|error_code, _result| error_code),
-                );
+            let method = webview2_com::CoTaskMemPWSTR::from("Memory.simulatePressureNotification");
+            let params = webview2_com::CoTaskMemPWSTR::from(r#"{"level":"critical"}"#);
+            let handler = webview2_com::CallDevToolsProtocolMethodCompletedHandler::create(
+                Box::new(|result, _result_json| {
+                    if let Err(err) = result {
+                        log::warn!("Memory.simulatePressureNotification failed: {err}");
+                    }
+                    Ok(())
+                }),
+            );
 
-            if let Err(err) = result {
-                log::warn!("Memory.simulatePressureNotification failed: {err:?}");
+            // The COM call keeps its own reference to `handler`, so dropping our local
+            // one right away is safe: the callback outlives this closure either way.
+            if let Err(err) = unsafe {
+                core_webview
+                    .CallDevToolsProtocolMethod(
+                        *method.as_ref().as_pcwstr(),
+                        *params.as_ref().as_pcwstr(),
+                        &handler,
+                    )
+                    .map_err(webview2_com::Error::WindowsError)
+            } {
+                log::warn!("Failed to issue Memory.simulatePressureNotification: {err}");
             }
         })
         .log_error();

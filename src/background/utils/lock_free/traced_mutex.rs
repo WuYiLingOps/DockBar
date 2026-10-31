@@ -4,6 +4,7 @@ use std::{
     sync::atomic::{AtomicPtr, Ordering},
 };
 
+#[cfg(test)]
 use crate::error::AppError;
 
 /// A wrapper around parking_lot::Mutex that tracks the last location where it was locked.
@@ -58,12 +59,15 @@ impl<T> TracedMutex<T> {
     /// This propagates through to `panic_timeout` (also `#[track_caller]`), so a
     /// timeout panic reports the original call site, not a line inside this module.
     ///
+    /// After the timeout elapses, tests still panic (deadlock detector), while
+    /// production logs the contention and keeps waiting: a panic here would kill
+    /// unrelated tasks (tray menu threads, command handlers, liveness probes) and
+    /// leave the UI silently unresponsive, which is worse than a slow lock holder.
+    ///
     /// # Panics
     ///
-    /// This function will panic if the mutex is already locked by the current thread (deadlock).
-    /// The panic will include:
-    /// - The current caller location (where this call to `lock()` is blocked)
-    /// - The last recorded lock location (if any)
+    /// Only in test builds: when the mutex stays locked longer than the timeout
+    /// (deadlock or pathological contention).
     #[inline]
     #[track_caller]
     pub fn lock<'a>(&'a self) -> MutexGuard<'a, T> {
@@ -75,12 +79,32 @@ impl<T> TracedMutex<T> {
                     .store(location as *const _ as *mut _, Ordering::Release);
                 guard
             }
-            None => self.panic_timeout(),
+            None => {
+                #[cfg(test)]
+                {
+                    self.panic_timeout();
+                }
+                #[cfg(not(test))]
+                {
+                    let last = unsafe { self.last_lock_location.load(Ordering::Acquire).as_ref() };
+                    log::error!(
+                        "Lock contention exceeded {:?}, waiting instead of panicking. \
+                         Last lock acquired at: {last:?}",
+                        self.timeout(),
+                    );
+                    let guard = self.inner.lock();
+                    let location = Location::caller();
+                    self.last_lock_location
+                        .store(location as *const _ as *mut _, Ordering::Release);
+                    guard
+                }
+            }
         }
     }
 
     #[cold]
     #[track_caller]
+    #[cfg(test)]
     fn panic_timeout(&self) -> ! {
         let last = unsafe { self.last_lock_location.load(Ordering::Acquire).as_ref() };
 

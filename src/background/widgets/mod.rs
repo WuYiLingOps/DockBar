@@ -9,6 +9,7 @@ pub mod webview;
 use std::{
     path::{Path, PathBuf},
     sync::LazyLock,
+    time::{Duration, Instant},
 };
 
 use dockbar_core::{
@@ -37,8 +38,13 @@ use crate::{
     },
 };
 
-static PENDING_TRIGGERS: LazyLock<SyncHashMap<WidgetWebviewLabel, WidgetTriggerPayload>> =
-    LazyLock::new(SyncHashMap::new);
+static PENDING_TRIGGERS: LazyLock<
+    SyncHashMap<WidgetWebviewLabel, (WidgetTriggerPayload, Instant)>,
+> = LazyLock::new(SyncHashMap::new);
+
+/// How long a queued trigger stays valid. It covers the time a lazy webview needs
+/// to boot and report ready; older payloads are dropped instead of firing late.
+const PENDING_TRIGGER_TTL: Duration = Duration::from_secs(30);
 
 fn trigger_widget_inner(
     mut payload: WidgetTriggerPayload,
@@ -61,6 +67,10 @@ fn trigger_widget_inner(
         payload.instance_id.as_ref(),
     );
 
+    let Some(deployment) = WIDGET_MANAGER.deployment(&payload.id) else {
+        return Err(format!("Widget deployment not found: {}", payload.id).into());
+    };
+
     match widget.instances {
         WidgetInstanceMode::Single => {}
         WidgetInstanceMode::ReplicaByMonitor => {
@@ -73,11 +83,9 @@ fn trigger_widget_inner(
                 return Err("Instance id is required for multiple instance widgets".into());
             };
 
-            WIDGET_MANAGER.deployments.get(&payload.id, |container| {
-                if !container.pods.contains_key(&label) {
-                    container.create_runtime_instance(instance_id, owner_hwnd);
-                }
-            });
+            if !deployment.pods.contains_key(&label) {
+                deployment.create_runtime_instance(instance_id, owner_hwnd);
+            }
         }
     }
 
@@ -99,11 +107,9 @@ fn trigger_widget_inner(
 
     if !WIDGET_MANAGER.is_ready(&label) {
         log::trace!("Trigger postponed, because widget instance is not ready: {label}");
-        PENDING_TRIGGERS.upsert(label.clone(), payload);
+        PENDING_TRIGGERS.upsert(label.clone(), (payload, Instant::now()));
 
-        WIDGET_MANAGER.deployments.get(&label.widget_id, |c| {
-            c.start_webview(&label);
-        });
+        deployment.start_webview(&label);
         return Ok(());
     }
 
@@ -200,9 +206,15 @@ impl crate::tauri_handlers::Handlers {
         let label = WidgetWebviewLabel::try_from_raw(webview.label())?;
         WIDGET_MANAGER.set_status(&label, status);
 
-        if let Some(pending) = PENDING_TRIGGERS.remove(&label) {
-            log::info!("Emitting pending trigger for {label}");
-            get_app_handle().emit_to(label.raw, DockBarEvent::WidgetTriggered, &pending)?;
+        if let Some((pending, queued_at)) = PENDING_TRIGGERS.remove(&label) {
+            if queued_at.elapsed() <= PENDING_TRIGGER_TTL {
+                log::info!("Emitting pending trigger for {label}");
+                get_app_handle().emit_to(label.raw, DockBarEvent::WidgetTriggered, &pending)?;
+            } else {
+                log::warn!(
+                    "Dropping pending trigger for {label}: it was queued longer than {PENDING_TRIGGER_TTL:?}"
+                );
+            }
         }
         Ok(())
     }

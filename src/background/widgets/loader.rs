@@ -5,19 +5,17 @@ use std::{
 
 use dockbar_core::state::{Widget, WidgetInstanceMode, WidgetStatus};
 use tauri::{Emitter, Listener};
-use tauri_plugin_dialog::{DialogExt, MessageDialogButtons, MessageDialogKind};
 use uuid::Uuid;
 
 use crate::{
     app::get_app_handle,
     get_tokio_handle,
     modules::monitors::MonitorManager,
-    resources::RESOURCES,
     state::application::FULL_STATE,
     utils::lock_free::SyncHashMap,
     widgets::{
         WidgetWebviewLabel,
-        manager::{GAME_MODE_ACTIVE, WIDGET_MANAGER},
+        manager::WIDGET_MANAGER,
         notify_widget_statuses_change,
         webview::{self, WidgetWebview},
     },
@@ -32,12 +30,18 @@ pub enum PodSource {
 const LIVENESS_PROVE_INTERVAL: Duration = Duration::from_secs(5);
 const LIVENESS_PROVE_WAIT_TIMEOUT: Duration = Duration::from_secs(3);
 const LIVENESS_PROVE_MAX_RETRIES: u8 = 5;
-// Grace period after session resume or soft_restart to let the webview finish reloading.
+// Grace period after session resume, a soft_restart or a liveness respawn to let
+// the webview finish reloading.
 const LIVENESS_RELOAD_GRACE_PERIOD: Duration = Duration::from_secs(10);
 // Widgets sit occluded/background almost all the time, so the OS never signals real
 // memory pressure to their renderer and the JS heap balloons unchecked. Simulating it
 // periodically forces WebView2 to actually release freed pages back to the OS.
 const MEMORY_PRESSURE_INTERVAL: Duration = Duration::from_secs(30);
+// Webview creation failures are retried with exponential backoff (1s, 2s, 4s...);
+// without this the pod would be stuck in `CrashedOnCreation` forever and every
+// trigger for it would queue a pending payload that never fires.
+const MAX_CREATION_RETRIES: u8 = 5;
+const CREATION_RETRY_BASE_DELAY: Duration = Duration::from_secs(1);
 
 pub struct WidgetDeployment {
     pub definition: Arc<Widget>,
@@ -165,6 +169,7 @@ pub struct WidgetPod {
     liveness_prove_handle: Option<tokio::task::JoinHandle<()>>,
     memory_pressure_handle: Option<tokio::task::JoinHandle<()>>,
     retries: Arc<AtomicU8>,
+    creation_retries: u8,
 }
 
 impl WidgetPod {
@@ -179,6 +184,7 @@ impl WidgetPod {
             liveness_prove_handle: None,
             memory_pressure_handle: None,
             retries: Arc::new(AtomicU8::new(0)),
+            creation_retries: 0,
         }
     }
 
@@ -222,9 +228,11 @@ impl WidgetPod {
             Err(err) => {
                 log::error!("Failed to create webview: {}", err);
                 self.set_status(WidgetStatus::CrashedOnCreation);
+                self.schedule_creation_retry();
                 return;
             }
         };
+        self.creation_retries = 0;
         self.set_status(WidgetStatus::Mounting);
 
         let label = self.label.clone();
@@ -237,18 +245,7 @@ impl WidgetPod {
                 // APPLICATION_HANG_ENDTASK_HungThreadIsIdle crash.
                 let label = label.clone();
                 std::thread::spawn(move || {
-                    WIDGET_MANAGER.deployments.get(&label.widget_id, |deploy| {
-                        deploy.kill_pod(&label);
-                        deploy.reconcile();
-                        // suspend_all() destroys every widget when game mode starts; respawning
-                        // here would bring them back on top of the game. resume_all() starts
-                        // them again once game mode ends.
-                        if !deploy.definition.lazy
-                            && !GAME_MODE_ACTIVE.load(std::sync::atomic::Ordering::Acquire)
-                        {
-                            deploy.start_all_webviews();
-                        }
-                    });
+                    WIDGET_MANAGER.respawn_pod(&label);
                 });
             }
         });
@@ -261,6 +258,43 @@ impl WidgetPod {
         notify_widget_statuses_change();
         self.start_liveness_prove();
         self.start_memory_pressure_simulation();
+    }
+
+    /// Retries webview creation with exponential backoff on a detached thread.
+    /// Only a pod still in `CrashedOnCreation` is restarted, so a fresh pod created
+    /// by `reconcile` in the meantime is never started twice.
+    fn schedule_creation_retry(&mut self) {
+        let attempt = self.creation_retries + 1;
+        self.creation_retries = attempt;
+
+        if attempt > MAX_CREATION_RETRIES {
+            log::error!(
+                "Giving up on creating the webview for {} after {attempt} attempts.",
+                self.label
+            );
+            return;
+        }
+
+        let label = self.label.clone();
+        let delay = CREATION_RETRY_BASE_DELAY * (1 << (attempt - 1));
+        std::thread::spawn(move || {
+            std::thread::sleep(delay);
+            let Some(deploy) = WIDGET_MANAGER.deployment(&label.widget_id) else {
+                return;
+            };
+            let restarted = deploy.pods.get(&label, |pod| {
+                if pod.status() == &WidgetStatus::CrashedOnCreation {
+                    pod.set_status(WidgetStatus::Pending);
+                    true
+                } else {
+                    false
+                }
+            });
+            if restarted.unwrap_or(false) {
+                log::info!("Retrying webview creation for {label} (attempt {attempt}).");
+                deploy.start_webview(&label);
+            }
+        });
     }
 
     fn start_memory_pressure_simulation(&mut self) {
@@ -282,8 +316,11 @@ impl WidgetPod {
     fn start_liveness_prove(&mut self) {
         if let Some(window) = &self.window {
             let live = self.live.clone();
+            // `notify_one` (unlike `notify_waiters`) stores a permit when no waiter is
+            // parked yet, so a pong arriving between the ping and the `select!` below
+            // is not lost and does not produce a false timeout.
             window.0.listen("internal::liveness-pong", move |_event| {
-                live.notify_waiters();
+                live.notify_one();
             });
         }
 
@@ -319,30 +356,24 @@ impl WidgetPod {
                     }
                     _ = tokio::time::sleep(LIVENESS_PROVE_WAIT_TIMEOUT) => {
                         let attempt = retries.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-                        log::warn!("Liveness prove failed for {label} (attempt {}/{LIVENESS_PROVE_MAX_RETRIES}), reloading webview.", attempt + 1);
 
                         if attempt < LIVENESS_PROVE_MAX_RETRIES {
-                            WIDGET_MANAGER.deployments.get(&label.widget_id, |deployment| {
-                                deployment.pods.get(&label, |pod| {
+                            log::warn!("Liveness prove failed for {label} (attempt {}/{LIVENESS_PROVE_MAX_RETRIES}), reloading webview.", attempt + 1);
+                            if let Some(deploy) = WIDGET_MANAGER.deployment(&label.widget_id) {
+                                deploy.pods.get(&label, |pod| {
                                     pod.soft_restart();
                                 });
-                            });
+                            }
+                            // Let the webview finish reloading before judging it again.
+                            tokio::time::sleep(LIVENESS_RELOAD_GRACE_PERIOD).await;
                         } else {
-                            log::error!("Liveness prove failed for {label} too many times, giving up.");
-                            let lang = rust_i18n::locale();
-                            let widget_name = RESOURCES
-                                .widgets
-                                .read_async(&label.widget_id, |_, w| {
-                                    w.metadata.display_name.get(&lang).to_string()
-                                })
-                                .await
-                                .unwrap_or_else(|| label.widget_id.to_string());
-                            app.dialog()
-                                .message(t!("widget_liveness.failed_description", widget_name = widget_name))
-                                .title(t!("widget_liveness.failed_title"))
-                                .kind(MessageDialogKind::Error)
-                                .buttons(MessageDialogButtons::Ok)
-                                .show(|_| {});
+                            // A reload could not recover the widget: the window (or its
+                            // renderer) is wedged. Destroying the pod and respawning it is
+                            // the only way back to a working state — previously the loop
+                            // just gave up, leaving the pod in `Restarting` forever, which
+                            // made every later trigger queue a payload that never fired.
+                            log::error!("Liveness prove failed for {label} too many times, recreating its window.");
+                            WIDGET_MANAGER.respawn_pod(&label);
                             break;
                         }
                     }

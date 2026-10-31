@@ -13,7 +13,10 @@ use crate::{
     modules::start::application::StartMenuManager,
     resources::RESOURCES,
     state::application::{AppSettings, FULL_STATE, initialize_user_resources_watcher},
-    widgets::{manager::WIDGET_MANAGER, popups::shortcut_conflicts::show_shortcut_conflict_popup},
+    widgets::{
+        manager::{GAME_MODE_ACTIVE, WIDGET_MANAGER},
+        popups::shortcut_conflicts::show_shortcut_conflict_popup,
+    },
     windows_api::event_window::{IS_INTERACTIVE_SESSION, create_background_window},
 };
 
@@ -95,6 +98,15 @@ impl DockBarApp {
 
     pub fn on_settings_change(state: &AppSettings) -> Result<()> {
         rust_i18n::set_locale(state.locale());
+
+        // If game-mode suspension was just turned off while the widgets are still
+        // suspended, bring them back: the resume would otherwise only happen on
+        // the next PowerModeChanged event, which may never arrive.
+        if !state.settings.suspend_on_game_mode
+            && GAME_MODE_ACTIVE.load(std::sync::atomic::Ordering::Acquire)
+        {
+            WIDGET_MANAGER.resume_all().log_error();
+        }
 
         let widgets = RESOURCES.widgets();
         let widget_refs: Vec<_> = widgets.iter().map(|w| w.as_ref()).collect();
