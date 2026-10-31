@@ -16,29 +16,51 @@ const workArea = $derived(systemState.currentMonitor.rect);
 const widgetRect = $derived.by(() => {
   const wa = workArea;
   const hitboxRect = { ...workArea };
-  const webviewRect = { ...workArea };
+  const webviewRect = { ...hitboxRect };
 
+  const scale = systemState.currentMonitor.scaleFactor;
   const size = Math.round(
     (settings.size + settings.padding * 2 + settings.margin * 2) *
-      systemState.currentMonitor.scaleFactor,
+      scale,
+  );
+
+  /*
+   * The webview only needs room for what legitimately escapes the dock bar
+   * inside it: hover tooltips (12px gap, ~30px tall, max-width 240px centered
+   * on the item — UserApplicationItem.placeTooltip + theme dock.css) and the
+   * magnify bulge (up to +100% of the item size). Everything else is dead
+   * transparent surface where stray content paints over the desktop (the
+   * classic-scrollbar strip bug), so the window hugs the hitbox plus exactly
+   * that headroom. Touch has no hover tooltips and keeps the hitbox-sized
+   * window it always had.
+   */
+  const bulge = (settings.iconMagnification ?? 0) > 0 ? settings.size : 0;
+  const headroom = Math.round(
+    (isHorizontalDock()
+      // across the dock axis: bulged item + tooltip gap/height + slack
+      ? bulge + 12 + 30 + 16
+      // along the dock axis: bulged item center (up to 2x item width) +
+      // half of the 240px tooltip + slack
+      : settings.margin + settings.padding + settings.size * 2 + 120 + 16) *
+      scale,
   );
 
   switch (settings.position) {
     case DockBarSide.Left:
       hitboxRect.right = hitboxRect.left + size;
-      webviewRect.right = isTouchPrimary.value ? hitboxRect.right : wa.right - Math.round((wa.right - wa.left) / 4);
+      webviewRect.right = isTouchPrimary.value ? hitboxRect.right : Math.min(wa.right, hitboxRect.right + headroom);
       break;
     case DockBarSide.Right:
       hitboxRect.left = hitboxRect.right - size;
-      webviewRect.left = isTouchPrimary.value ? hitboxRect.left : wa.left + Math.round((wa.right - wa.left) / 4);
+      webviewRect.left = isTouchPrimary.value ? hitboxRect.left : Math.max(wa.left, hitboxRect.left - headroom);
       break;
     case DockBarSide.Top:
       hitboxRect.bottom = hitboxRect.top + size;
-      webviewRect.bottom = isTouchPrimary.value ? hitboxRect.bottom : wa.top + Math.round((wa.bottom - wa.top) / 4);
+      webviewRect.bottom = isTouchPrimary.value ? hitboxRect.bottom : Math.min(wa.bottom, hitboxRect.bottom + headroom);
       break;
     case DockBarSide.Bottom:
       hitboxRect.top = hitboxRect.bottom - size;
-      webviewRect.top = isTouchPrimary.value ? hitboxRect.top : wa.bottom - Math.round((wa.bottom - wa.top) / 4);
+      webviewRect.top = isTouchPrimary.value ? hitboxRect.top : Math.max(wa.top, hitboxRect.top - headroom);
       break;
   }
 
