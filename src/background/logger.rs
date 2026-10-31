@@ -50,8 +50,18 @@ impl DockBarLogger {
             })
             .chain(fern::log_file(log_path)?);
 
+        // Trace in dev for diagnosis, Info in release: the file is only rotated on
+        // startup, so a chatty dependency logging at trace level can grow it to
+        // gigabytes in a single long-running session (a render loop did exactly
+        // that once), which also costs constant I/O on every frame.
+        let base_level = if cfg!(dev) {
+            log::LevelFilter::Trace
+        } else {
+            log::LevelFilter::Info
+        };
+
         let dispatch = fern::Dispatch::new()
-            .level(log::LevelFilter::Trace)
+            .level(base_level)
             .level_for("tao", log::LevelFilter::Error)
             .level_for("os_info", log::LevelFilter::Error)
             .level_for("notify", log::LevelFilter::Error)
@@ -60,6 +70,15 @@ impl DockBarLogger {
             .level_for("wmi", log::LevelFilter::Error)
             .level_for("tungstenite", log::LevelFilter::Error)
             .level_for("tokio_tungstenite", log::LevelFilter::Error)
+            // async runtime / server / http-client internals are extremely chatty
+            // at trace level and carry no diagnostic value for us
+            .level_for("tokio", log::LevelFilter::Error)
+            .level_for("mio", log::LevelFilter::Error)
+            .level_for("salvo", log::LevelFilter::Error)
+            .level_for("hyper", log::LevelFilter::Error)
+            .level_for("reqwest", log::LevelFilter::Error)
+            .level_for("rustls", log::LevelFilter::Error)
+            .level_for("scc", log::LevelFilter::Error)
             .chain(file_dispatch);
 
         #[cfg(dev)]
