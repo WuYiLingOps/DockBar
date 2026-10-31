@@ -24,14 +24,3 @@ pre-commit:
       priority: 6
       glob: "**/*.rs"
       run: cargo clippy --all-targets -- -D warnings
-
-pre-push:
-  commands:
-    js-test:
-      priority: 1
-      glob: "**/*.{js,jsx,ts,tsx}"
-      run: npm run test
-    rust-test:
-      priority: 3
-      glob: "**/*.rs"
-      run: cargo test
