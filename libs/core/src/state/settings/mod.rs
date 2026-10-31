@@ -167,7 +167,11 @@ impl Default for DockBarSettings {
             space_between_items: 8,
             delay_to_show: 100,
             delay_to_hide: 800,
-            reveal_on_attention: WegAttentionReveal::UntilActivated,
+            // `UntilActivated` pops the dock over a maximized app and keeps it there
+            // until the attention window is activated, which feels intrusive when a
+            // background app (e.g. WeChat) flashes for every message. Revealing only
+            // while flashing keeps the highlight hint without covering the content.
+            reveal_on_attention: WegAttentionReveal::WhileFlashing,
             show_end_task: false,
             split_windows: false,
             middle_click_action: WegMiddleClickAction::OpenNewInstance,
