@@ -57,7 +57,6 @@ export enum DockBarCommand {
   SetWidgetPermissions = "set_widget_permissions",
   GetUserAppWindows = "get_user_app_windows",
   GetUserAppWindowsPreviews = "get_user_app_windows_previews",
-  GetUserAppWindowsColors = "get_user_app_windows_colors",
   GetStartMenuItems = "get_start_menu_items",
   GetSelfToken = "get_self_token",
   GetPowerStatus = "get_power_status",

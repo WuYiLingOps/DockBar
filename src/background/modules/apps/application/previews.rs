@@ -1,7 +1,7 @@
 use std::{collections::HashMap, sync::LazyLock, time::Duration};
 
 use base64::{Engine as _, engine::general_purpose::STANDARD};
-use dockbar_core::system_state::{Color, UserAppWindowColors, UserAppWindowPreview};
+use dockbar_core::system_state::UserAppWindowPreview;
 use dockbar_utils::{Debounce, debounce};
 use image::{DynamicImage, RgbaImage};
 use win_screenshot::prelude::capture_window;
@@ -20,8 +20,6 @@ use crate::{
 };
 
 const CAPTURE_WINDOW_INTERVAL: Duration = Duration::from_millis(200);
-/// Number of pixel samples taken evenly across the top and bottom edges of a window.
-const SAMPLING: usize = 7;
 
 static WINDOWS_PREVIEWS: LazyLock<WinPreviewManager> = LazyLock::new(WinPreviewManager::create);
 
@@ -48,7 +46,6 @@ static CAPTURE_TX: LazyLock<crossbeam_channel::Sender<isize>> = LazyLock::new(||
 
 struct UserAppWindowPreviewWrap {
     preview: Option<UserAppWindowPreview>,
-    colors: Option<UserAppWindowColors>,
     capture: Debounce<()>,
 }
 
@@ -60,7 +57,6 @@ pub struct WinPreviewManager {
 #[allow(dead_code)]
 pub enum WinPreviewEvent {
     Captured(isize),
-    ColorsUpdated(isize),
     Cleaned(isize),
 }
 
@@ -138,7 +134,6 @@ impl WinPreviewManager {
             addr,
             UserAppWindowPreviewWrap {
                 preview: None,
-                colors: None,
                 capture,
             },
         );
@@ -181,8 +176,6 @@ impl WinPreviewManager {
             cropped
         };
 
-        let colors = sample_edge_colors(&image);
-
         let image_hash = image_to_hash(&image);
 
         let mut unchanged = false;
@@ -212,11 +205,6 @@ impl WinPreviewManager {
             Self::send(WinPreviewEvent::Captured(addr));
         }
 
-        self.previews.get(&addr, |wrap| {
-            wrap.colors = Some(colors);
-        });
-        Self::send(WinPreviewEvent::ColorsUpdated(addr));
-
         Ok(())
     }
 
@@ -228,66 +216,6 @@ impl WinPreviewManager {
             }
         });
         map
-    }
-
-    pub fn get_colors(&self) -> HashMap<isize, UserAppWindowColors> {
-        let mut map = HashMap::new();
-        self.previews.for_each(|(k, v)| {
-            if let Some(colors) = &v.colors {
-                map.insert(*k, colors.clone());
-            }
-        });
-        map
-    }
-}
-
-/// Samples SAMPLING pixels evenly spaced from left to right along the top and bottom rows.
-fn sample_edge_colors(image: &RgbaImage) -> UserAppWindowColors {
-    let w = image.width();
-    let h = image.height();
-
-    let sample_x = |i: usize| -> u32 {
-        if SAMPLING <= 1 {
-            return 0;
-        }
-        ((i as u64 * (w as u64 - 1)) / (SAMPLING as u64 - 1)) as u32
-    };
-
-    let pixel_to_color = |x: u32, y: u32| -> Color {
-        let p = image.get_pixel(x, y);
-        Color {
-            r: p[0],
-            g: p[1],
-            b: p[2],
-            a: p[3],
-        }
-    };
-
-    let sample_y = |i: usize| -> u32 {
-        if SAMPLING <= 1 {
-            return 0;
-        }
-        ((i as u64 * (h as u64 - 1)) / (SAMPLING as u64 - 1)) as u32
-    };
-
-    let top = (0..SAMPLING)
-        .map(|i| pixel_to_color(sample_x(i), 0))
-        .collect();
-    let bottom = (0..SAMPLING)
-        .map(|i| pixel_to_color(sample_x(i), h.saturating_sub(1)))
-        .collect();
-    let left = (0..SAMPLING)
-        .map(|i| pixel_to_color(0, sample_y(i)))
-        .collect();
-    let right = (0..SAMPLING)
-        .map(|i| pixel_to_color(w.saturating_sub(1), sample_y(i)))
-        .collect();
-
-    UserAppWindowColors {
-        top,
-        bottom,
-        left,
-        right,
     }
 }
 

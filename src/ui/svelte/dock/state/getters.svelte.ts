@@ -1,5 +1,4 @@
 import { DockBarCommand, DockBarEvent, invoke, Settings, subscribe, Widget } from "@dockbar/lib";
-import type { UserAppWindowColors } from "@dockbar/lib/types";
 import { lazyRune } from "libs/ui/svelte/utils";
 
 export const currentMonitorId = Widget.getCurrent().decoded.monitorId!;
@@ -26,11 +25,6 @@ subscribe(DockBarEvent.UserAppWindowsChanged, interactables.setByPayload);
 export const previews = lazyRune(() => invoke(DockBarCommand.GetUserAppWindowsPreviews));
 subscribe(DockBarEvent.UserAppWindowsPreviewsChanged, previews.setByPayload);
 
-export const windowsColors = lazyRune<Record<number, UserAppWindowColors>>(
-  () => invoke(DockBarCommand.GetUserAppWindowsColors),
-);
-subscribe(DockBarEvent.UserAppWindowsColorsChanged, windowsColors.setByPayload);
-
 export const focused = lazyRune(() => invoke(DockBarCommand.GetFocusedApp));
 
 export const widgetStatuses = lazyRune(() => invoke(DockBarCommand.DebugGetWidgetsStatuses));
@@ -45,7 +39,6 @@ await Promise.all([
   selfWinId.init(),
   interactables.init(),
   previews.init(),
-  windowsColors.init(),
   focused.init(),
   widgetStatuses.init(),
   wegItems.init(),

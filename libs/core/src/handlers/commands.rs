@@ -301,7 +301,6 @@ slu_commands_declaration! {
     // User
     GetUserAppWindows = get_user_app_windows() -> Vec<UserAppWindow>,
     GetUserAppWindowsPreviews = get_user_app_windows_previews() -> std::collections::HashMap<isize, UserAppWindowPreview>,
-    GetUserAppWindowsColors = get_user_app_windows_colors() -> std::collections::HashMap<isize, UserAppWindowColors>,
     GetStartMenuItems = get_start_menu_items() -> Vec<StartMenuEntry>,
 
     // events server

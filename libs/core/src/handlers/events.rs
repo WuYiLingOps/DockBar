@@ -71,7 +71,6 @@ slu_events_declaration! {
 
     UserAppWindowsChanged(Vec<UserAppWindow>) as "user::windows-changed",
     UserAppWindowsPreviewsChanged(HashMap<isize, UserAppWindowPreview>) as "user::windows-previews-changed",
-    UserAppWindowsColorsChanged(HashMap<isize, UserAppWindowColors>) as "user::windows-colors-changed",
 
     PowerStatus(PowerStatus) as "power-status",
     PowerMode(PowerMode) as "power-mode",

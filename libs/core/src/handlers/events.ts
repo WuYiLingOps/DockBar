@@ -5,7 +5,6 @@ export enum DockBarEvent {
   SystemMonitorsChanged = "system::monitors-changed",
   UserAppWindowsChanged = "user::windows-changed",
   UserAppWindowsPreviewsChanged = "user::windows-previews-changed",
-  UserAppWindowsColorsChanged = "user::windows-colors-changed",
   PowerStatus = "power-status",
   PowerMode = "power-mode",
   BatteriesStatus = "batteries-status",

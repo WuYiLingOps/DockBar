@@ -3,7 +3,7 @@ use std::{collections::HashMap, sync::Once};
 use dockbar_core::{
     handlers::DockBarEvent,
     state::StartMenuEntry,
-    system_state::{FocusedApp, UserAppWindow, UserAppWindowColors, UserAppWindowPreview},
+    system_state::{FocusedApp, UserAppWindow, UserAppWindowPreview},
 };
 use windows::Win32::UI::Shell::{IShellDispatch6, Shell};
 
@@ -30,19 +30,14 @@ fn get_apps_manager() -> &'static UserAppsManager {
 
         WinPreviewManager::subscribe(|event| {
             use crate::modules::apps::application::previews::WinPreviewEvent;
-            match event {
-                WinPreviewEvent::Captured(_) | WinPreviewEvent::Cleaned(_) => {
-                    emit_to_webviews(
-                        DockBarEvent::UserAppWindowsPreviewsChanged,
-                        WinPreviewManager::instance().get_previews(),
-                    );
-                }
-                WinPreviewEvent::ColorsUpdated(_) => {
-                    emit_to_webviews(
-                        DockBarEvent::UserAppWindowsColorsChanged,
-                        WinPreviewManager::instance().get_colors(),
-                    );
-                }
+            if matches!(
+                event,
+                WinPreviewEvent::Captured(_) | WinPreviewEvent::Cleaned(_)
+            ) {
+                emit_to_webviews(
+                    DockBarEvent::UserAppWindowsPreviewsChanged,
+                    WinPreviewManager::instance().get_previews(),
+                );
             }
         });
     });
@@ -80,11 +75,6 @@ impl crate::tauri_handlers::Handlers {
     pub fn get_user_app_windows_previews() -> HashMap<isize, UserAppWindowPreview> {
         get_apps_manager();
         WinPreviewManager::instance().get_previews()
-    }
-
-    pub fn get_user_app_windows_colors() -> HashMap<isize, UserAppWindowColors> {
-        get_apps_manager();
-        WinPreviewManager::instance().get_colors()
     }
 
     /// Installed apps (start-menu shortcuts and packaged apps) for app-picker UIs.
