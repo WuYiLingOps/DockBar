@@ -9,6 +9,19 @@
   --dock-size: calc(var(--config-item-size) + (var(--config-padding) + var(--config-margin)) * 2);
 }
 
+/*
+ * html must not keep the UA-default `overflow: visible`: with a visible root,
+ * the viewport inherits BODY's overflow instead (CSS overflow propagation) and
+ * body stops clipping its children. The hidden-dock slide (#root translated by
+ * --dock-size below the viewport) then becomes scrollable overflow on the root
+ * scroller, and the moment the magnify state flips body back to `visible` the
+ * viewport resolves to `auto` and classic scrollbars paint over the dock's
+ * transparent margin as a stray gray strip at the screen bottom.
+ */
+html {
+  overflow: hidden;
+}
+
 body {
   /* clip is required for the auto-hide slide animation (the dock translates
    * inside the webview and must stay invisible); lifted while magnifying */

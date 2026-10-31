@@ -321,14 +321,20 @@
  * magnifying, magnify.svelte.ts flips it to overflow: visible via an inline
  * style (inline beats any stylesheet subtlety) and restores it on settle —
  * scrolling is briefly unnecessary while the user is interacting with items.
- * body/html keep their overflow except body[data-magnifying] (the auto-hide
- * slide needs body's clip, lifted here since the dock is visible anyway).
+ * body keeps its overflow except body[data-magnifying] (the auto-hide slide
+ * needs body's clip, lifted here since the dock is visible anyway); html must
+ * never flip to visible, see the note on the rule below.
  */
 .dock-items-container[data-magnifying] {
   overflow: visible;
 }
-body[data-magnifying],
-html[data-magnifying] {
+/*
+ * Only body may flip to visible while magnifying. html must stay `hidden`
+ * (see dock global.css): a visible root propagates body's overflow to the
+ * viewport, resolving it to `auto` — the translated-hidden dock then paints
+ * classic scrollbars (a gray strip at the screen bottom) for the whole hover.
+ */
+body[data-magnifying] {
   overflow: visible;
 }
 .dock-item .dock-item-attention-indicator {
