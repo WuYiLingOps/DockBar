@@ -1,5 +1,6 @@
 pub mod cli;
 pub mod dock;
+pub mod env_recovery;
 pub mod loader;
 pub mod manager;
 pub mod permissions;

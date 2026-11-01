@@ -14,7 +14,7 @@ use crate::{
     state::application::FULL_STATE,
     utils::lock_free::SyncHashMap,
     widgets::{
-        WidgetWebviewLabel,
+        WidgetWebviewLabel, env_recovery,
         manager::WIDGET_MANAGER,
         notify_widget_statuses_change,
         webview::{self, WidgetWebview},
@@ -142,6 +142,13 @@ impl WidgetDeployment {
 
     pub fn start_webview(&self, label: &WidgetWebviewLabel) {
         self.pods.get(label, |pod| {
+            // A pod that exhausted its creation retries stays in `CrashedOnCreation`
+            // forever, silently swallowing every later trigger queued for it. An
+            // explicit start attempt (user trigger, environment recovery) is a new
+            // chance: reset it to Pending so run() can create the webview again.
+            if pod.status() == &WidgetStatus::CrashedOnCreation {
+                pod.set_status(WidgetStatus::Pending);
+            }
             pod.run(&self.definition);
         });
     }
@@ -227,6 +234,10 @@ impl WidgetPod {
             Ok(window) => window,
             Err(err) => {
                 log::error!("Failed to create webview: {}", err);
+                // A `RPC_E_DISCONNECTED` (0x80010108) here means the whole WebView2
+                // environment is dead (e.g. the runtime auto-updated while running):
+                // per-pod retries can never succeed, recovery has to be process-wide.
+                env_recovery::notify_webview_creation_failure(&err);
                 self.set_status(WidgetStatus::CrashedOnCreation);
                 self.schedule_creation_retry();
                 return;

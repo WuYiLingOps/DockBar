@@ -84,6 +84,15 @@ impl WidgetManager {
         self.reconcile()
     }
 
+    /// Drops every pod of every deployment. `WidgetWebview`'s `Drop` destroys
+    /// the native windows, giving the caller a clean slate to `reconcile()`
+    /// against (used by the WebView2 environment recovery).
+    pub fn close_all_pods(&self) {
+        self.deployments.for_each(|(_, deploy)| {
+            deploy.pods.clear();
+        });
+    }
+
     /// Destroys the pod for `label` (if any) and rebuilds a fresh one, starting
     /// it unless the widget is lazy or game mode is active. This is the recovery
     /// path for wedged windows (used by the liveness give-up and the
