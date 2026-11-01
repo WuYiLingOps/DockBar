@@ -1,6 +1,6 @@
 [package]
 name = "dockbar"
-version = "1.0.1"
+version = "1.0.2"
 description = "DockBar Background"
 authors = ["dockbar"]
 license = "MIT"
