@@ -2,6 +2,19 @@
 
 ## [1.0.3-dev]
 
+### 重构
+
+- 移除内置快捷键（全局热键）功能的全部残留逻辑。该功能的核心依赖（负责捕获按键并注册系统热键的特权服务）此前已被移除，剩余代码仅做解析与存储、从不注册任何热键，设置页中的快捷键绑定（如 `Win+1`~`Win+0` 启动/聚焦停靠栏应用）实际不生效，本次将其彻底清理：
+  - 后端：删除 `cli/shortcuts.rs`（暂停状态与解析结果存储）、快捷键注册弹窗与冲突弹窗（`shortcut_registering` / `shortcut_conflicts`）、`request_to_user_input_shortcut` 命令、`StateGetSystemShortcuts` 命令、`ShortcutsPaused` 事件、设置变更/部件刷新时的快捷键解析链路，以及 `ToggleShortcutsPause`、`InternalSetShortcut`、`SvcAction::SetShortcuts` 等 IPC 命令
+  - 核心库：删除 `DockBarShortcutsSettings`、`SystemShortcutDeclaration`、`ResolvedShortcut`、`WidgetShortcutDeclaration` 等类型与 `resolve_shortcuts` 解析逻辑，`Settings` 不再包含 `shortcuts`、`unlock_shortcuts` 字段，部件元数据不再支持 `shortcuts` 声明，设置不再读写 `*_shortcuts.json` 旁路文件（旧文件成为无害孤儿，可手动删除）
+  - 前端：删除设置页"快捷键"标签页（含启用开关、重置按钮与全部条目编辑 UI）、导航入口、开发者选项中的"解锁只读快捷键"开关
+  - 静态资源：删除 dock / settings 部件元数据中的 `shortcuts` 声明及对应多语言标签文件；`dockbar-cli dock foreground-or-run-app N` 命令保留，仍可通过脚本直接调用
+  - 同名陷阱说明：开始菜单 `.lnk` 文件快捷方式（shortcuts）的扫描、解析与启动逻辑与本功能无关，全部保留
+
+### 变更
+
+- 应用语言精简为英文、简体中文、繁体中文三种：删除其余 70 种语言的翻译文件，语言列表（`SUPPORTED_LANGUAGES` / `SupportedLanguages`）与翻译脚本同步收窄；语言选择器、回退逻辑（非中英文环境自动回退英文）保持不变
+
 ## [1.0.2] - 2026-11-01
 
 ### 修复
