@@ -285,7 +285,24 @@ impl Settings {
         "en".to_string()
     }
 
+    /// The app only ships English and Chinese. Configs from versions that
+    /// supported more languages keep a now-unsupported `language` value, which
+    /// would make widgets try to load locale files that no longer exist.
+    fn normalize_language(&mut self) {
+        use crate::constants::SUPPORTED_LANGUAGES;
+
+        if SUPPORTED_LANGUAGES.iter().any(|l| l.value == self.language) {
+            return;
+        }
+        self.language = if self.language.starts_with("zh") {
+            "zh-CN".to_string()
+        } else {
+            "en".to_string()
+        };
+    }
+
     pub fn migrate(&mut self) -> Result<()> {
+        self.normalize_language();
         Ok(())
     }
 
@@ -295,9 +312,7 @@ impl Settings {
     }
 
     pub fn sanitize(&mut self) -> Result<()> {
-        if self.language.is_empty() {
-            self.language = Self::get_app_language();
-        }
+        self.normalize_language();
 
         // ensure base is always selected
         self.active_icon_packs.insert(0, "@system/icon-pack".into());
@@ -451,5 +466,48 @@ impl From<PerformanceMode> for u8 {
             PerformanceMode::Minimal => 1,
             PerformanceMode::Extreme => 2,
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn normalize_language_keeps_supported_values() {
+        let mut settings = Settings {
+            language: "zh-TW".to_string(),
+            ..Default::default()
+        };
+        settings.normalize_language();
+        assert_eq!(settings.language, "zh-TW");
+    }
+
+    #[test]
+    fn normalize_language_maps_legacy_chinese_variants_to_simplified() {
+        let mut settings = Settings {
+            language: "zh".to_string(),
+            ..Default::default()
+        };
+        settings.normalize_language();
+        assert_eq!(settings.language, "zh-CN");
+
+        settings.language = "zh-HK".to_string();
+        settings.normalize_language();
+        assert_eq!(settings.language, "zh-CN");
+    }
+
+    #[test]
+    fn normalize_language_falls_back_to_english_for_removed_locales() {
+        let mut settings = Settings {
+            language: "ja".to_string(),
+            ..Default::default()
+        };
+        settings.normalize_language();
+        assert_eq!(settings.language, "en");
+
+        settings.language = "pt-BR".to_string();
+        settings.normalize_language();
+        assert_eq!(settings.language, "en");
     }
 }

@@ -51,10 +51,27 @@ async function loadLocale(locale: string) {
   if (get(_messages)[locale]) {
     return;
   }
-  const res = await fetch(`./translations/${locale}.yml`);
-  const text = await res.text();
-  const messages = yaml.load(text) as Record<string, any>;
-  _messages.update((m) => ({ ...m, [locale]: messages }));
+  try {
+    const res = await fetch(`./translations/${locale}.yml`);
+    if (!res.ok) {
+      throw new Error(`translations/${locale}.yml responded ${res.status}`);
+    }
+    const text = await res.text();
+    const messages = yaml.load(text) as Record<string, any>;
+    if (!messages || typeof messages !== "object") {
+      throw new Error(`translations/${locale}.yml has no valid content`);
+    }
+    _messages.update((m) => ({ ...m, [locale]: messages }));
+  } catch (error) {
+    // Locale file missing (e.g. a language removed from the app): fall back to
+    // English instead of breaking the widget, and force the active locale to en
+    // so t() doesn't keep looking up keys under the missing locale.
+    console.error(`failed to load locale "${locale}", falling back to "en":`, error);
+    if (locale !== "en" && !get(_messages)["en"]) {
+      await loadLocale("en");
+    }
+    _locale.set("en");
+  }
 }
 
 // Load the default locale in the background
@@ -67,7 +84,9 @@ export const locale = {
 
   async set(newLocale: string) {
     await loadLocale(newLocale);
-    _locale.set(newLocale);
+    if (get(_messages)[newLocale]) {
+      _locale.set(newLocale);
+    }
   },
 };
 
