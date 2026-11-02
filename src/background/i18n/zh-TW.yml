@@ -43,15 +43,6 @@ service:
   not_running: 服務尚未執行
   not_running_description: DOCKBAR UI服務（SLU服務）是該是應用程式正常運作所需的必要元件。
   not_running_ok: 開始服務
-shortcut:
-  conflicts:
-    body: 某些快捷鍵已指派給多個操作，請重新指派它們。
-    dismiss: 解僱
-    review: 審查
-    title: 偵測到快捷鍵衝突
-  register:
-    placeholder: 按下任意快捷鍵組合
-    title: 註冊新的快捷鍵
 widget_liveness:
   failed_description: |-
     小工具「%{widget_name}」停止回應的次數過多。

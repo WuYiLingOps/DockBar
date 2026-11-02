@@ -43,15 +43,6 @@ service:
   not_running: DockBar 服务未运行
   not_running_description: DockBar 服务（dockbar-service）是应用正常运行的依赖组件。
   not_running_ok: 启动服务
-shortcut:
-  conflicts:
-    body: 部分快捷键被分配给了多个操作，请重新分配。
-    dismiss: 忽略
-    review: 查看
-    title: 检测到快捷键冲突
-  register:
-    placeholder: 按下任意组合键
-    title: 注册新快捷键
 widget_liveness:
   failed_description: |-
     部件「%{widget_name}」停止响应的次数过多。

@@ -2,8 +2,6 @@ use std::{collections::HashMap, path::PathBuf};
 
 use dockbar_core::system_state::RelaunchArguments;
 
-use tauri::WebviewWindow;
-
 use crate::{
     app::{DockBarApp, get_app_handle},
     error::Result,
@@ -11,10 +9,7 @@ use crate::{
         constants::DOCKBAR_COMMON,
         icon_extractor::{request_icon_extraction_from_file, request_icon_extraction_from_umid},
     },
-    widgets::{
-        permissions::{WidgetPerm, request_widget_permission},
-        popups::shortcut_registering::REG_SHORTCUT_DATA,
-    },
+    widgets::permissions::{WidgetPerm, request_widget_permission},
     windows_api::WindowsApi,
 };
 
@@ -95,19 +90,6 @@ impl crate::tauri_handlers::Handlers {
         if let Some(path) = path {
             request_icon_extraction_from_file(&path);
         }
-        Ok(())
-    }
-
-    pub async fn request_to_user_input_shortcut(
-        window: WebviewWindow,
-        callback_event: String,
-    ) -> Result<()> {
-        // The privileged service (which captured raw key input) was removed; the
-        // registering dialog still works but only accepts shortcuts typed through
-        // the manual edit flow.
-        let mut data = REG_SHORTCUT_DATA.lock();
-        data.response_view_label = Some(window.label().to_string());
-        data.response_event = Some(callback_event);
         Ok(())
     }
 }

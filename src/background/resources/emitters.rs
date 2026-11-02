@@ -3,16 +3,10 @@ use std::sync::Arc;
 use crate::{
     app::emit_to_webviews,
     error::{Result, ResultLogExt},
-    state::application::FULL_STATE,
     widgets::manager::WIDGET_MANAGER,
     widgets::permissions::WIDGET_PERMISSIONS,
-    widgets::popups::shortcut_conflicts::show_shortcut_conflict_popup,
 };
-use dockbar_core::{
-    handlers::DockBarEvent,
-    resource::ResourceKind,
-    state::{Widget, settings::shortcuts::resolve_shortcuts},
-};
+use dockbar_core::{handlers::DockBarEvent, resource::ResourceKind, state::Widget};
 
 use super::ResourceManager;
 
@@ -49,14 +43,6 @@ impl ResourceManager {
         WIDGET_PERMISSIONS.remove_uninstalled_widgets().log_error();
 
         WIDGET_MANAGER.reconcile()?;
-
-        let state = FULL_STATE.load();
-        let widget_refs: Vec<_> = widgets.iter().map(|w| w.as_ref()).collect();
-        let (resolved, has_conflicts) = resolve_shortcuts(&state.settings, &widget_refs);
-        if has_conflicts {
-            show_shortcut_conflict_popup().log_error();
-        }
-        crate::cli::shortcuts::set_resolved_shortcuts(resolved);
         Ok(())
     }
 

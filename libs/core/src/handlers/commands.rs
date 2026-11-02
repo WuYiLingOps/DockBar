@@ -1,8 +1,7 @@
 #[cfg(feature = "gen-binds")]
 use crate::{
     handlers::SelfEventsToken, rect::Rect, resource::*, state::by_monitor::MonitorConfiguration,
-    state::context_menu::*, state::settings::shortcuts::SystemShortcutDeclaration, state::*,
-    system_state::*, utils::TsVoid,
+    state::context_menu::*, state::*, system_state::*, utils::TsVoid,
 };
 
 #[cfg(feature = "gen-binds")]
@@ -169,12 +168,6 @@ slu_commands_declaration! {
         @fallible()
         show_desktop(),
 
-    RequestToUserInputShortcut =
-        @webview()
-        @async()
-        @fallible()
-        request_to_user_input_shortcut(callback_event: String),
-
     // System
     SystemGetMonitors = get_connected_monitors() -> Vec<PhysicalMonitor>,
     SetMonitorHdr =
@@ -231,7 +224,6 @@ slu_commands_declaration! {
         state_write_settings(settings: Settings),
     StateGetWidgets = state_get_widgets() -> Vec<std::sync::Arc<Widget>>,
     StateGetIconPacks = state_get_icon_packs() -> Vec<std::sync::Arc<IconPack>>,
-    StateGetSystemShortcuts = state_get_system_shortcuts() -> Vec<SystemShortcutDeclaration>,
     StateDeleteCachedIcons =
         @async()
         @fallible()

@@ -136,12 +136,6 @@ pub fn show_settings() -> Result<()> {
     ))
 }
 
-pub fn show_settings_at(route: &str) -> Result<()> {
-    let mut payload = WidgetTriggerPayload::new("@dockbar/settings".into());
-    payload.add_custom_arg("route", route);
-    crate::tauri_handlers::Handlers::trigger_widget(payload)
-}
-
 fn widget_data_dir(webview: &tauri::WebviewWindow) -> Result<PathBuf> {
     let label = WidgetWebviewLabel::try_from_raw(webview.label())?;
     let data_dir = DOCKBAR_COMMON.app_data_dir().join("data");

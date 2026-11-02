@@ -1,9 +1,6 @@
 use std::collections::HashMap;
 
-use dockbar_core::{
-    rect::Rect,
-    state::{Settings, shortcuts::ResolvedShortcut},
-};
+use dockbar_core::{rect::Rect, state::Settings};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -84,9 +81,6 @@ pub enum SvcAction {
     Stop,
     SetStartup(bool),
     SetSettings(Box<Settings>),
-    /// Sends the resolved shortcuts list to the service for hotkey registration.
-    /// Pass an empty `Vec` to unregister all hotkeys (e.g. when shortcuts are disabled).
-    SetShortcuts(Vec<ResolvedShortcut>),
     ShowWindow {
         hwnd: isize,
         command: i32,

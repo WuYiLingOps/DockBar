@@ -27,12 +27,6 @@ runtime.outdated_description: 94c4e9de
 service.not_running: 5b898615
 service.not_running_description: c2fd771e
 service.not_running_ok: 2cf0b014
-shortcut.conflicts.body: c63b21fe
-shortcut.conflicts.dismiss: ada064d9
-shortcut.conflicts.review: 58267bb8
-shortcut.conflicts.title: b6bf4944
-shortcut.register.placeholder: ae206329
-shortcut.register.title: 6a1680cc
 widget_liveness.failed_description: 5241e670
 widget_liveness.failed_title: 8e071700
 widget_permissions.perm_kill_processes: cdca7038

@@ -3,8 +3,6 @@ use std::sync::atomic::Ordering;
 use tauri::{AppHandle, Emitter, Wry};
 use winreg::{RegKey, enums::HKEY_CURRENT_USER};
 
-use dockbar_core::state::shortcuts::resolve_shortcuts;
-
 use crate::{
     APP_HANDLE,
     error::{Result, ResultLogExt},
@@ -13,10 +11,7 @@ use crate::{
     modules::start::application::StartMenuManager,
     resources::RESOURCES,
     state::application::{AppSettings, FULL_STATE, initialize_user_resources_watcher},
-    widgets::{
-        manager::{GAME_MODE_ACTIVE, WIDGET_MANAGER},
-        popups::shortcut_conflicts::show_shortcut_conflict_popup,
-    },
+    widgets::manager::{GAME_MODE_ACTIVE, WIDGET_MANAGER},
     windows_api::event_window::{IS_INTERACTIVE_SESSION, create_background_window},
 };
 
@@ -107,14 +102,6 @@ impl DockBarApp {
         {
             WIDGET_MANAGER.resume_all().log_error();
         }
-
-        let widgets = RESOURCES.widgets();
-        let widget_refs: Vec<_> = widgets.iter().map(|w| w.as_ref()).collect();
-        let (resolved, has_conflicts) = resolve_shortcuts(&state.settings, &widget_refs);
-        if has_conflicts {
-            show_shortcut_conflict_popup().log_error();
-        }
-        crate::cli::shortcuts::set_resolved_shortcuts(resolved);
 
         Ok(())
     }

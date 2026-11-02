@@ -12,36 +12,14 @@ use serde::{Deserialize, Serialize};
 use crate::{
     Point,
     error::Result,
-    resource::{DockBarResource, ResourceKind, ResourceMetadata, ResourceText, WidgetId},
+    resource::{DockBarResource, ResourceKind, ResourceMetadata, WidgetId},
     system_state::MonitorId,
     utils::TsUnknown,
 };
 
-/// Declares a shortcut that belongs to this widget.
-/// The user can override the keys via the widget's `$shortcuts` setting entry.
 #[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
 #[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), derive(ts_rs::TS))]
 #[serde(default, rename_all = "camelCase")]
-pub struct WidgetShortcutDeclaration {
-    /// Stable identifier for this shortcut (e.g. `"wm-focus-up"`).
-    /// Used as the key for user overrides in `$shortcuts`.
-    pub id: String,
-    /// CLI command to execute when the shortcut is triggered (e.g. `["wm", "focus", "up"]`).
-    pub command: Vec<String>,
-    /// Human-readable label shown in the shortcuts settings UI.
-    pub label: ResourceText,
-    /// Optional longer description shown in the settings UI.
-    pub description: Option<ResourceText>,
-    /// Default key combination (can be overridden by the user unless `readonly` is true).
-    pub default_keys: Vec<String>,
-    /// If true, the user cannot change the key combination for this shortcut.
-    pub readonly: bool,
-}
-
-#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
-#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), derive(ts_rs::TS))]
-#[serde(default, rename_all = "camelCase")]
-#[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), ts(export))]
 pub struct Widget {
     /// Resource id ex: `@dockbar/dock`
     pub id: WidgetId,
@@ -79,11 +57,6 @@ pub struct Widget {
     pub css: Option<String>,
     /// Optional widget html
     pub html: Option<String>,
-
-    /// Shortcut declarations for this widget.
-    /// These define the default shortcuts that the user can override via `$shortcuts` in
-    /// the widget's settings entry.
-    pub shortcuts: Vec<WidgetShortcutDeclaration>,
 }
 
 impl DockBarResource for Widget {

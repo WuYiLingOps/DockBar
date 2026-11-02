@@ -1,7 +1,6 @@
 use dockbar_core::{
     handlers::SelfEventsToken, rect::Rect, resource::*, state::by_monitor::MonitorConfiguration,
-    state::context_menu::*, state::settings::shortcuts::SystemShortcutDeclaration, state::*,
-    system_state::*,
+    state::context_menu::*, state::*, system_state::*,
 };
 
 pub struct Handlers;

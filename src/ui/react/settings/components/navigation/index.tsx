@@ -32,7 +32,6 @@ export const Navigation = memo(() => {
 
   const advanceGroup = [
     RoutePath.SettingsByMonitor,
-    RoutePath.Shortcuts,
   ];
   const devGroup = [RoutePath.DevTools];
 

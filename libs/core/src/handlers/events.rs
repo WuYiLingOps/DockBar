@@ -94,9 +94,6 @@ slu_events_declaration! {
     DockAddItem(DockItemData) as "dock::add-item",
     DockItemsChanged(DockItems) as "dock::items-changed",
 
-    // Shortcuts
-    ShortcutsPaused(bool) as "shortcuts::paused",
-
     // Widget debug info
     WidgetDebugInfoChanged(Vec<WidgetDebugInfo>) as "widget::debug-info-changed",
 }

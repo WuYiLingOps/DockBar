@@ -25,17 +25,6 @@ export function setDevTools(devTools: boolean) {
   };
 }
 
-export function getUnlockShortcuts(): boolean {
-  return settings.value.unlockShortcuts;
-}
-
-export function setUnlockShortcuts(unlockShortcuts: boolean) {
-  settings.value = {
-    ...settings.value,
-    unlockShortcuts,
-  };
-}
-
 export function getUnstableOptimizations(): boolean {
   return settings.value.unstableOptimizations;
 }

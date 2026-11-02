@@ -24,22 +24,6 @@ pub struct SettingsByWidget {
 }
 
 impl SettingsByWidget {
-    /// Returns the user-configured key overrides (`shortcut_id -> keys`) for the given widget.
-    pub fn get_shortcut_overrides(&self, widget_id: &WidgetId) -> &HashMap<String, Vec<String>> {
-        static EMPTY_SHORTCUTS: std::sync::LazyLock<HashMap<String, Vec<String>>> =
-            std::sync::LazyLock::new(HashMap::new);
-
-        let shortcuts = match widget_id.as_str() {
-            "@dockbar/dock" => self.dock.shortcuts.as_ref(),
-            _ => self
-                .others
-                .get(widget_id)
-                .and_then(|s| s.shortcuts.as_ref()),
-        };
-
-        shortcuts.unwrap_or(&EMPTY_SHORTCUTS)
-    }
-
     pub fn is_enabled(&self, widget_id: &WidgetId) -> bool {
         match widget_id.as_str() {
             "@dockbar/dock" => self.dock.enabled,
@@ -95,12 +79,6 @@ pub struct GenericWidgetSettings {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), ts(optional = nullable))]
     pub instances: Option<HashMap<Uuid, HashMap<String, TsUnknown>>>,
-    /// Key overrides for widget-declared shortcuts (`shortcut_id -> keys`).
-    /// When present, replaces the shortcut's `defaultKeys` for this widget instance.
-    #[serde(rename = "$shortcuts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(all(feature = "gen-binds", not(feature = "salvo")), ts(optional = nullable))]
-    pub shortcuts: Option<HashMap<String, Vec<String>>>,
     #[serde(flatten)]
     pub rest: HashMap<String, TsUnknown>,
 }

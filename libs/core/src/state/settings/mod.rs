@@ -2,7 +2,6 @@
 pub mod by_monitor;
 pub mod by_widget;
 pub mod settings_by_app;
-pub mod shortcuts;
 
 pub use settings_by_app::*;
 
@@ -20,10 +19,7 @@ use crate::system_state::MonitorId;
 use crate::{
     error::Result,
     resource::IconPackId,
-    state::{
-        by_monitor::MonitorConfiguration, by_widget::SettingsByWidget,
-        shortcuts::DockBarShortcutsSettings,
-    },
+    state::{by_monitor::MonitorConfiguration, by_widget::SettingsByWidget},
 };
 
 // ============== DockBar Settings ==============
@@ -106,9 +102,6 @@ pub enum DockBarSide {
 pub struct DockBarSettings {
     /// enable or disable the dockbarweg
     pub enabled: bool,
-    /// Key overrides for widget-declared shortcuts (`shortcut_id -> keys`).
-    #[serde(rename = "$shortcuts")]
-    pub shortcuts: Option<std::collections::HashMap<String, Vec<String>>>,
     /// Dock/Taskbar mode
     pub mode: DockBarMode,
     /// When to hide the dock
@@ -153,7 +146,6 @@ impl Default for DockBarSettings {
     fn default() -> Self {
         Self {
             enabled: true,
-            shortcuts: None,
             mode: DockBarMode::MinContent,
             hide_mode: HideMode::OnOverlap,
             position: DockBarSide::Bottom,
@@ -213,8 +205,6 @@ pub struct Settings {
     pub by_app: AppsConfigurationList,
     /// list of monitors and their configurations
     pub monitors_v3: HashMap<MonitorId, MonitorConfiguration>,
-    /// app shortcuts settings
-    pub shortcuts: DockBarShortcutsSettings,
     /// list of selected icon packs
     pub active_icon_packs: Vec<IconPackId>,
     /// enable or disable dev tools tab in settings
@@ -244,8 +234,6 @@ pub struct Settings {
     pub backup_sync_enabled: bool,
     /// Suspend all webviews when Windows GameMode is active to free resources for the game.
     pub suspend_on_game_mode: bool,
-    /// Allow editing read-only shortcuts (e.g. system overrides). Only effective when dev_tools is enabled.
-    pub unlock_shortcuts: bool,
 }
 
 impl Default for Settings {
@@ -253,7 +241,6 @@ impl Default for Settings {
         Self {
             by_app: AppsConfigurationList::default(),
             performance_mode: PerformanceModeSettings::default(),
-            shortcuts: DockBarShortcutsSettings::default(),
             drpc: false,
             active_icon_packs: vec!["@system/icon-pack".into()],
             monitors_v3: HashMap::new(),
@@ -268,7 +255,6 @@ impl Default for Settings {
             streaming_mode: false,
             backup_sync_enabled: true,
             suspend_on_game_mode: false,
-            unlock_shortcuts: false,
         }
     }
 }
@@ -334,23 +320,13 @@ impl Settings {
             .unwrap_or_default();
         let parent = path.parent().unwrap_or(path);
 
-        let shortcuts_path = parent.join(format!("{stem}_shortcuts.json"));
         let by_app_path = parent.join(format!("{stem}_by_app.yml"));
 
-        let (main, shortcuts, by_app) = std::thread::scope(|s| {
+        let (main, by_app) = std::thread::scope(|s| {
             let main = s.spawn(|| -> Result<Self> {
                 let file = File::open(path)?;
                 file.lock_shared()?;
                 Ok(serde_json::from_reader(&file)?)
-            });
-
-            let shortcuts = s.spawn(|| -> Result<Option<DockBarShortcutsSettings>> {
-                if !shortcuts_path.exists() {
-                    return Ok(None);
-                }
-                let file = File::open(&shortcuts_path)?;
-                file.lock_shared()?;
-                Ok(Some(serde_json::from_reader(&file)?))
             });
 
             let by_app = s.spawn(|| -> Result<Option<AppsConfigurationList>> {
@@ -362,13 +338,10 @@ impl Settings {
                 Ok(Some(serde_yaml::from_reader(&file)?))
             });
 
-            (main.join(), shortcuts.join(), by_app.join())
+            (main.join(), by_app.join())
         });
 
         let mut settings = main.map_err(|_| "settings thread panicked")??;
-        if let Some(s) = shortcuts.map_err(|_| "shortcuts thread panicked")?? {
-            settings.shortcuts = s;
-        }
         if let Some(b) = by_app.map_err(|_| "by_app thread panicked")?? {
             settings.by_app = b;
         }
@@ -385,7 +358,6 @@ impl Settings {
             // Create a copy without splitted fields
             let mut settings_copy = serde_json::to_value(self)?;
             let obj = settings_copy.as_object_mut().unwrap();
-            obj.remove("shortcuts");
             obj.remove("byApp");
 
             let mut file = File::create(path)?;
@@ -394,14 +366,8 @@ impl Settings {
             file.flush()?;
         }
 
-        // Save shortcuts to sibling file
+        // Save by_app to sibling file
         if let (Some(parent), Some(stem)) = (path.parent(), path.file_stem()) {
-            let shortcuts_path = parent.join(format!("{}_shortcuts.json", stem.to_string_lossy()));
-            let mut shortcuts_file = File::create(&shortcuts_path)?;
-            shortcuts_file.lock()?;
-            serde_json::to_writer_pretty(&shortcuts_file, &self.shortcuts)?;
-            shortcuts_file.flush()?;
-
             let by_app_path = parent.join(format!("{}_by_app.yml", stem.to_string_lossy()));
             let mut by_app_file = File::create(&by_app_path)?;
             by_app_file.lock()?;

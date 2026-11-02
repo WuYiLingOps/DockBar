@@ -43,8 +43,6 @@ pub enum AppCommand {
     Resource(ResourceManagerCli),
     Art(ArtCli),
     TaskSwitcher(TaskSwitcherClient),
-    /// Toggle the global shortcuts pause state
-    ToggleShortcutsPause,
 }
 
 impl DockBarCliCommand for AppCommand {
@@ -252,8 +250,6 @@ pub enum PopupsCommand {
         /// id
         id: String,
     },
-    #[command(hide = true)]
-    InternalSetShortcut { json: String },
 }
 
 // ===== Dock =====

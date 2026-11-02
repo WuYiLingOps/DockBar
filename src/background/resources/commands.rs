@@ -1,6 +1,6 @@
 use dockbar_core::{
     resource::DockBarResource,
-    state::{IconPack, Widget, settings::shortcuts::SystemShortcutDeclaration},
+    state::{IconPack, Widget},
 };
 
 use crate::{error::Result, resources::RESOURCES, utils::icon_extractor::queue::IconExtractor};
@@ -9,10 +9,6 @@ use std::sync::Arc;
 impl crate::tauri_handlers::Handlers {
     pub fn state_get_widgets() -> Vec<Arc<Widget>> {
         RESOURCES.widgets()
-    }
-
-    pub fn state_get_system_shortcuts() -> Vec<SystemShortcutDeclaration> {
-        dockbar_core::state::settings::shortcuts::system_shortcut_declarations()
     }
 
     pub fn state_get_icon_packs() -> Vec<Arc<IconPack>> {

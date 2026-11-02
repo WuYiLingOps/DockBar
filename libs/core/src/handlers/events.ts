@@ -18,6 +18,5 @@ export enum DockBarEvent {
   WidgetTriggered = "widget::triggered",
   DockAddItem = "dock::add-item",
   DockItemsChanged = "dock::items-changed",
-  ShortcutsPaused = "shortcuts::paused",
   WidgetDebugInfoChanged = "widget::debug-info-changed",
 }

@@ -1,6 +1,5 @@
 mod debugger;
 mod self_pipe;
-pub mod shortcuts;
 mod uri;
 
 pub use self_pipe::SelfPipe;
@@ -77,9 +76,6 @@ pub async fn process_app_command(cmd: AppCommand) -> Result<()> {
         }
         AppCommand::Popup(command) => {
             popups_cli::process(command)?;
-        }
-        AppCommand::ToggleShortcutsPause => {
-            shortcuts::toggle_pause();
         }
         _ => {
             return Err("Command does not support instance execution".into());
